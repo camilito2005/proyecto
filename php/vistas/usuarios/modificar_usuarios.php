@@ -74,7 +74,7 @@ $query = $conexion->query(" SELECT * FROM cargo ");
                 <a href="../usuarios/usuarios.php">regresar</a>
             </button><br><br>
             <button class="btn btn-outline-secondary">
-                <a href="../pagina-principal/index.php">inicio</a>
+                <a href="../../../index.php">inicio</a>
             </button>
         </form>
     </div>

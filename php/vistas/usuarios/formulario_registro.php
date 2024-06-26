@@ -68,7 +68,7 @@
                 </button><br><br>
                 
                 <button class="btn btn-outline-secondary">
-                    <a href="../../index.php">inicio</a>
+                    <a href="../../../index.php">inicio</a>
                 </button>
         </div>
         </form>

@@ -32,7 +32,7 @@
             </form>
         </div>
     </div>
-    <a href="../pagina-principal/index.php">inicio</a>
+    <a href="../../../index.php">inicio</a>
 </body>
 
 </html>
