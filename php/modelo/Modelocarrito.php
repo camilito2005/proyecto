@@ -1,21 +1,22 @@
 <?php
 
+// require_once "../modelo/ModelValidacion.php";
 
 class Carrito
 {
     public function aggCarrito($id, $nombre, $foto, $descripcion, $precio, $stock)
     {
-        if (!isset($_SESSION['carrito'])) {
-            $_SESSION['carrito'] = array();
+        if (!isset($_SESSION['correo'])) {
+            $_SESSION['correo'] = array();
         }
-        if (array_key_exists($id, $_SESSION['carrito'])) {
-            $_SESSION['carrito'][$id]['stock'] += $stock;
-            $_SESSION['carrito'][$id]['precio'] += $precio;
+        if (array_key_exists($id, $_SESSION['correo'])) {
+            $_SESSION['correo'][$id]['stock'] += $stock;
+            $_SESSION['correo'][$id]['precio'] += $precio;
         } else {
-            $_SESSION['carrito'][$id] = array(
+            $_SESSION['correo'][$id] = array(
                 'nombre' => $nombre,
                 'foto' => $foto,
-                'descripcion' => $descripcion,
+                'descripcion' => $descripcion,  
                 'precio' => $precio,
                 'stock' => $stock,
                 // 'cantidad' => $cantidad,
@@ -24,20 +25,21 @@ class Carrito
     }
     public function eliminarCarrito($id)
     {
-        if (isset($_SESSION['carrito'][$id])) {
-            unset($_SESSION['carrito'][$id]);
+        if (isset($_SESSION['correo'][$id])) {
+            unset($_SESSION['correo'][$id]);
         }
     }
     public function eliminarTodo()
     {
-        unset($_SESSION['carrito']);
+        unset($_SESSION['correoo']);
     }
     public function ver(){
-        if (empty($_SESSION['carrito'])) {
+        if (empty($_SESSION['correo'])) {
             // echo 'no hay nada en el carrito';
             header('Location: ../catalogo/carrito.php');
         } else {
-            return  $_SESSION['carrito'];
+            return  $_SESSION['correo'];
         }
     }
+    
 }

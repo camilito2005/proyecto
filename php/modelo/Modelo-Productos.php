@@ -21,7 +21,7 @@
             // UPDATE `productos` SET `nombre` = ' $nombre_producto', `descripcion` = '$descripcion', `precio` = '$precio', `stock` = '$cantidad' WHERE `productos`.`id` = $id;
             // $sql = mysqli_query($conexion,"UPDATE productos SET nombre = $nombre_producto , descripcion = $descripcion , precio = $precio stock = $cantidad WHERE id = $id ");
             // $sql = $conexion->query("UPDATE productos SET nombre = '$nombre_producto' , descripcion = '$descripcion' , precio = '$precio' stock = '$cantidad'  WHERE id = $id ");
-            $sql = $conexion->query("UPDATE `productos` SET `nombre` = ' $nombre_producto', `descripcion` = '$descripcion', `precio` = '$precio', `stock` = '$cantidad' WHERE `productos`.`id` = $id");
+            $sql = $conexion->query("UPDATE `productos` SET `nombre` = ' $nombre_producto', `descripcion` = '$descripcion', `precio` = '$precio', `stock` = '$cantidad' WHERE `productos`.`id_productos` = $id");
     
             if ($sql == 1) {
                 header("Location:../vistas/productos/verProductos.php");
@@ -32,7 +32,7 @@
         }
         public function EliminarP($id){
             include "../conexion.php";
-            $consulta = $conexion->query(" DELETE FROM productos WHERE id = $id ");
+            $consulta = $conexion->query(" DELETE FROM productos WHERE id_productos = $id ");
     
             if ($consulta == 1) {
                 header("Location:../vistas/productos/verProductos.php");
@@ -40,6 +40,16 @@
             } else {
                 echo ('<div class="alert alert-danger"> error al eliminar </div>');
             }
+        }
+        public function mostrar() {
+            include "../../conexion.php";
+            $sql = mysqli_query($conexion, "SELECT * FROM productos");
+            // $total = mysqli_num_rows($sql);
+            $Productos = [];
+            while ($row = $sql->fetch_assoc() ) { // mysqli_fetch_object($sql)
+                $Productos[] = $row;
+            }
+            return $Productos;
         }
     }
     

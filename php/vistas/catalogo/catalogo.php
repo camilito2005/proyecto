@@ -62,10 +62,12 @@
         <div class="row">
 
             <?php
-            include "../../conexion.php";
-            $ramdom = mysqli_query($conexion, "SELECT * FROM productos");
-            $total = mysqli_num_rows($ramdom);
-            while ($filas = mysqli_fetch_assoc($ramdom)) {
+            include_once "../../modelo/Modelo-Productos.php";
+            $clases = new Productos();
+            $Productos = $clases->mostrar();
+            foreach ($Productos as  $clases) {
+                # code...
+                         
                 # code...
                 // }
                 // $ramdom = $conexion->query("SELECT * FROM productos");
@@ -74,37 +76,37 @@
 
                 <div class="card mx-4 mt-4 mx-auto" style="width: 21rem;">
 
-                <td><?= $filas['id'] ?></td>
+                <td><?= $clases['id_productos'] ?></td>
 
-                    <img src="/<?php echo $filas['imagen'] ?>" height="100%" width="100%" class="card-img-top" alt=""><br>
+                    <img src="/<?= $clases['imagen'] ?>" height="100%" width="100%" class="card-img-top" alt=""><br>
 
                     <div class="card-title">
-                        <?= $filas['nombre'] ?>
+                        <?= $clases['nombre'] ?>
 
                     </div>
                     <div class="card-body">
                         <p>
-                            <?= $filas['descripcion'] ?>
+                            <?= $clases['descripcion'] ?>
                         </p>
 
                         <p>precio: $
-                            <?= $filas['precio'] ?>
+                            <?= $clases['precio'] ?>
                         </p>
                         <p>
                             disponibles:
-                            <?= $filas['stock'] ?>
+                            <?= $clases['stock'] ?>
                         </p>
 
                     </div>
                     <div class="card-footer">
                         <button class="btn-buy button1">COMPRALO YA¡</button>
                         <form action="../../controlador/carrito.php?carri=agregar" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="<?= $filas['id'] ?>">
-                            <input name="nombre" type="hidden" value="<?= $filas['nombre'] ?>">
-                            <input name="descripcion" type="hidden" value="<?= $filas['descripcion'] ?>">
-                            <input name="precio" type="hidden" value="<?= $filas['precio']  ?>">
-                            <input name="stock" type="hidden" value="<?= $filas['stock']  ?>">
-                            <input name="foto" type="hidden" value="<?= $filas['imagen'] ?>">
+                            <input type="hidden" name="id" value="<?= $clases['id_productos'] ?>">
+                            <input name="nombre" type="hidden" value="<?= $clases['nombre'] ?>">
+                            <input name="descripcion" type="hidden" value="<?= $clases['descripcion'] ?>">
+                            <input name="precio" type="hidden" value="<?= $clases['precio']  ?>">
+                            <input name="stock" type="hidden" value="<?= $clases['stock']  ?>">
+                            <input name="foto" type="hidden" value="<?= $clases['imagen'] ?>">
                             <input name="carrito" type="submit" class="btn btn-primary" value="agregar al carrito">
                         </form>
                     </div>
@@ -122,9 +124,9 @@
             </div>
             <!-- <a href="">ver carrito</a> -->
         </div>
-        <p> resultado : <?php echo $total ?></p>
+        <!-- <p> resultado : <?php echo $total ?></p> -->
     </div>
-    <a href="../pagina-principal/index.php">inicio</a>
+    <a href="../../../index.php">inicio</a>
     <script src="../../js/script.js"></script>
 </body>
 

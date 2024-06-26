@@ -36,7 +36,7 @@ if (isset($_SESSION["correo"])) {
         }
     </script>
     <h3 class="text-center text-secondary">productos</h3>
-    <div class="mx-auto col-8 p-6" style="display: none;" id="resultados-conainer">
+    <div class="mx-auto col-8 p-6" id="resultados-conainer">
         <table class="table" id="resultado">
             <thead class="bs-info">
                 <tr>
@@ -65,7 +65,7 @@ if (isset($_SESSION["correo"])) {
                         <tr>
 
 
-                            <td><?php echo $filas["id"] ?></td>
+                            <td><?php echo $filas["id_productos"] ?></td>
                             <td>
                                 <div class="card mx-4 mt-4 mx-auto" style="width: 10rem;">
                                     <img src="/<?php echo $filas["imagen"] ?>" height="70%" width="100%" class="card-img-top">
@@ -77,10 +77,10 @@ if (isset($_SESSION["correo"])) {
                             <td> <?php echo  $filas["stock"] ?></td>
 
                             <td>
-                                <a href="./modificar-productos.php?id=<?php echo $filas["id"]  ?>" class="btn btn-small btn-warning">
+                                <a href="./modificar-productos.php?id=<?php echo $filas["id_productos"]  ?>" class="btn btn-small btn-warning">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
-                                <form action="../../controlador/CONTROLADOR-Productos.php?id=<?php echo $filas["id"] ?>" method="post">
+                                <form action="../../controlador/CONTROLADOR-Productos.php?id=<?php echo $filas["id_productos"] ?>" method="post">
                                     <button name="eliminar" class="btn btn-small btn-danger" type="submit" onclick="return Pregunta()">
                                         <i class="fa-solid fa-trash">
 

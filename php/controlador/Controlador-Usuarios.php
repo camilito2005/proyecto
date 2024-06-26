@@ -6,8 +6,10 @@ include('../modelo/Modelo-Usuarios.php') ;
 $clases = new Registro;
 
 
-    if (!empty($_POST["registro"])) {
-        
+    if (isset($_POST["registro"])) {
+
+        if (!empty($_POST["dni"]) && !empty($_POST["nombre"]) && !empty($_POST["apellido"]) && !empty($_POST["telefono"]) && !empty($_POST["direccion"]) && !empty($_POST["correo"]) && !empty($_POST["contraseña"]) && !empty($_POST["rol"])) {
+            
             $dni = $_POST['dni'];
             $nombre = $_POST['nombre'];
             $apellido = $_POST['apellido'];
@@ -22,12 +24,18 @@ $clases = new Registro;
             // $registro = new Registro();
 
             $clases->registrar($dni,$nombre,$apellido,$telefono,$direccion,$correo,$contraseña,$rol);
+            
+        }
+        
+          else {
+            echo "llene todos los campos";
+            include_once "../vistas/usuarios/formulario_registro.php";
+          }  
         
     }
     
     if (isset($_POST["modificar"])) {
         $id = $_REQUEST["id"];
-        // $dni = $_POST["dni"];
         $nombre = $_POST["nombre"];
         $apellido = $_POST["apellido"];
         $telefono = $_POST["telefono"];
@@ -42,7 +50,7 @@ $clases = new Registro;
         $clases->actualizar_usuarios($id,$nombre,$apellido,$telefono,$direccion,$correo,$contraseña,$rol);
     }
 
-    if (isset($_REQUEST["borrar"])) {
+    if (isset($_POST["borrar"])) {
         if (!empty($_GET["id"])) {
 
             $id = $_GET["id"];

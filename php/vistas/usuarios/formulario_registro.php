@@ -62,12 +62,13 @@
                 </div>
 
                 <input class="btn btn-primary" type="submit" name="registro" value="registrar"><br><br>
+
                 <button class="btn btn-outline-secondary">
-                    <a href="../usuarios/usuarios.php">ver registro</a>
+                    <a href="../../../php/vistas/usuarios/usuarios.php">ver registro</a>
                 </button><br><br>
                 
                 <button class="btn btn-outline-secondary">
-                    <a href="../pagina-principal/index.php">inicio</a>
+                    <a href="../../index.php">inicio</a>
                 </button>
         </div>
         </form>

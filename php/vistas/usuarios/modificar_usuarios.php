@@ -1,7 +1,8 @@
 <?php
 include("../../conexion.php");
 $id = $_GET["id"];
-$sql = $conexion->query(" SELECT * FROM usuarios WHERE id = $id ");
+$sql = $conexion->query(" SELECT * FROM usuarios WHERE id_personas = $id ");
+$query = $conexion->query(" SELECT * FROM cargo ");
 
 ?>
 <!DOCTYPE html>
@@ -18,7 +19,7 @@ $sql = $conexion->query(" SELECT * FROM usuarios WHERE id = $id ");
     <div class="contenedor">
         <form class="col-4 p-3 m-auto" action="../../controlador/Controlador-Usuarios.php" method="post">
             <h3>modificar registro de usuarios</h3>
-                <input type="hidden" name="id" value="<?= $_GET["id"] ?>">
+            <input type="hidden" name="id" value="<?= $_GET["id"] ?>">
             <?php
             // include "../../controlador/actualizar-usuarios.php";
             while ($camilo = $sql->fetch_object()) { ?>
@@ -50,14 +51,24 @@ $sql = $conexion->query(" SELECT * FROM usuarios WHERE id = $id ");
                     <label for="exampleInputEmail1" class="form-label" required>contraseña</label>
                     <input type="password" class="form-control" name="contraseña" value="<?= $camilo->contraseña ?>">
                 </div>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label" required>rol</label>
-                    <input type="text" class="form-control" name="rol" value="<?= $camilo->id_rol ?>">
-                </div>
 
 
-            <?php }
-            ?>
+
+            <?php  } ?>
+
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label" required>rol</label>
+                <select name="rol" id="">
+
+                    <?php
+                    while ($roles = $query->fetch_object()) { ?>
+
+                        <option class="form-control" value="<?=$roles->id?>"><?= $roles->rol ?></option>
+
+                    <?php }
+                    ?>
+                </select>
+            </div>
             <input type="submit" class="btn btn-primary" name="modificar" value="modificar productos"></input><br><br>
             <button class="btn btn-outline-secondary">
                 <a href="../usuarios/usuarios.php">regresar</a>

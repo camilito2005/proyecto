@@ -24,10 +24,10 @@
 
     require_once '../../modelo/Modelocarrito.php';
     $modelo = new Carrito();
-    $zapatos = $modelo->ver();
+    $Producto = $modelo->ver();
     // include "../../conexion.php";
     // $camilo = $conexion->query("SELECT * FROM productos");
-    foreach ($zapatos as $id => $zapatico) : ?>
+    foreach ($Producto as $id => $zapatico) : ?>
         <div class="container">
             <div class="card mx-4 mt-4 mx-auto" style="width: 21rem;">
                 <!-- <div> -->

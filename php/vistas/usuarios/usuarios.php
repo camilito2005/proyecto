@@ -7,10 +7,11 @@
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Usuarios</title>
 </head>
 
 <body>
+    
     <script>
         function pregunta() {
             p = confirm("¿estas seguro que desea eliminar el registro?");
@@ -46,7 +47,7 @@
                 // $sql = $conexion->query("SELECT * FROM usuarios");
                 foreach ($usuarios as $clases) : ?>
                     <tr>
-                        <td> <?= $clases->id ?> </td>
+                        <td> <?= $clases->id_personas ?> </td>
                         <td> <?= $clases->dni ?></td>
                         <td> <?= $clases->nombre ?> </td>
                         <td> <?= $clases->apellido ?> </td>
@@ -54,14 +55,14 @@
                         <td> <?= $clases->direccion ?> </td>
                         <td> <?= $clases->correo ?> </td>
                         <td> <?= $clases->contraseña ?> </td>
-                        <td> <?= $clases->id_rol ?> </td>
+                        <td> <?= $clases->rol ?> </td>
 
                         <td>
-                            <a href="./modificar_usuarios.php?id=<?= $clases->id ?>" class="btn btn-small btn-warning">
+                            <a href="./modificar_usuarios.php?id=<?= $clases->id_personas ?>" class="btn btn-small btn-warning">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
 
-                            <form action="../../controlador/CONTROLADOR-Usuarios.php?id=<?= $clases->id ?>" method="post">
+                            <form action="../../controlador/CONTROLADOR-Usuarios.php?id=<?= $clases->id_presonas ?>" method="post">
                                 <button class="btn btn-small btn-danger" name="borrar" onclick="return pregunta()" type="submit">
                                     <i class='fa-solid fa-trash'>
                                         <!-- <input    > -->
@@ -82,7 +83,7 @@
         </table>
     </div>
     <button class="btn btn-outline-secondary">
-        <a href="../pagina-principal/index.php">inicio</a>
+        <a href="../../../index.php">inicio</a>
     </button>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>

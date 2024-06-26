@@ -1,7 +1,7 @@
 <?php
 include("../../conexion.php");
 $id = $_GET["id"];
-$sql = $conexion->query(" SELECT * FROM productos WHERE id=$id");
+$sql = $conexion->query(" SELECT * FROM productos WHERE id_productos=$id");
 
 ?>
 <!DOCTYPE html>
@@ -25,7 +25,7 @@ $sql = $conexion->query(" SELECT * FROM productos WHERE id=$id");
             while ($camilo = $sql->fetch_object()) { ?>
                 <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">id</label>
-                        <input type="text" disabled class="form-control" name="id" value="<?= $camilo->id ?>" >
+                        <input type="text" disabled class="form-control" name="id" value="<?= $camilo->id_productos ?>" >
                     </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">nombre del producto</label>
