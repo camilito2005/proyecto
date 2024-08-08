@@ -120,10 +120,13 @@ function Mostrar_usuarios()
                     <th>EDITAR/ELIMINAR</th>
                 </tr>
             </thead>
+            <tbody>            
 HTML;
 
-    Ver();
+Ver();
     $mostrar .= <<<HTML
+    
+        </tbody>
         </table>
     </div>
     <button class="btn btn-outline-secondary">
@@ -133,20 +136,12 @@ HTML;
     echo $mostrar;
 }
 
-function Estilos()
-{
-    $Estilos = <<<HTML
-     <link rel="stylesheet" href="../../css/estilos7.css">
-HTML;
-    echo $Estilos;
-}
-
 function Ver()
 {
     include_once "../../conexion.php";
     $conexion = Conexion();
     $consulta1 = <<<SQL
-        "SELECT * FROM usuarios"
+        SELECT * FROM usuarios
 SQL;
     $query = pg_query($conexion, $consulta1);
 
@@ -163,7 +158,8 @@ SQL;
             "correo" => $fila->correo,
             "contraseña" => $fila->contraseña
         ];
-        $html = <<<HTML
+        $html .= <<<HTML
+            <tbody>
                 <tr>
                     <td>$fila->dni</td>
                     <td>$fila->nombre</td>
@@ -173,6 +169,7 @@ SQL;
                     <td>$fila->correo</td>
                     <td>$fila->contraseña</td>
                 </tr>
+            </tbody>
 HTML;
     }
 

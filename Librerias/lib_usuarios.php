@@ -33,8 +33,7 @@ SQL
     );
 
     if ($consulta) {
-        include_once "./lib_HTM-U.php";
-        Mostrar_usuarios() ;
+        echo "insercion correcta ";
     }
     else {
         if (!$consulta) {
