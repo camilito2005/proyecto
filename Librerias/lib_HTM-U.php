@@ -98,7 +98,7 @@ function Mostrar_usuarios()
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>tabla</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </head>
 
@@ -116,14 +116,48 @@ function Mostrar_usuarios()
                     <th scope="col">DIRECCION</th>
                     <th scope="col">CORREO</th>
                     <th scope="col">CONTRASEÑA</th>
-                    <th scope="col">ROL</th>
                     <th>EDITAR/ELIMINAR</th>
                 </tr>
             </thead>
             <tbody>            
 HTML;
+include_once "../../conexion.php";
+$conexion = Conexion();
+$consulta1 = <<<SQL
+    SELECT * FROM usuarios
+SQL;
+$query = pg_query($conexion, $consulta1);
 
-Ver();
+
+$areglo = [];
+
+while ($fila = pg_fetch_object($query)) {
+    $arreglo[] = [
+        "dni" => $fila->dni,
+        "nombre" => $fila->nombre,
+        "apellido" => $fila->apellido,
+        "telefono" => $fila->telefono,
+        "direccion" => $fila->direccion,
+        "correo" => $fila->correo,
+        "contraseña" => $fila->contraseña
+    ];
+    $mostrar .= <<<HTML
+            <tbody>
+                <tr>
+                    <td>$fila->id</td>
+                    <td>$fila->dni</td>
+                    <td>$fila->nombre</td>
+                    <td>$fila->apellido</td>
+                    <td>$fila->telefono</td>
+                    <td>$fila->direccion</td>
+                    <td>$fila->correo</td>
+                    <td>$fila->contraseña</td>
+                    <td>modificar/eliminar</td>
+                </tr>
+            </tbody>
+HTML;
+echo $html;
+}
     $mostrar .= <<<HTML
     
         </tbody>
@@ -136,44 +170,6 @@ HTML;
     echo $mostrar;
 }
 
-function Ver()
-{
-    include_once "../../conexion.php";
-    $conexion = Conexion();
-    $consulta1 = <<<SQL
-        SELECT * FROM usuarios
-SQL;
-    $query = pg_query($conexion, $consulta1);
 
-
-    $areglo = [];
-
-    while ($fila = pg_fetch_object($query)) {
-        $arreglo[] = [
-            "dni" => $fila->dni,
-            "nombre" => $fila->nombre,
-            "apellido" => $fila->apellido,
-            "telefono" => $fila->telefono,
-            "direccion" => $fila->direccion,
-            "correo" => $fila->correo,
-            "contraseña" => $fila->contraseña
-        ];
-        $html .= <<<HTML
-            <tbody>
-                <tr>
-                    <td>$fila->dni</td>
-                    <td>$fila->nombre</td>
-                    <td>$fila->apellido</td>
-                    <td>$fila->telefono</td>
-                    <td>$fila->direccion</td>
-                    <td>$fila->correo</td>
-                    <td>$fila->contraseña</td>
-                </tr>
-            </tbody>
-HTML;
-    }
-
-    echo $html;
-}
 
 ?>
