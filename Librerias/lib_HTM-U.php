@@ -1,5 +1,7 @@
 <?php
-function Registro_clientes(){
+
+function Registro_clientes()
+{
     $formulario = <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +23,7 @@ function Registro_clientes(){
                     <label for="exampleInputEmail1" class="form-label">dni</label>
                     <input class="form-control" required type="text" name="dni" placeholder=" introduzca su dni">
                 </div>
-                <div class="mb-3">
+               <!--  <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">rol</label>
                     <section>
                         <select name="rol" id="">
@@ -29,8 +31,8 @@ function Registro_clientes(){
                             <option value="2">cliente</option>
                         </select>
                     </section>
-                    <!-- <input class="form-control" required type="text" name="rol" placeholder=" introduzca su dni"> -->
-                </div>
+                    <input class="form-control" required type="text" name="rol" placeholder=" introduzca su dni"> 
+                </div>-->
 
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">nombre</label>
@@ -118,11 +120,9 @@ function Mostrar_usuarios()
                     <th>EDITAR/ELIMINAR</th>
                 </tr>
             </thead>
-            </body>
-
-</html>
 HTML;
 
+    Ver();
     $mostrar .= <<<HTML
         </table>
     </div>
@@ -141,6 +141,42 @@ HTML;
     echo $Estilos;
 }
 
+function Ver()
+{
+    include_once "../../conexion.php";
+    $conexion = Conexion();
+    $consulta1 = <<<SQL
+        "SELECT * FROM usuarios"
+SQL;
+    $query = pg_query($conexion, $consulta1);
+
+
+    $areglo = [];
+
+    while ($fila = pg_fetch_object($query)) {
+        $arreglo[] = [
+            "dni" => $fila->dni,
+            "nombre" => $fila->nombre,
+            "apellido" => $fila->apellido,
+            "telefono" => $fila->telefono,
+            "direccion" => $fila->direccion,
+            "correo" => $fila->correo,
+            "contraseña" => $fila->contraseña
+        ];
+        $html = <<<HTML
+                <tr>
+                    <td>$fila->dni</td>
+                    <td>$fila->nombre</td>
+                    <td>$fila->apellido</td>
+                    <td>$fila->telefono</td>
+                    <td>$fila->direccion</td>
+                    <td>$fila->correo</td>
+                    <td>$fila->contraseña</td>
+                </tr>
+HTML;
+    }
+
+    echo $html;
+}
 
 ?>
-

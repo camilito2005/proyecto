@@ -1,4 +1,5 @@
 <?php
+
 $accion = $_GET["accion"];
 
 function Guardar(){
@@ -9,8 +10,7 @@ function Guardar(){
         "telefono" => $_POST["telefono"],
         "direccion" => $_POST["direccion"],
         "correo" => $_POST["correo"],
-        "contraseña" => $_POST["contraseña"],
-        "rol" => $_POST["rol"]
+        "contraseña" => $_POST["contraseña"]
     ];
 
 $dni = pg_escape_string($datos['dni']);
@@ -19,8 +19,7 @@ $apellido = pg_escape_string($datos['apellido']);
 $telefono = pg_escape_string($datos['telefono']);
 $direccion = pg_escape_string($datos['direccion']);
 $correo = pg_escape_string($datos['correo']);
-$contraseña = pg_escape_string($datos['contraseña']);
-$rol= pg_escape_string($datos['rol']);
+$contraseña = pg_escape_string($datos['contraseña']); // el pg_escape_string es para que la base de datos no tenga problemas con caracteres especiales como comillas y otros caracteres y para evitar que los datos del usuario puedan modificar la estructura de la consulta SQL de manera maliciosa.
 
 
 
@@ -28,13 +27,14 @@ $rol= pg_escape_string($datos['rol']);
     $conexion = Conexion();
 
     $consulta = pg_query($conexion, <<<SQL
-    INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña, id_rol) 
-    VALUES ('{$dni}','{$nombre}','{$apellido}','{$telefono}','{$direccion}','{$correo}','{$contraseña}','{$rol}')
+    INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña) 
+    VALUES ('{$dni}','{$nombre}','{$apellido}','{$telefono}','{$direccion}','{$correo}','{$contraseña}')
 SQL
     );
 
     if ($consulta) {
-        echo "insercion de datos exitosa";
+        include_once "./lib_HTM-U.php";
+        Mostrar_usuarios() ;
     }
     else {
         if (!$consulta) {
@@ -45,15 +45,8 @@ SQL
 
 }
 
+
 if ($accion == "registrar") {
     Guardar();
 }
-            $dni = $_POST['dni'];
-            $nombre = $_POST['nombre'];
-            $apellido = $_POST['apellido'];
-            $telefono = $_POST['telefono'];
-            $direccion = $_POST['direccion'];
-            $correo = $_POST['correo'];
-            $contraseña = $_POST['contraseña'];
-            $rol = $_POST["rol"];
 ?>
