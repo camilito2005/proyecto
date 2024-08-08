@@ -3,7 +3,9 @@ require_once 'conexion.php';
 
 $busqueda = $_POST["search_criteria"];
 
-$query = "SELECT * FROM productos WHERE nombre LIKE '%"."$busqueda"."%'";
+$query = <<<SQL
+"SELECT * FROM productos WHERE nombre LIKE '%"."$busqueda"."%'";
+SQL;
 
 $productos = [];
 $error = ['data'=>false];

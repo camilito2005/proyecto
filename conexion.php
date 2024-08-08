@@ -1,9 +1,19 @@
 <?php
-$conexion = new mysqli("localhost", "root", "", "pagina");
+$port = "5432";
+$host ="localhost";
+$dbname = "pagina";
+$user = "postgres";
+$contraseña = "camilo";
+
+$conexion = pg_connect("dbname = $dbname user=$user password=$contraseña port= $port host=$host");
 /* verificar la conexión */
-if (mysqli_connect_errno()) {
-    echo ("Falló la conexión failed: %s\n" + $mysqli->connect_error);
-    exit();
+if ($conexion) {
+    echo "conexion exitosa";
+}
+else {
+    if (!$conexion) {
+        echo "error";
+    }
 }
 
 // if ($conexion=mysqli_connect_error()) {

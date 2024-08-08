@@ -2,7 +2,6 @@
 <?php 
 session_start();
 
-// include ('../modelo/Modelocarrito.php');
 require_once "../modelo/Modelocarrito.php";
 
 

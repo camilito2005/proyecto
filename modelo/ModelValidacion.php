@@ -8,7 +8,9 @@ class Validacion
         // $conexion =new mysqli("localhost","root","","pagina");
 
 
-        $consulta = ("SELECT correo,contraseña,id_rol FROM usuarios WHERE correo='$correo' AND contraseña='$contraseña'");
+        $consulta = <<<SQL
+        ("SELECT correo,contraseña,id_rol FROM usuarios WHERE correo='$correo' AND contraseña='$contraseña'");
+SQL;
 
         $resultado = mysqli_query($conexion, $consulta);
         // $filas = mysqli_num_rows($resultado);
