@@ -13,13 +13,13 @@ function Guardar(){
         "contraseña" => $_POST["contraseña"]
     ];
 
-$dni = pg_escape_string($datos['dni']);
-$nombre = pg_escape_string($datos['nombre']);
-$apellido = pg_escape_string($datos['apellido']);
-$telefono = pg_escape_string($datos['telefono']);
-$direccion = pg_escape_string($datos['direccion']);
-$correo = pg_escape_string($datos['correo']);
-$contraseña = pg_escape_string($datos['contraseña']); // el pg_escape_string es para que la base de datos no tenga problemas con caracteres especiales como comillas y otros caracteres y para evitar que los datos del usuario puedan modificar la estructura de la consulta SQL de manera maliciosa.
+    $dni = pg_escape_string($datos['dni']);
+    $nombre = pg_escape_string($datos['nombre']);
+    $apellido = pg_escape_string($datos['apellido']);
+    $telefono = pg_escape_string($datos['telefono']);
+    $direccion = pg_escape_string($datos['direccion']);
+    $correo = pg_escape_string($datos['correo']);
+    $contraseña = pg_escape_string($datos['contraseña']); // el pg_escape_string es para que la base de datos no tenga problemas con caracteres especiales como comillas y otros caracteres y para evitar que los datos del usuario puedan modificar la estructura de la consulta SQL de manera maliciosa.
 
 
 
@@ -42,6 +42,21 @@ SQL
     }
 
 
+}
+
+function Login(){
+    session_start();
+    $datos = [
+        "correo"=> $_POST['correo'],
+        "contraseña"=> $_POST['contraseña'],
+    ];
+
+    $correo = pg_escape_string($datos['correo']);
+    $contraseña = pg_escape_string($datos["contraseña"]);
+
+    $consulta = <<< SQL
+        SELECT correo,contraseña FROM usuarios WHERE correo = $correo AND contraseña = $contraseña
+SQL;
 }
 
 
