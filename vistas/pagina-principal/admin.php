@@ -91,7 +91,7 @@
         </div>
 
 
-        <div class="container">
+        <!--<div class="container">
             <div class="car">
                 <figure>
                     <img src="../../fotos/zapatillas_mas_vendidas.webp" alt="">
@@ -99,10 +99,10 @@
                 <div class="contenido">
                     <h3> nike air force one</h3>
                     <p>los nike air force one son los zaopatos que mas se venden en la actualidad, gracias a su belleza, su sencillez y su economico precio, los tenemos en descuento aprovecha ya!!</p>
-                    <!-- <a href="" target="_blank">leer mas</a> -->
+                    <a href="" target="_blank">leer mas</a> 
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 
 

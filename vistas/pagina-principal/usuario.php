@@ -18,8 +18,29 @@
                     <i>registro</i>
                 </a>
             </li>
+            <li>
+                <a href="../catalogo/catalogo.php">productos
+                </a>
+            </li>
+        </ul>
+    </nav>
 
-            <!-- <li>
+    <!-- <div class="content">
+        <div class="container">
+            <div class="car">
+                <figure>
+                    <img src="../../fotos/zapatillas_mas_vendidas.webp" alt="">
+                </figure>
+                <div class="contenido">
+                    <h3> nike air force one</h3>
+                    <p>los nike air force one son los zaopatos que mas se venden en la actualidad, gracias a su belleza, su sencillez y su economico precio, los tenemos en descuento aprovecha ya!!</p>
+                    <a href="" target="_blank">leer mas</a>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+<!-- <li>
                 <a href="usuarios.php">
                     <i>usuarios</i>
                 </a>
@@ -52,24 +73,6 @@
                 </a>
             </li> -->
 
-            <li>
-                <a href="../catalogo/catalogo.php">productos
-
-                    <!-- <ul class="menu-vertical">
-                        <li>
-                            <a href="../productos/verProductos.php">
-                                <i>mis productos</i>
-                            </a>
-                        </li>
-                    </ul> -->
-
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-    <div class="content">
-
         <!-- <div class="formulario">
             <form action="../../controlador/registro.php" method="post">
                 <h2> bienvenido </h2>
@@ -86,20 +89,13 @@
         </div>  -->
 
 
-        <div class="container">
-            <div class="car">
-                <figure>
-                    <img src="../../fotos/zapatillas_mas_vendidas.webp" alt="">
-                </figure>
-                <div class="contenido">
-                    <h3> nike air force one</h3>
-                    <p>los nike air force one son los zaopatos que mas se venden en la actualidad, gracias a su belleza, su sencillez y su economico precio, los tenemos en descuento aprovecha ya!!</p>
-                    <!-- <a href="" target="_blank">leer mas</a> -->
-                </div>
-            </div>
-        </div>
-    </div>
-
+                    <!-- <ul class="menu-vertical">
+                        <li>
+                            <a href="../productos/verProductos.php">
+                                <i>mis productos</i>
+                            </a>
+                        </li>
+                    </ul> -->
 
 </body>
 

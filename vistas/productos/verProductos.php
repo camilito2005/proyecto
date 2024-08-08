@@ -36,7 +36,7 @@ if (isset($_SESSION["correo"])) {
         }
     </script>
     <h3 class="text-center text-secondary">productos</h3>
-    <div class="mx-auto col-8 p-6" style="display: none;" id="resultados-conainer">
+    <div class="mx-auto col-8 p-6" id="resultados-conainer">
         <table class="table" id="resultado">
             <thead class="bs-info">
                 <tr>

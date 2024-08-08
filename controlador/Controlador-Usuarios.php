@@ -8,14 +8,7 @@ $clases = new Registro;
 
     if (!empty($_POST["registro"])) {
         
-            $dni = $_POST['dni'];
-            $nombre = $_POST['nombre'];
-            $apellido = $_POST['apellido'];
-            $telefono = $_POST['telefono'];
-            $direccion = $_POST['direccion'];
-            $correo = $_POST['correo'];
-            $contraseña = $_POST['contraseña'];
-            $rol = $_POST["rol"];
+            
 
 
 
