@@ -2,9 +2,10 @@
 
 $accion = $_GET["accion"];
 
-function Guardar(){
+function Guardar()
+{
     $datos = [
-        "dni"=>$_POST['dni'],
+        "dni" => $_POST['dni'],
         "nombre" => $_POST["nombre"],
         "apellido" => $_POST["apellido"],
         "telefono" => $_POST["telefono"],
@@ -26,7 +27,9 @@ function Guardar(){
     include_once "../conexion.php";
     $conexion = Conexion();
 
-    $consulta = pg_query($conexion, <<<SQL
+    $consulta = pg_query(
+        $conexion,
+        <<<SQL
     INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña) 
     VALUES ('{$dni}','{$nombre}','{$apellido}','{$telefono}','{$direccion}','{$correo}','{$contraseña}')
 SQL
@@ -34,8 +37,7 @@ SQL
 
     if ($consulta) {
         echo "insercion correcta ";
-    }
-    else {
+    } else {
         if (!$consulta) {
             echo "error";
         }
@@ -44,19 +46,32 @@ SQL
 
 }
 
-function Login(){
+function Login()
+{
     session_start();
+
+    include_once "../conexion.php";
+
+    $conexion = Conexion();
+
     $datos = [
-        "correo"=> $_POST['correo'],
-        "contraseña"=> $_POST['contraseña'],
+        "correo" => $_POST['correo'],
+        "contraseña" => $_POST['contraseña'],
     ];
 
     $correo = pg_escape_string($datos['correo']);
     $contraseña = pg_escape_string($datos["contraseña"]);
 
-    $consulta = <<< SQL
+    $consulta = <<<SQL
         SELECT correo,contraseña FROM usuarios WHERE correo = $correo AND contraseña = $contraseña
 SQL;
+
+    $resultado = pg_query($conexion, $consulta);
+    $filas = pg_fetch_array($resultado);
+
+
+
+
 }
 
 
