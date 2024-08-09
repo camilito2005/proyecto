@@ -75,6 +75,7 @@ SQL;
 
 
 function Login(){
+    session_start();
 
     include_once "../conexion.php";
 
@@ -90,17 +91,20 @@ function Login(){
 
     $correo = pg_escape_string($correo);
     $contraseña = pg_escape_string($contraseña);
+    $nombre = "";
 
     $consulta = <<<SQL
-        SELECT correo,contraseña FROM usuarios WHERE correo = $correo AND contraseña = $contraseña
+        SELECT nombre,correo,contraseña FROM usuarios WHERE correo = '$correo' AND contraseña = '$contraseña' AND nombre = $nombre
 SQL;
-echo $consulta;
 
     $resultado = pg_query($conexion, $consulta);
     $filas = pg_fetch_array($resultado);
 
     if ($filas) {
-        echo "inicisate sesion";
+        $_SESSION["correo"] = $correo;
+        $_SESSION["nombre"] = $nombre;
+
+        header("Location: ../vistas/pagina-principal/usuario.php");
     }
     else{
         echo "error";

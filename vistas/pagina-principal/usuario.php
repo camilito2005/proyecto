@@ -10,20 +10,15 @@
 </head>
 
 <body>
-    <h3>Tienda de zapatos</h3>
-    <nav>
-        <ul class="menu-horizontal">
-            <li>
-                <a href="../usuarios/formulario_registro.php">
-                    <i>registro</i>
-                </a>
-            </li>
-            <li>
-                <a href="../catalogo/catalogo.php">productos
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <?
+    session_start();
+    if (isset($_SESSION["correo"])) {
+        echo $_SESSION["correo"];
+        echo $_SESSION["nombre"];
+
+    }
+    
+    ?>
 
     <!-- <div class="content">
         <div class="container">
