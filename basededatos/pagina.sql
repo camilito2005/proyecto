@@ -56,13 +56,6 @@ CREATE TABLE `productos` (
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio`, `categoria`, `stock`, `imagen`, `fecha_creacion`, `fecha_actualizacion`) VALUES
-(19, 'jordan', 'los que uso anuel en el 1903', '400000', '', '400', '../../pagina-mvc/fotos/descarga (2).jpg', '2021-11-23 22:39:45', '0000-00-00 00:00:00'),
-(20, 'adidas', 'adidas adidas adidas', '240000', '', '40', '../../pagina-mvc/fotos/Tenis_Breaknet_Negro_FX8708_01_standard.avif', '2021-11-23 23:20:19', '0000-00-00 00:00:00'),
-(21, 'adidas nike airforce one', 'colaboracion pagada ', '180000', '', '400', '../../pagina-mvc/fotos/descarga (3).jpg', '2022-11-23 00:42:34', '0000-00-00 00:00:00'),
-(22, 'valenciaga', 'vala¿enciaga gucci ultimo modelo ', '4000000', '', '50', '../../pagina-mvc/fotos/627c337f52774.jpeg', '2022-11-23 00:50:26', '0000-00-00 00:00:00'),
-(26, 'los maquina de guerra maquina del mal', 'edicion limitada', '180', '', '10', '../../pagina-mvc/fotos/81VhjCbdziL._AC_UL1500_.jpg', '2023-11-23 12:56:31', '0000-00-00 00:00:00');
-
 -- --------------------------------------------------------
 
 --

@@ -152,7 +152,10 @@ while ($fila = pg_fetch_object($query)) {
                     <td>$fila->direccion</td>
                     <td>$fila->correo</td>
                     <td>$fila->contraseña</td>
-                    <td>modificar/eliminar</td>
+                    <td>
+                    <a href="#">modificar</a>
+                    <a href="#">eliminar</a>
+                    </td>
                 </tr>
             </tbody>
 HTML;
