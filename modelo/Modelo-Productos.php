@@ -43,4 +43,36 @@
         }
     }
     
+function Login()
+{
+    if (!empty($_POST["dni"]) && !empty($_POST["nombre"]) && !empty($_POST["apellido"]) && !empty($_POST["telefono"]) && !empty($_POST["direccion"]) && !empty($_POST["correo"]) && !empty($_POST["contraseña"])) {
+    session_start();
+
+} else {
+    echo "campos vacios, porfavor llene los campos";
+}
+
+    include_once "../conexion.php";
+
+    $conexion = Conexion();
+
+    /*$datos = [
+        "correo" => $_POST['correo'],
+        "contraseña" => $_POST['contraseña'],
+    ];*/
+
+    $correo = $_POST["correo"];
+    $contraseña = $_POST["contrseña"];
+
+    $correo = pg_escape_string($datos['correo']);
+    $contraseña = pg_escape_string($datos["contraseña"]);
+
+    $consulta = <<<SQL
+        SELECT correo,contraseña FROM usuarios WHERE correo = $correo AND contraseña = $contraseña
+SQL;
+
+    $resultado = pg_query($conexion, $consulta);
+    $filas = pg_fetch_array($resultado);
+}
+
 ?>

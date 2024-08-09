@@ -15,7 +15,6 @@ function Menus()
 </head>
 
 <body>
-    <h3>zapatos</h3>
     <nav>
         <ul class="menu-horizontal">
             <li>

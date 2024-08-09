@@ -1,6 +1,6 @@
 <?php
 
-function Registro_clientes()
+function Formulario_clientes()
 {
     $formulario = <<<HTML
 <!DOCTYPE html>
@@ -132,7 +132,7 @@ $query = pg_query($conexion, $consulta1);
 $areglo = [];
 
 while ($fila = pg_fetch_object($query)) {
-    $arreglo[] = [
+    /*$arreglo[] = [
         "dni" => $fila->dni,
         "nombre" => $fila->nombre,
         "apellido" => $fila->apellido,
@@ -140,19 +140,31 @@ while ($fila = pg_fetch_object($query)) {
         "direccion" => $fila->direccion,
         "correo" => $fila->correo,
         "contraseña" => $fila->contraseña
-    ];
+    ];*/
+    $id = $fila->id;
+    $dni= $fila->dni;
+    $nombre= $fila->nombre;
+    $apellido = $fila->apellido;
+    $telefono = $fila->telefono;
+    $direccion = $fila->direccion;
+    $correo = $fila->correo;
+    $contraseña = $fila->contraseña;
+
     $mostrar .= <<<HTML
             <tbody>
                 <tr>
-                    <td>$fila->id</td>
-                    <td>$fila->dni</td>
-                    <td>$fila->nombre</td>
-                    <td>$fila->apellido</td>
-                    <td>$fila->telefono</td>
-                    <td>$fila->direccion</td>
-                    <td>$fila->correo</td>
-                    <td>$fila->contraseña</td>
-                    <td>modificar/eliminar</td>
+                    <td>$id</td>
+                    <td>$dni</td>
+                    <td>$nombre</td>
+                    <td>$apellido</td>
+                    <td>$telefono</td>
+                    <td>$direccion</td>
+                    <td>$correo</td>
+                    <td>$contraseña</td>
+                    <td>
+                    <a href="#">modificar</a>
+                    <a href="../../librerias/lib_usuarios.php?accion=eliminar&id=$id">eliminar</a>
+                    </td>
                 </tr>
             </tbody>
 HTML;
@@ -166,45 +178,14 @@ echo $html;
     <button class="btn btn-outline-secondary">
         <a href="../../index.php">inicio</a>
     </button>
+
+    <button class="btn btn-outline-secondary">
+        <a href="./formulario_registro.php">registrar</a>
+    </button>
 HTML;
     echo $mostrar;
 }
 
-function Login(){
-    $html=<<<HTML
 
-    
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>inicia sesion</title>
-</head>
-
-<body>
-    <div class="mx-auto contenedor">
-        <div class="formulario_registro">
-            <form class="mx-auto col-4 p-3 " action="../../controlador/ControllerValidacion.php?accion=login" method="post">
-                <h2 class="text-center text-secondary"> bienvenido </h2>
-                <p class="text-center text-secondary"> inicia sesion </p>
-                <input class="form-control" placeholder="correo" required type="text" name="correo"><br><br>
-                <input class="form-control" placeholder="contraseña" required type="password" name="contraseña"><br><b>
-                    <input class="btn btn-primary" name="inicio" class="btn" type="submit" value="entrar"><br><br>
-                    <a class="mr-auto navbar-brand" href="../usuarios/formulario_registro.php">registro</a>
-            </form>
-        </div>
-    </div>
-    <a href="../pagina-principal/index.php">inicio</a>
-</body>
-
-</html>
-
-HTML;
-
-echo $html;
-}
 
 ?>

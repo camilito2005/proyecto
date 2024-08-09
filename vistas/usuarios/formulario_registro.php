@@ -1,4 +1,4 @@
 <?php
-include_once "../../Librerias/lib_HTM-U.php";
-Registro_clientes();
+include_once "../../Librerias/lib_HTML-U.php";
+Formulario_clientes();
 ?>
