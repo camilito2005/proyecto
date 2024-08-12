@@ -2,7 +2,9 @@
 session_start();
 if (isset($_SESSION["correo"])) {
     # code...
+
 }
+echo session_status();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,10 +55,11 @@ if (isset($_SESSION["correo"])) {
                 <div class="container">
                     <?php
                     include "../../conexion.php";
-                    $mostrar = mysqli_query($conexion, "SELECT * FROM productos");
-                    $numero = mysqli_num_rows($mostrar);
+                    $conexion=Conexion();
+                    $mostrar = pg_query($conexion, "SELECT * FROM productos");
+                    $numero = pg_num_rows($mostrar);
 
-                    while ($filas = mysqli_fetch_assoc($mostrar)) {
+                    while ($filas = pg_fetch_assoc($mostrar)) {
                         # code...
                         // }
                         // $ramdom = $conexion->query("SELECT * FROM productos");

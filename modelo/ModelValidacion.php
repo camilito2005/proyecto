@@ -9,7 +9,7 @@ class Validacion
 
 
         $consulta = <<<SQL
-        ("SELECT correo,contraseña,id_rol FROM usuarios WHERE correo='$correo' AND contraseña='$contraseña'");
+        (SELECT correo,contraseña,id_rol FROM usuarios WHERE correo=$correo AND contraseña=$contraseña);
 SQL;
 
         $resultado = mysqli_query($conexion, $consulta);

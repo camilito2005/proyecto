@@ -3,7 +3,7 @@ function Conexion()
 {
     $port = "5432";
     $host = "localhost";
-    $dbname = "pagina1";
+    $dbname = "pagina";
     $user = "postgres";
     $contraseña = "postgres";
 

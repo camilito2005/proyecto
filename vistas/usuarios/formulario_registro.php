@@ -1,4 +1,11 @@
 <?php
-include_once "../../Librerias/lib_HTM-U.php";
-Registro_clientes();
+include_once "../../Librerias/lib_HTML-U.php";
+include_once "../../Librerias/lib_usuarios.php";
+
+$accion = $_GET["accion"];
+
+Formulario_clientes();
+if ($accion == "registrar") {
+    Guardar();
+}
 ?>
