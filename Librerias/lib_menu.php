@@ -1,6 +1,7 @@
 <?php
 function Menus()
 {
+    session_start();
     $menu = <<<HTML
     <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +18,13 @@ function Menus()
 <body>
     <nav>
         <ul class="menu-horizontal">
+HTML;
+if (isset($_SESSION["correo"])) {
+    $menu .= '<li>' . htmlspecialchars($_SESSION["correo"]) . '</li>';
+
+    //htmlspecialchars Convierte caracteres especiales en entidades HTML
+}
+    $menu .= <<<HTML
             <li>
                 <a href="./vistas/usuarios/usuarios.php">usuarios</a>
                 <ul class="menu-vertical">
@@ -32,21 +40,24 @@ function Menus()
                     <i>catalogo</i>
                 </a>
             </li>
-
+HTML;
+if (!isset($_SESSION["correo"])) {
+    $menu .= <<<HTML
             <li>
                 <a href="./vistas/pagina-principal/login.php">
-                    <i>iniciar sesion </i>
+                    <i>iniciar sesión</i>
                     <ul class="menu-vertical">
                         <li>
                             <a href="./vistas/usuarios/formulario_registro.php">
-                                <i>registrate</i>
+                                <i>regístrate</i>
                             </a>
                         </li>
                     </ul>
-
                 </a>
             </li>
-
+HTML;
+}
+$menu .= <<<HTML
             <li>
                 <a href="./vistas/facturas.php">
                     <i>facturas</i>

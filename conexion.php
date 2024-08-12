@@ -5,7 +5,7 @@ function Conexion()
     $host = "localhost";
     $dbname = "pagina";
     $user = "postgres";
-    $contraseña = "postgres";
+    $contraseña = "camilo";
 
     $conexion = pg_connect("dbname = $dbname user=$user password=$contraseña port= $port host=$host");
     /* verificar la conexión 

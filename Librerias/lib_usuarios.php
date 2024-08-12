@@ -12,7 +12,9 @@ function Guardar()
             "telefono" => $_POST["telefono"],
             "direccion" => $_POST["direccion"],
             "correo" => $_POST["correo"],
-            "contraseña" => $_POST["contraseña"]
+            "contraseña" => $_POST["contraseña"],
+            "id_rol" => $_POST["rol"],
+
         ];
 
         include_once "../../conexion.php";
@@ -25,44 +27,47 @@ function Guardar()
         $direccion = pg_escape_string($datos['direccion']);
         $correo = pg_escape_string($datos['correo']);
         $contraseña = pg_escape_string($datos['contraseña']); // el pg_escape_string es para que la base de datos no tenga problemas con caracteres especiales como comillas y otros caracteres y para evitar que los datos del usuario puedan modificar la estructura de la consulta SQL de manera maliciosa.
+        $id_rol = pg_escape_string($datos['rol']);
 
         if (strlen($contraseña) < 6) {
             echo "La contraseña debe tener al menos 6 caracteres.";
             exit;
         }
+        $consultaCorreo = <<<SQL
+        SELECT count(*) FROM usuarios WHERE correo = '$correo'
+SQL;
+        $consultaCorreo = pg_query($conexion, $consultaCorreo);
+        $resultadoCorreo = pg_fetch_result($consultaCorreo, 0, 0);
+        if ($resultadoCorreo) {
+            echo "este correo" . "'$correo'" . "ya existe";
+            exit;
+        }
 
-        $consultadni =<<<SQL
+        $consultadni = <<<SQL
         SELECT count(*) FROM usuarios WHERE dni = '$dni'
 SQL;
         $querydni = pg_query($conexion, $consultadni);
-        if ($querydni == FALSE) {
-            echo "error al consultar el dni". pg_last_error($conexion);
-            exit;
-        }
         $resultadoDni = pg_fetch_result($querydni, 0, 0); //Es una función que se usa para recuperar un valor específico de un recurso de consulta obtenido a través de pg_query.
-        if ($resultadoDni>0) {
-            echo  "este dni "."'$dni'"." ya existe";
+        if ($resultadoDni > 0) {
+            echo "este dni " . "'$dni'" . " ya existe";
             exit;
         }
 
         $consultaContraseña = <<<SQL
         SELECT count(*) FROM usuarios WHERE contraseña = '$contraseña'
 SQL;
-        $resultadoContraseña=pg_query($conexion,$consultaContraseña);
-        if ($resultadoContraseña==FALSE) {
-            echo "error al consultar la contraseña". pg_last_error($conexion);
-            exit;
-        }
-        $countcontraseña = pg_fetch_result($resultadoContraseña,0,0);
-        if ($countcontraseña>0) {
-            echo"la contraseña "."'$contraseña'" ." ya existe";
-            
+        $resultadoContraseña = pg_query($conexion, $consultaContraseña);
+        $countcontraseña = pg_fetch_result($resultadoContraseña, 0, 0);
+        if ($countcontraseña > 0) {
+            echo "la contraseña " . "'$contraseña'" . " ya existe";
+
             exit;
         }
 
-            $consulta = <<<SQL
+        $consulta = <<<SQL
             INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña) VALUES ('$dni','$nombre','$apellido','$telefono','$direccion','$correo','$contraseña')
 SQL;
+        echo $consulta;
 
         $resultadoc = pg_query($conexion, $consulta);
 
@@ -93,7 +98,7 @@ function Eliminar()
 SQL;
     $resultado = pg_query($conexion, $consulta);
     if ($resultado) {
-        echo "el registro de id ".$id." eliminado correctamente";
+        echo "el registro de id " . $id . " eliminado correctamente";
         exit;
     } else {
         echo "error ";
@@ -134,24 +139,110 @@ SQL;
     if ($filas) {
         $_SESSION["correo"] = $correo;
 
-        header("Location: ../vistas/pagina-principal/usuario.php");
+        header("Location: ../vistas/catalogo/catalogo.php");
     } else {
         echo "contraseña incorrecta ";
     }
 }
-function Cerrar_sesion(){
+function Cerrar_sesion()
+{
     session_start();
     session_destroy();
     header("Location: ../vistas/pagina-principal/login.php");
 }
 
-if ($accion=="sesion") {
+function Modificar_usuarios()
+{
+
+    include_once "../conexion.php";
+    $conexion = Conexion();
+    $id = $_GET["id"];
+
+    $consulta = <<<SQL
+        SELECT * FROM usuarios WHERE id = '$id'
+SQL;
+    $resultado = pg_query($conexion, $consulta);
+    
+    $html = <<<HTML
+    <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>modificar registro</title>
+</head>
+
+<body>
+    <div class="contenedor">
+        <form class="col-4 p-3 m-auto" action="../../controlador/Controlador-Usuarios.php" method="post">
+            <h3>modificar registro de usuarios</h3>
+                <input type="hidden" name="id" value="{$id}">
+HTML;
+    while ($filas = pg_fetch_object($resultado)) {
+        $html .= <<<HTML
+                <div class="mb-3" disabled>
+                    <label for="exampleInputEmail1" class="form-label">dni</label>
+                    <input type="text" class="form-control" disabled name="dni" value="{$filas->dni}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">nombres</label>
+                    <input type="text" class="form-control" name="nombre" value="{$filas->nombre}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">apellido</label>
+                    <input type="text" class="form-control" name="apellido" value="{$filas->apellido}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">telefono</label>
+                    <input type="number" class="form-control" name="telefono" value="{$filas->telefono}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label" required>direccion</label>
+                    <input type="text" class="form-control" name="direccion" value="{$filas->direccion}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label" required>correo</label>
+                    <input type="email" class="form-control" name="correo" value="{$filas->correo}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label" required>contraseña</label>
+                    <input type="password" class="form-control" name="contraseña" value="{$filas->contraseña}">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label" required>rol</label>
+                    <input type="text" class="form-control" name="rol" value="{$filas->id_rol}">
+                </div>
+
+HTML;
+    }
+    $html .= <<<HTML
+<input type="submit" class="btn btn-primary" name="modificar" value="modificar productos"></input><br><br>
+            <button class="btn btn-outline-secondary">
+                <a href="../usuarios/usuarios.php">regresar</a>
+            </button><br><br>
+            <button class="btn btn-outline-secondary">
+                <a href="../pagina-principal/index.php">inicio</a>
+            </button>
+        </form>
+    </div>
+</body>
+</html>
+
+HTML;
+    echo $html;
+
+
+}
+
+if ($accion == "sesion") {
     Cerrar_sesion();
 }
-if ($accion =="login") {
+if ($accion == "login") {
     Login();
+}
+
+if ($accion=="modificar"){
+    Modificar_usuarios();
 }
 
 
 ?>
-

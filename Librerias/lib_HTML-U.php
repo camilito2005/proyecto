@@ -161,7 +161,7 @@ SQL;
                     <td>$correo</td>
                     <td>$contraseña</td>
                     <td>
-                    <a href="#">modificar</a>
+                    <a href="../../Librerias/lib_usuarios.php?accion=modificar&id=$id">modificar</a>
                     <a href="usuarios.php?accion=eliminar&id=$id">eliminar</a>
                     </td>
                 </tr>
@@ -222,8 +222,7 @@ HTML;
 
     echo $html;
 }
-function Formulario_productos()
-{
+function Formulario_productos(){
     $html = <<<HTML
         <!DOCTYPE html>
 <html lang="en">
@@ -238,7 +237,7 @@ function Formulario_productos()
 
 <body>
 <div class="contenedor">
-        <form class="col-4 p-3 m-auto" action="../../librerias/lib_productos.php?accion=registrar" method="post" enctype="multipart/form-data">
+        <form class="col-4 p-3 m-auto" action="../../librerias/lib_productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data">
             <h3>agregar productos</h3>
             <!-- <div class="mb-3"disabled>
                         <label for="exampleInputEmail1" class="form-label">id</label>
@@ -397,7 +396,7 @@ HTML;
             </div>
             <!-- <a href="">ver carrito</a> -->
         </div>
-        <p> resultado : <?php echo $total ?></p>
+        <p> resultado : {$total}</p>
     </div>
     <a href="../../index.php">inicio</a>
 HTML;

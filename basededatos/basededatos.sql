@@ -44,7 +44,7 @@ CREATE TABLE public.categorias (
     id integer NOT NULL,
     categoria_producto character varying(100) NOT NULL,
     fecha_creacion timestamp without time zone NOT NULL,
-    fecha_actualizacion timestamp without time zone NOT NULL
+    fecha_actualizacion timestamp without time zone
 );
 
 
