@@ -61,6 +61,11 @@ function Menus()
                                 <i>mis productos</i>
                             </a>
                         </li>
+                        <li>
+                        <a href="./vistas/productos/Productos.php">
+                                <i>agregar Productos</i>
+                            </a>
+                        </li>
                     </ul>
 
                 </a>
