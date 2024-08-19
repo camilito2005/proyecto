@@ -5,7 +5,7 @@ function Conexion()
     $host = "localhost";
     $dbname = "pagina";
     $user = "postgres";
-    $contraseña = "camilo";
+    $contraseña = "postgres";
 
     $conexion = pg_connect("dbname = $dbname user=$user password=$contraseña port= $port host=$host");
     /* verificar la conexión 
@@ -20,10 +20,10 @@ function Conexion()
 }
 
 
-// if ($conexion=mysqli_connect_error()) {
+if ($conexion=mysqli_connect_error()) {
 
-//     echo("error");
-// } 
+echo("error");
+} 
 // else {
 //     echo "no hay error";
 // }

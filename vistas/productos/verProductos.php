@@ -1,4 +1,4 @@
 <?php
-    include_once "../../Librerias/lib_productos.php";
+    include_once "../../Librerias/lib_HTML-U.php";
     Mostrar_productos();
 ?>

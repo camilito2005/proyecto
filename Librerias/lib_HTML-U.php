@@ -62,6 +62,10 @@ function Formulario_clientes()
                     <label for="exampleInputEmail1" class="form-label">contraseña</label>
                     <input class="form-control" required type="password" name="contraseña" placeholder="contraseña">
                 </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">comfirmar contraseña</label>
+                    <input class="form-control" required type="password" name="comfirm_contraseña" placeholder="contraseña">
+                </div>
 
                 <input class="btn btn-primary" type="submit" name="registro" value="registrar"><br><br>
                 <button class="btn btn-outline-secondary">
@@ -222,7 +226,8 @@ HTML;
 
     echo $html;
 }
-function Formulario_productos(){
+function Formulario_productos()
+{
     $html = <<<HTML
         <!DOCTYPE html>
 <html lang="en">
@@ -279,6 +284,117 @@ function Formulario_productos(){
 </body>
 
 </html>
+HTML;
+    echo $html;
+}
+function Mostrar_productos()
+{
+
+    date_default_timezone_set('America/Bogota');
+    $fecha = date('d-m-Y g:i:s A');
+    session_start();
+    if (isset($_SESSION["correo"])) {
+        echo $_SESSION["correo"];
+        $html = <<<HTML
+<form action='../../Librerias/lib_usuarios.php?accion=sesion' method='post'>
+    <input type='submit' value="cerrar sesion">
+</form>
+HTML;
+    }
+    $html .= <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/busqueda.css">
+    <title>Productos</title>
+</head>
+
+<body>
+    <script src="../../js/busqueda.js" defer></script>
+
+    <div class="input-search">
+        <nav>
+            <input  type="search" id="search" placeholder="search">
+        </nav>
+    </div>
+    <a href="../../Librerias/lib_productos.php?accion=excel" class="btn btn-small btn-warning">
+        <i class="fa-solid fa-pen-to-square"></i>
+    </a>
+    <h3 class="text-center text-secondary">productos</h3>
+    <div class="mx-auto col-8 p-6" id="resultados-conainer">
+        <table class="table" id="resultado">
+            <thead class="bs-info">
+                <tr>
+                    <th scope="col">id</th>
+                    <th>imagen</th>
+                    <th>nombre del prodcuto</th>
+                    <th>descripcion</th>
+                    <th>precio</th>
+                    <th>cantidad</th>
+                    <th>EDITAR/ELIMINAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <div class="container">
+HTML;
+    include "../../conexion.php";
+    $conexion = Conexion();
+    $mostrar = pg_query($conexion, "SELECT * FROM productos");
+    $numero = pg_num_rows($mostrar);
+
+    while ($filas = pg_fetch_assoc($mostrar)) {
+        $html .= <<<HTML
+<tr>
+<td>{$filas["id"]}</td>
+<td>
+    <div class="card mx-4 mt-4 mx-auto" style="width: 10rem;">
+        <img src="/{$filas['imagen']}" height="70%" width="100%" class="card-img-top">
+    </div>
+</td>
+<td>{$filas["nombre"]}</td>
+<th>{$filas["descripcion"]}</th>
+<td>{$filas["precio"]}</td>
+<td>{$filas["stock"]}</td>
+
+<td>
+    <a href="../../Librerias/lib_productos.php?accion=modificar&id={$filas['id']}" class="btn btn-small btn-warning">
+        <i class="fa-solid fa-pen-to-square"></i>
+    </a>
+    <form action="/ti/librerias/lib_Productos.php?accion=eliminar&id={$filas['id']}" method="post">
+        <button name="eliminar" class="btn btn-small btn-danger" type="submit" onclick="return Pregunta()">
+            <i class="fa-solid fa-trash">
+
+            </i>
+        </button>
+    </form>
+</td>
+
+
+
+</tr>
+</div>
+</div>
+HTML;
+    }
+    $html .= <<<HTML
+    <p>total : {$numero}</p>
+    <p>fecha y hora : {$fecha}</p>
+    
+</tbody>
+</table>
+</div>
+<button class="btn btn-secondary">
+    <a href="../catalogo/catalogo.php">catalogo</a>
+</button>
+<button class="btn btn-secondary">
+    <a href="../productos/productos.php">agregar productos</a>
+</button>
+<a href="../../index.php">inicio</a>
 HTML;
     echo $html;
 }
@@ -374,7 +490,7 @@ HTML;
                     </div>
                     <div class="card-footer">
                         <button class="btn-buy button1">COMPRALO YA¡</button>
-                        <form action="../../controlador/carrito.php?carri=agregar" method="post" enctype="multipart/form-data">
+                        <form action="../../Librerias/lib_carrito.php?accion=agregar" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="{$filas['id']}">
                             <input name="nombre" type="hidden" value="{$filas['nombre']}">
                             <input name="descripcion" type="hidden" value="{$filas['descripcion']}">
@@ -390,7 +506,7 @@ HTML;
     }
     $html .= <<<HTML
     <div>
-                <form action="../../controlador/carrito.php?carri=ver" method="post">
+                <form action="../../Librerias/lib_carrito.php?accion=ver" method="post">
                     <button>ver carrito</button>
                 </form>
             </div>
@@ -402,4 +518,97 @@ HTML;
 HTML;
     echo $html;
 }
-?>
+
+function Carrito_HTML(){
+    $correo = $_SESSION["correo"];
+
+    $html=<<<HTML
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>carrito</title>
+    </head>
+    
+    <body>
+        <div>
+            <form action="../../Librerias/lib_carrito.php?accion=eliminarT" method="post">
+                <input type="submit" value="vaciar el carrito">
+            </form>
+        </div>
+        <!-- <a href="../../controlador/carrito.php?carri=eliminarT"> Vaciar el carrito</a> -->
+HTML;
+        session_start();
+        if (isset($correo)) {
+            echo $correo;
+        }
+    
+        require_once '../../modelo/Modelocarrito.php';
+        $modelo = new Carrito();
+        $zapatos = $modelo->ver();
+            // if (empty($_SESSION['carrito'])) {
+            //     // echo 'no hay nada en el carrito';
+            //     header('Location: ../catalogo/carrito.php');
+            // } else {
+            //     return  $_SESSION['carrito'];
+            // }
+        include "../../conexion.php";
+        $conexion = Conexion();
+        $consulta = <<<SQL
+        SELECT * FROM productos
+SQL;
+$resultado = pg_query($conexion,$consulta);
+
+        foreach ($zapatos as $id => $zapatico) :
+            $html.=<<<HTML
+            <div class="container">
+                <div class="card mx-4 mt-4 mx-auto" style="width: 21rem;">
+                    <!-- <div> -->
+                    <!--<p>fotico:  {$zapatico['stock']}</p> en la foto sale la descripcion -->
+                    <!-- </div> -->
+                    <div>
+                        <img src="/{$zapatico['foto']}" height="100%" width="100%" class="card-img-top" alt="...">
+                    </div>
+                    <!-- <img src="{$zapatico['imagen']}alt="" class="card-img-top"> -->
+                    <div class="card-body">
+                        <h3 class="card-title ">nombre :{$zapatico['nombre']}
+                        </h3>
+    
+                        <p class="">precio $ : {$zapatico['precio']}</p> <!-- en el precio aparece el stcok o disponibles -->
+                        <!--<p class="">disponibles : {$zapatico['stock']}p>  en el stock aparece la ruta de la foto -->
+    
+                        <p class="">disponibles : {$zapatico['stock']}</p> <!-- en la descripcion aparece el precio -->
+                        <p class="">descripcion : {$zapatico['descripcion']}</p> <!-- en la descripcion aparece el precio -->
+    
+    
+                    </div>
+                    <div class="card-footer">
+                        <p class="">Cantidad: {$zapatico['stock']}</p> <!-- en el stock aparece la ruta de la foto -->
+                        <form action="../../Librerias/lib_carrito.php?accion=eliminarU" method="post">
+                            <input type="hidden" name="id" value="{$id}">
+                            <button type="submit" class="btn btn-outline-danger"> Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+HTML;
+        endforeach;
+        $html.=<<<HTML
+        <div>
+            <form action="../../Librerias/lib_carrito.php?accion=index" method="post">
+                <input type="submit" value="volver a la tienda">
+            </form>
+            <a href="../catalogo/catalogo.php">volver a la tienda</a>
+        </div>
+    
+    
+        <!--  -->
+    
+    </body>
+HTML;
+    echo $html;
+}

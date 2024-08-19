@@ -43,139 +43,115 @@ SQL;
                         if (!$resultado)
                             echo "error";
                     }
-
                 } else {
                     echo "error al subir la foto";
                 }
             }
-
         }
     } else {
         echo "campos vacios , por favor llene los campos";
     }
-}
-
-function Mostrar_productos()
+}function Modificar_Productos()
 {
-    session_start();
-    if (isset($_SESSION["correo"])) {
-        echo $_SESSION["correo"];
-        $html = <<<HTML
-<form action='../../Librerias/lib_usuarios.php?accion=sesion' method='post'>
-    <input type='submit' value="cerrar sesion">
-</form>
-HTML;
-    }
-    echo session_status();
-    $html .= <<<HTML
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css/busqueda.css">
-    <title>Productos</title>
-</head>
-
-<body>
-    <script src="../../js/busqueda.js" defer></script>
-
-    <div class="input-search">
-        <nav>
-            <input  type="search" id="search" placeholder="search">
-        </nav>
-    </div>
-
-    <div class="error">
-        <p></p>
-    </div>
-    <h3 class="text-center text-secondary">productos</h3>
-    <div class="mx-auto col-8 p-6" id="resultados-conainer">
-        <table class="table" id="resultado">
-            <thead class="bs-info">
-                <tr>
-                    <th scope="col">id</th>
-                    <th>imagen</th>
-                    <th>nombre del prodcuto</th>
-                    <th>descripcion</th>
-                    <th>precio</th>
-                    <th>cantidad</th>
-                    <th>EDITAR/ELIMINAR</th>
-                </tr>
-            </thead>
-            <tbody>
-                <div class="container">
-HTML;
-    include "../../conexion.php";
+    include("../conexion.php");
     $conexion = Conexion();
-    $mostrar = pg_query($conexion, "SELECT * FROM productos");
-    $numero = pg_num_rows($mostrar);
+    $id = $_GET["id"];
+    $sql = <<<SQL
+        SELECT * FROM productos WHERE id=$id
+SQL;
+    $consulta = pg_query($conexion, $sql);
 
-    while ($filas = pg_fetch_assoc($mostrar)) {
+    $html = <<<HTML
+    
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="../../css/fomu_productos.css"> -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Modificar productos</title>
+    </head>
+    
+    <body>
+        <div class="contenedor">
+            <form class="col-4 p-3 m-auto" action="lib_productos.php?accion=actualizar&id=$id" method="post">
+                <h3>modificar productos</h3>
+                <input type="hidden" name="id" value="{$_GET['id']}">
+HTML;
+    while ($camilo = pg_fetch_object($consulta)) {
         $html .= <<<HTML
-                            <tr>
-
-
-<td>{$filas["id"]}</td>
-<td>
-    <div class="card mx-4 mt-4 mx-auto" style="width: 10rem;">
-        <img src="/{$filas['imagen']}" height="70%" width="100%" class="card-img-top">
-    </div>
-</td>
-<td>{$filas["nombre"]}</td>
-<th>{$filas["descripcion"]}</th>
-<td>{$filas["precio"]}</td>
-<td>{$filas["stock"]}</td>
-
-<td>
-    <a href="./modificar-productos.php?id={$filas['id']}" class="btn btn-small btn-warning">
-        <i class="fa-solid fa-pen-to-square"></i>
-    </a>
-    <form action="/ti/librerias/lib_Productos.php?accion=eliminar&id={$filas['id']}" method="post">
-        <button name="eliminar" class="btn btn-small btn-danger" type="submit" onclick="return Pregunta()">
-            <i class="fa-solid fa-trash">
-
-            </i>
-        </button>
-    </form>
-    <!-- <a href="../../controlador/eliminar_productos.php?id={$filas['id']}"  >
-        
-    </a> -->
-</td>
-
-
-
-</tr>
-</div>
-</div>
+                    <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">id</label>
+                            <input type="text" disabled class="form-control" name="id" value="{$camilo->id}" >
+                        </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">nombre del producto</label>
+                        <input type="text" class="form-control" name="nombre" value="{$camilo->nombre}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">descrpcion</label>
+                        <input type="text" class="form-control" name="descripcion" value="{$camilo->descripcion}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="precio" class="form-label">Precio:</label>
+                        <input type="number" class="form-control" name="precio" value="{$camilo->precio}" id="precio"><br>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">cantidad</label>
+                        <input type="number" class="form-control" name="cantidad"  value="{$camilo->stock}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label" required>foto</label>
+                        <input type="file" class="form-control" disabled name="foto" value="{$camilo->imagen}">
+                    </div>
+    
+                
 HTML;
     }
-
     $html .= <<<HTML
-    <p>{$numero}</p>
-</tbody>
-</table>
-</div>
-<button class="btn btn-secondary">
-    <a href="../catalogo/catalogo.php">catalogo</a>
-</button>
-<button class="btn btn-secondary">
-    <a href="../productos/productos.php">agregar productos</a>
-</button>
+                <input type="submit" class="btn btn-primary" name="modificar" value="modificar productos"></input>
+                <button class="btn btn-outline-secondary">
+                    <a href="../productos/verProductos.php">regresar</a>
+                </button>
+            </form>
+        </div>
+    </body>
+    
+    </html>
 HTML;
-    echo $html;
+echo $html;
+}
+function Actualizar_productos(){
+
+    include_once "../conexion.php";
+    $conexion = Conexion();
+
+    $id = $_GET["id"];
+    $nombre_producto = $_POST["nombre"];
+    $descripcion = $_POST["descripcion"];
+    $precio = $_POST["precio"];
+    $cantidad = $_POST["cantidad"];
+
+    $sql=<<<SQL
+    UPDATE productos SET nombre = '$nombre_producto', descripcion = '$descripcion', precio = '$precio', stock = '$cantidad' WHERE id = '$id'
+SQL;
+$consulta = pg_query($conexion,$sql);
+if ($consulta) {
+    header("Location: ../../ti/vistas/productos/verProductos.php");
+}
+else {
+    echo "error";
+}
 }
 
 function Eliminar_productos()
 {
     include_once "../conexion.php";
     $conexion = Conexion();
-
-    $id = $_GET["id"];
-
+    $id = $_GET['id'];
     $consulta = <<<SQL
         DELETE FROM productos WHERE id = '$id'
 SQL;
@@ -184,19 +160,75 @@ SQL;
     if ($resultado) {
         header("Location: ../vistas/productos/verProductos.php");
         exit;
-    }
-    else {
+    } else {
         echo "error";
     }
+}
+function Excel (){
+    require "Classes/PHPExcel.php";
+
+    include_once "../conexion.php";
+    $conexion = Conexion();
+    if (!$conexion) {
+        die("Conexión fallida: ");
+    }
+    $sql = <<<SQL
+    SELECT * FROM productos
+SQL;
+$resultado = pg_query($conexion, $sql);
+
+if (!$resultado) {
+    die ("error en la consulta");
+}
+
+$objPHPExcel = new PHPExcel();
+$objPHPExcel->getActiveSheet()->setTitle('Productos');
+
+$headers = ['ID', 'nombre del producto', 'descripcion','precio','cantidad', 'imagen']; // Ajusta según tus columnas
+$col = 'A';
+foreach ($headers as $header) {
+    $objPHPExcel->getActiveSheet()->setCellValue($col . '1', $header);
+    $col++;
+}
+
+// Agregar los datos a la hoja de cálculo
+$rowNumber = 2;
+while ($row = pg_fetch_assoc($resultado)) {
+    $col = 'A';
+    foreach ($row as $data) {
+        $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $data);
+        $col++;
+    }
+    $rowNumber++;
+}
+// Crear el archivo Excel
+header ( "Pragma: " );
+	header ( "Cache-Control: cache" );
+	header ( "Content-type: application/x-msexcel" );
+	header ( "Content-Disposition: attachment; filename=productos.xls" );
+
+
+// Guardar el archivo Excel y forzar la descarga
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter->save('php://output');
+exit;
+
 }
 
 if ($accion == "registrar_productos") {
     Insertar_productos();
 }
 
-if ($accion=="eliminar") {
+if ($accion == "eliminar") {
     Eliminar_productos();
 }
-
-
+if ($accion== "modificar") {
+    Modificar_Productos();
+}
+if ($accion == "actualizar") {
+    Actualizar_productos();
+}
+if ($accion == "excel") {
+    Excel();
+}
 ?>

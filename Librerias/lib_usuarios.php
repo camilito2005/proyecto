@@ -13,6 +13,7 @@ function Guardar()
             "direccion" => $_POST["direccion"],
             "correo" => $_POST["correo"],
             "contraseña" => $_POST["contraseña"],
+            "comfirm_contraseña" => $_POST["comfirm_contraseña"],
             "id_rol" => $_POST["rol"],
 
         ];
@@ -27,7 +28,12 @@ function Guardar()
         $direccion = pg_escape_string($datos['direccion']);
         $correo = pg_escape_string($datos['correo']);
         $contraseña = pg_escape_string($datos['contraseña']); // el pg_escape_string es para que la base de datos no tenga problemas con caracteres especiales como comillas y otros caracteres y para evitar que los datos del usuario puedan modificar la estructura de la consulta SQL de manera maliciosa.
-        $id_rol = pg_escape_string($datos['rol']);
+        $comfirm_contraseña = pg_escape_string($datos['comfirm_contraseña']);
+
+        if ($contraseña !== $comfirm_contraseña) {
+            echo "Las contraseñas no coinciden. Por favor, intente de nuevo.";
+            exit;
+        }
 
         if (strlen($contraseña) < 6) {
             echo "La contraseña debe tener al menos 6 caracteres.";
@@ -67,7 +73,6 @@ SQL;
         $consulta = <<<SQL
             INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña) VALUES ('$dni','$nombre','$apellido','$telefono','$direccion','$correo','$contraseña')
 SQL;
-        echo $consulta;
 
         $resultadoc = pg_query($conexion, $consulta);
 
@@ -82,7 +87,32 @@ SQL;
         echo "campos vacios, porfavor llene los campos";
     }
 }
+function Actualizar_usuarios(){
+    $id = $_GET["id"];
+    // $dni = $_POST["dni"];
+    $nombre = $_POST["nombre"];
+    $apellido = $_POST["apellido"];
+    $telefono = $_POST["telefono"];
+    $direccion = $_POST["direccion"];
+    $correo = $_POST["correo"];
+    $contraseña = $_POST["contraseña"];
 
+    include_once "../conexion.php";
+    $conexion = Conexion();
+
+    $consulta = <<<SQL
+    UPDATE usuarios SET nombre = '$nombre', apellido = '$apellido',telefono = '$telefono', direccion = '$direccion' ,correo = '$correo',contraseña = '$contraseña' WHERE id = '$id'
+SQL;
+
+$resultado_consulta = pg_query($conexion,$consulta);
+
+if ($resultado_consulta) {
+    header("Location: ../../ti/vistas/usuarios/usuarios.php");
+}
+else {
+    echo "error al realizar la operacion ";
+}
+}
 
 function Eliminar()
 {
@@ -173,7 +203,7 @@ SQL;
 
 <body>
     <div class="contenedor">
-        <form class="col-4 p-3 m-auto" action="../../controlador/Controlador-Usuarios.php" method="post">
+        <form class="col-4 p-3 m-auto" action="lib_usuarios.php?accion=actualizar&id=$id" method="post">
             <h3>modificar registro de usuarios</h3>
                 <input type="hidden" name="id" value="{$id}">
 HTML;
@@ -207,10 +237,10 @@ HTML;
                     <label for="exampleInputEmail1" class="form-label" required>contraseña</label>
                     <input type="password" class="form-control" name="contraseña" value="{$filas->contraseña}">
                 </div>
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label" required>rol</label>
                     <input type="text" class="form-control" name="rol" value="{$filas->id_rol}">
-                </div>
+                </div> -->
 
 HTML;
     }
@@ -244,5 +274,8 @@ if ($accion=="modificar"){
     Modificar_usuarios();
 }
 
+if ($accion =="actualizar") {
+    Actualizar_usuarios();
+}
 
 ?>
