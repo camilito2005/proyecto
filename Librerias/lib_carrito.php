@@ -8,11 +8,15 @@ $accion = $_GET["accion"];
 
 if ($accion == "index") {
     header("Location: ../vistas/catalogo/catalogo.php");
-    break;
 }
 if ($accion == "ver") {
-    header('Location: ../vistas/catalogo/carrito.php');
-        break;
+    if (empty($_SESSION['carrito'])) {
+        echo 'no hay nada en el carrito';
+        header('Location: ..vistas/catalogo/carrito.php');
+        } else {
+        return  $_SESSION['carrito'];
+        }
+    //header('Location: ../vistas/catalogo/carrito.php');
 }
 
 if ($accion == "agregar") {
@@ -23,21 +27,24 @@ if ($accion == "agregar") {
         $precio = $_POST['precio'];
         $stock = $_POST['stock'];
         $foto = $_POST['foto'];
+        $cantidad=$_POST['cantidad'];
         // $imagen = $_POST['imagen'];
         if (!isset($_SESSION['carrito'])) {
             $_SESSION['carrito'] = array();
         }
         if (array_key_exists($id, $_SESSION['carrito'])) {
-            $_SESSION['carrito'][$id]['stock'] += $stock;
+            $precioF=$precio*$cantidad;
+            $_SESSION['carrito'][$id]['cantidad'] += $cantidad;
             $_SESSION['carrito'][$id]['precio'] += $precio;
         } else {
             $_SESSION['carrito'][$id] = array(
+                'id'=>$id,
                 'nombre' => $nombre,
                 'foto' => $foto,
                 'descripcion' => $descripcion,
                 'precio' => $precio,
                 'stock' => $stock,
-                // 'cantidad' => $cantidad,
+                'cantidad' => $cantidad,
             );
         }
         //$carrito->aggCarrito($id,$nombre,$descripcion,$precio,$stock,$foto);
@@ -48,7 +55,25 @@ if ($accion == "agregar") {
         
     $_SESSION['correo']['id']['stock'] += $stock;
 }
-break;
+}
+
+if ($accion == "actualizar") {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id = $_POST['id'];
+        $cantidad = $_POST['cantidad'];
+
+        if (isset($_SESSION['carrito'][$id])) {
+            $precioUnitario = $_SESSION['carrito'][$id]['precio'] / $_SESSION['carrito'][$id]['cantidad'];
+            $stock = $_SESSION['carrito'][$id]['stock'];
+
+            if ($cantidad > 0 && $cantidad <= $stock) {
+                $_SESSION['carrito'][$id]['cantidad'] = $cantidad;
+                $_SESSION['carrito'][$id]['precio'] = $precioUnitario * $cantidad;
+            }
+        }
+
+        header('Location: ../vistas/catalogo/carrito.php');
+    }
 }
         
 if ($accion == "eliminarU") {

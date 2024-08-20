@@ -89,6 +89,7 @@ $menu .= <<<HTML
     
     </div>
 </body>
+<p>estadisticas</p>
 </html>
 HTML;
     echo $menu;

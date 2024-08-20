@@ -499,6 +499,7 @@ HTML;
                             <input name="foto" type="hidden" value="{$filas['imagen']}">
                             <input name="carrito" type="submit" class="btn btn-primary" value="agregar al carrito">
                         </form>
+                        
                     </div>
 
                 </div>
@@ -519,10 +520,10 @@ HTML;
     echo $html;
 }
 
-function Carrito_HTML(){
-    $correo = $_SESSION["correo"];
-
-    $html=<<<HTML
+function Carrito_HTML()
+{
+    $correo = $_SESSION["correo"];    
+    $html = <<<HTML
     <!DOCTYPE html>
     <html lang="en">
     
@@ -542,29 +543,31 @@ function Carrito_HTML(){
         </div>
         <!-- <a href="../../controlador/carrito.php?carri=eliminarT"> Vaciar el carrito</a> -->
 HTML;
-        session_start();
-        if (isset($correo)) {
-            echo $correo;
-        }
-    
-        require_once '../../modelo/Modelocarrito.php';
-        $modelo = new Carrito();
-        $zapatos = $modelo->ver();
-            // if (empty($_SESSION['carrito'])) {
-            //     // echo 'no hay nada en el carrito';
-            //     header('Location: ../catalogo/carrito.php');
-            // } else {
-            //     return  $_SESSION['carrito'];
-            // }
-        include "../../conexion.php";
-        $conexion = Conexion();
-        $consulta = <<<SQL
+    session_start();
+    if (isset($correo)) {
+        echo $correo;
+    }
+
+    require_once '../../modelo/Modelocarrito.php';
+    $modelo = new Carrito();
+    $zapatos = $modelo->ver();
+    // if (empty($_SESSION['carrito'])) {
+    //     // echo 'no hay nada en el carrito';
+    //     header('Location: ../catalogo/carrito.php');
+    // } else {
+    //     return  $_SESSION['carrito'];
+    // }
+    include "../../conexion.php";
+    $conexion = Conexion();
+    $consulta = <<<SQL
         SELECT * FROM productos
 SQL;
-$resultado = pg_query($conexion,$consulta);
+    $resultado = pg_query($conexion, $consulta);
 
-        foreach ($zapatos as $id => $zapatico) :
-            $html.=<<<HTML
+    foreach ($zapatos as $id => $zapatico):
+    $totalProducto = $zapatico['precio'] * $zapatico['cantidad'];
+
+        $html .= <<<HTML
             <div class="container">
                 <div class="card mx-4 mt-4 mx-auto" style="width: 21rem;">
                     <!-- <div> -->
@@ -575,6 +578,8 @@ $resultado = pg_query($conexion,$consulta);
                     </div>
                     <!-- <img src="{$zapatico['imagen']}alt="" class="card-img-top"> -->
                     <div class="card-body">
+
+                    <h3 class="card-title ">num :{$zapatico['id']}</h3>
                         <h3 class="card-title ">nombre :{$zapatico['nombre']}
                         </h3>
     
@@ -583,11 +588,17 @@ $resultado = pg_query($conexion,$consulta);
     
                         <p class="">disponibles : {$zapatico['stock']}</p> <!-- en la descripcion aparece el precio -->
                         <p class="">descripcion : {$zapatico['descripcion']}</p> <!-- en la descripcion aparece el precio -->
+                        <p>Total: \${$totalProducto}</p>
     
     
                     </div>
                     <div class="card-footer">
-                        <p class="">Cantidad: {$zapatico['stock']}</p> <!-- en el stock aparece la ruta de la foto -->
+                    <form action="../../Librerias/lib_carrito.php?accion=actualizar" method="post" class="form-inline">
+                        <input type="hidden" name="id" value="{$id}">
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" name="cantidad" value="{$zapatico['cantidad']}" min="1" max="{$zapatico['stock']}" class="form-control mx-2">
+                        <button type="submit" class="btn btn-outline-primary">Actualizar</button>
+                    </form>
                         <form action="../../Librerias/lib_carrito.php?accion=eliminarU" method="post">
                             <input type="hidden" name="id" value="{$id}">
                             <button type="submit" class="btn btn-outline-danger"> Eliminar</button>
@@ -596,13 +607,12 @@ $resultado = pg_query($conexion,$consulta);
                 </div>
             </div>
 HTML;
-        endforeach;
-        $html.=<<<HTML
+    endforeach;
+    $html .= <<<HTML
         <div>
             <form action="../../Librerias/lib_carrito.php?accion=index" method="post">
                 <input type="submit" value="volver a la tienda">
             </form>
-            <a href="../catalogo/catalogo.php">volver a la tienda</a>
         </div>
     
     

@@ -10,7 +10,7 @@ SQL;
 $productos = [];
 $error = ['data'=>false];
 
-$getProductos = $conexion->query($query);
+$getProductos = $conexion->pg_query($query);
 if ($getProductos->num_rows > 0) {
     while ($data = $getProductos->fetch_assoc()) {
         $productos []= $data;
