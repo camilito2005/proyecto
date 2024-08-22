@@ -174,12 +174,6 @@ SQL;
         echo "contraseña incorrecta ";
     }
 }
-function Cerrar_sesion()
-{
-    session_start();
-    session_destroy();
-    header("Location: ../vistas/pagina-principal/login.php");
-}
 
 function Modificar_usuarios()
 {
@@ -259,8 +253,50 @@ HTML;
 
 HTML;
     echo $html;
+}
 
+function Buscar($search){
 
+    if(){
+        include_once "../conexion.php";
+    $conexion = Conexion();
+    $consulta = <<<SQL
+    SELECT * FROM usuarios WHERE nombre LIKE '%$search%'
+SQL;
+    $resultado_consulta = pg_query($conexion, $consulta);
+    if (pg_num_rows($resultado_consulta) == 0) {
+        echo "no se encuentran resultados";
+    }
+    if (!$resultado_consulta) {
+        die("query failed");
+    }
+
+    $array=[];
+
+    if (pg_num_rows($resultado_consulta) > 0) {
+        while ($fila = pg_fetch_array($resultado_consulta)) {
+            $array[]=[
+            "nombre"	=> $filas["nombre"],
+            "apellidos"	=> $fila["apellidos"],
+            "telefono"=> $fila["telefono"],
+            "direccion"	=> $fila["direccion"],
+            "correo"	=> $fila["correo"],
+            "contraseña" => $fila["contraseña"]
+            ];
+           
+        }
+        $jsonstring = json_encode($array);
+        echo $jsonstring;
+
+    }
+    }
+    
+}
+function Cerrar_sesion()
+{
+    session_start();
+    session_destroy();
+    header("Location: ../vistas/pagina-principal/login.php");
 }
 
 if ($accion == "sesion") {
