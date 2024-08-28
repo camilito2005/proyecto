@@ -256,41 +256,40 @@ HTML;
 }
 
 function Buscar($search){
-
-    if(){
+    if(!empty($search)){
         include_once "../conexion.php";
-    $conexion = Conexion();
-    $consulta = <<<SQL
-    SELECT * FROM usuarios WHERE nombre LIKE '%$search%'
+        $conexion = Conexion();
+        $consulta = <<<SQL
+        SELECT * FROM usuarios WHERE nombre LIKE '%$search%'
 SQL;
-    $resultado_consulta = pg_query($conexion, $consulta);
-    if (pg_num_rows($resultado_consulta) == 0) {
-        echo "no se encuentran resultados";
-    }
-    if (!$resultado_consulta) {
-        die("query failed");
-    }
-
-    $array=[];
-
-    if (pg_num_rows($resultado_consulta) > 0) {
-        while ($fila = pg_fetch_array($resultado_consulta)) {
-            $array[]=[
-            "nombre"	=> $filas["nombre"],
-            "apellidos"	=> $fila["apellidos"],
-            "telefono"=> $fila["telefono"],
-            "direccion"	=> $fila["direccion"],
-            "correo"	=> $fila["correo"],
-            "contraseña" => $fila["contraseña"]
-            ];
-           
+        $resultado_consulta = pg_query($conexion, $consulta);
+        if (pg_num_rows($resultado_consulta) == 0) {
+            echo "no se encuentran resultados";
         }
-        $jsonstring = json_encode($array);
-        echo $jsonstring;
-
-    }
-    }
+        if (!$resultado_consulta) {
+            die("query failed");
+        }
     
+        $array=[];
+    
+        if (pg_num_rows($resultado_consulta) > 0) {
+            while ($fila = pg_fetch_array($resultado_consulta)) {
+                $array[]=[
+                "nombre"	=> $filas["nombre"],
+                "apellidos"	=> $fila["apellidos"],
+                "telefono"=> $fila["telefono"],
+                "direccion"	=> $fila["direccion"],
+                "correo"	=> $fila["correo"],
+                "contraseña" => $fila["contraseña"]
+                ];
+               
+            }
+            $jsonstring = json_encode($array);
+            echo $jsonstring;
+    
+        }
+        
+    }
 }
 function Cerrar_sesion()
 {
@@ -312,6 +311,10 @@ if ($accion=="modificar"){
 
 if ($accion =="actualizar") {
     Actualizar_usuarios();
+}
+
+if ($opciones == "search") {
+    Buscar($search);
 }
 
 ?>
