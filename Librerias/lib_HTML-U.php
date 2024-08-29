@@ -6,6 +6,9 @@ function Formulario_clientes()
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!--<link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">-->
+<link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="../../css/registro.css"> -->
@@ -96,6 +99,8 @@ function Mostrar_usuarios()
 <html lang="en">
 
 <head>
+<link rel="shortcut icon" href="../../fotos/mostrar-contraseña.png" type="image/x-icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
@@ -238,6 +243,8 @@ function Formulario_productos()
 <html lang="en">
 
 <head>
+<link rel="shortcut icon" href="../../fotos/comercio-electronico.png" type="image/x-icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="../../css/fomu_productos.css"> -->
     <meta charset="UTF-8">
@@ -311,6 +318,8 @@ HTML;
 <html lang="en">
 
 <head>
+<link rel="shortcut icon" href="../../fotos/mostrar_productos.png" type="image/x-icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
@@ -419,9 +428,7 @@ function Catalogo()
 
 <body>
     <div class="row">
-        <h4 class="text-center text-secondary">
-            productos
-        </h4>
+        
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul>
@@ -431,15 +438,13 @@ function Catalogo()
                 </ul>
             </div>
             <div class="container-fluid">
-                <!-- <form method="post" action="../../controlador/controlerBuscar.php"> -->
-                    <input name="busqueda" type="search" id="buscador">
-                    <!-- <input name="buscar" type="submit" > -->
-                    <!-- <button>search</button> -->
-                <!-- </form> -->
-
+                <input name="busqueda" type="search" id="buscador">
             </div>
 
         </nav>
+        <h4 class="text-center text-secondary">
+            productos
+        </h4>
 HTML;
     session_start();
     if (isset($_SESSION["correo"])) {

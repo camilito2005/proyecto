@@ -9,14 +9,13 @@ function Insertar_productos()
             "nombre" => $_POST["nombre"],
             "descripcion" => $_POST["descripcion"],
             "precio" => $_POST["precio"],
-            "cantidad" => $_POST["cantidad"],
-            "fecha" => date('d-m-y H:i:s')
+            "cantidad" => $_POST["cantidad"]
         ];
         $nombre = pg_escape_string($datos["nombre"]);
         $descripcion = pg_escape_string($datos["descripcion"]);
         $precio = pg_escape_string($datos["precio"]);
         $cantidad = pg_escape_string($datos["cantidad"]);
-        $fecha_actual = $datos["fecha"];
+        $fecha_Actual = date('Y-d-m H:i:s');
 
 
         if (isset($_FILES["foto"])) {
@@ -36,6 +35,7 @@ function Insertar_productos()
                     $consulta = <<<SQL
                     INSERT INTO productos (nombre,descripcion,precio,stock,imagen,fecha_creacion)VALUES('$nombre','$descripcion','$precio','$cantidad','$foto','$fecha_actual')
 SQL;
+echo $query;
                     $resultado = pg_query($conexion, $consulta);
                     if ($resultado) {
                         header("Location: ../vistas/catalogo/catalogo.php");
