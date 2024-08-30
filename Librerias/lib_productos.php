@@ -219,7 +219,6 @@ exit;
 
 function Pdf(){
 
-    $sesion = $_SESSION['correo'];
     //require "../fpdf/fpdf.php";
     require '../fpdf17/fpdf.php';
 
@@ -230,7 +229,7 @@ function Pdf(){
     $pdf->SetFont('Arial', 'B', 16);
 
     // Agregar un título
-    $pdf->Cell(40, 10, '¡Hola, mundo!',$sesion);
+    $pdf->Cell(40, 10, 'prueba ');
 
     // Salida del archivo PDF
     $pdf->Output();
