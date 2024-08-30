@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 function Formulario_clientes()
 {
@@ -302,9 +303,10 @@ HTML;
 function Mostrar_productos()
 {
 
+    $sesion = $_SESSION["correo"];
+    
     date_default_timezone_set('America/Bogota');
     $fecha = date('d-m-Y g:i:s A');
-    session_start();
     if (isset($_SESSION["correo"])) {
         echo $_SESSION["correo"];
         $html = <<<HTML
@@ -338,6 +340,9 @@ HTML;
     </div>
     <a href="../../Librerias/lib_productos.php?accion=excel" class="btn btn-small btn-warning">
         <i class="fa-solid fa-pen-to-square"></i>
+    </a>
+    <a href="../../Librerias/lib_productos.php?accion=pdf" target="_blank" class="btn btn-success">
+        <i class="fa-solid fa-file-pdf"></i>
     </a>
     <h3 class="text-center text-secondary">productos</h3>
     <div class="mx-auto col-8 p-6" id="resultados-conainer">

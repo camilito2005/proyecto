@@ -1,6 +1,8 @@
 <?php
 $accion = $_GET["accion"];
 
+session_start();
+
 function Insertar_productos()
 {
     if (!empty($_POST["nombre"]) && !empty($_POST["descripcion"]) && !empty($_POST["precio"]) && !empty($_POST["cantidad"])) {
@@ -215,6 +217,25 @@ exit;
 
 }
 
+function Pdf(){
+
+    $sesion = $_SESSION['correo'];
+    //require "../fpdf/fpdf.php";
+    require '../fpdf17/fpdf.php';
+
+    $pdf = new FPDF();
+    $pdf->AddPage();
+
+    // Establecer fuente
+    $pdf->SetFont('Arial', 'B', 16);
+
+    // Agregar un título
+    $pdf->Cell(40, 10, '¡Hola, mundo!',$sesion);
+
+    // Salida del archivo PDF
+    $pdf->Output();
+}
+
 if ($accion == "registrar_productos") {
     Insertar_productos();
 }
@@ -230,5 +251,8 @@ if ($accion == "actualizar") {
 }
 if ($accion == "excel") {
     Excel();
+}
+if ($accion == "pdf") {
+    Pdf();
 }
 ?>
