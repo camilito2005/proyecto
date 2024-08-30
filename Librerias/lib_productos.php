@@ -238,7 +238,6 @@ function Pdf(){
 if ($accion == "registrar_productos") {
     Insertar_productos();
 }
-
 if ($accion == "eliminar") {
     Eliminar_productos();
 }

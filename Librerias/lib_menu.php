@@ -12,6 +12,7 @@ function Menus()
     <link rel="shortcut icon" href="fotos/buscador.png" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>PAGINA</title>
 </head>
 
@@ -89,9 +90,61 @@ $menu .= <<<HTML
     
     </div>
 </body>
-<p>estadisticas</p>
+<canvas id="myChart" width="400" height="200"></canvas>
+    <script>
+        // Datos estáticos
+        const labels = ["enero", "febrero", "marzo", "Abril", "Mayo"];
+        const data = [10, 20, 30, 40, 50];
+
+        // Crear el gráfico
+        var ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'meses ',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 </html>
 HTML;
     echo $menu;
+}
+function Graficas(){
+    require_once("pChart2.1.4/class/pData.class.php");
+    require_once("pChart2.1.4/class/pDraw.class.php");
+    require_once("pChart2.1.4/class/pImage.class.php");
+
+    $categoria = ["enero","febrero", "marzo","abril","mayo","junio","julio"];
+    $valores = [0,0,0,0,0,0,0]; 
+
+
+    $data = new pData();
+    $data->addPoints($valores, "Values");
+    $data->addPoints($categoria, "Categories");
+    $data->setSerieDescription("Categories", "Categories");
+    $data->setAbscissa("Categories");
+
+    $image = new pImage(700, 230, $data);
+    $image->setFontProperties(["FontName" => "pChart2.1.4/fonts/Forgotte.ttf", "FontSize" => 10]);
+    $image->setGraphArea(60, 40, 650, 190);
+    $image->drawScale(["CycleBackground" => TRUE]);
+    $image->drawBarChart();
+
+    header("Content-Type: image/png");
+    $image->render();
 }
 ?>

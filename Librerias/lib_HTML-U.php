@@ -112,9 +112,15 @@ function Mostrar_usuarios()
 
 <body>
     <h3 class="text-center text-secondary">usuarios</h3>
-    <form class="mx-auto col-4 p-3 " action="../../Librerias/lib_usuarios.php?accion=search" method="post">
-        <input type="search" class="" placeholder="search" name="search" id="search">
-    </form>
+    <div class="input-search">
+        <nav>
+            <form method="post">
+                <input  type="search" id="search" placeholder="search">
+            </form>
+        </nav>
+    </div>
+    <!--<form class="mx-auto col-4 p-3" action="../../Librerias/lib_usuarios.php?accion=search" method="post">
+    </form>-->
     <div class="mx-auto col-8 p-4">
         <table class="table">
             <thead class="bs-info">
