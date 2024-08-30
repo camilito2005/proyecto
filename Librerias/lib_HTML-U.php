@@ -18,7 +18,7 @@ function Formulario_clientes()
     <body>
 
     <title>Registro</title>
-     <div class="contenedor">
+    <div class="contenedor">
         <div class="formulario_registro">
             <form class="col-4 p-3 m-auto" action="?accion=registrar" method="post">
                 <h3 class="text-center text-secondary">registro de clientes</h3>
@@ -72,14 +72,19 @@ function Formulario_clientes()
                 </div>
 
                 <input class="btn btn-primary" type="submit" name="registro" value="registrar"><br><br>
-                <button class="btn btn-outline-secondary">
-                    <a href="../usuarios/usuarios.php">ver registros</a>
-                </button><br><br>
-
-                <button class="btn btn-outline-secondary">
-                    <a href="../../index.php">inicio</a>
-                </button>
+                
             </form>
+            <button class="btn btn-outline-secondary">
+                <a href="../usuarios/usuarios.php">
+                    <i class="fa-duotone fa-solid fa-users-viewfinder">ver registros</i>
+                </a>
+            </button>
+
+            <button class="btn btn-outline-secondary">
+                <a href="../../index.php">
+                    <i class="fa-solid fa-house">inicio</i>
+                </a>
+            </button>
         </div>
     </div>
     
@@ -193,11 +198,11 @@ HTML;
         </table>
     </div>
     <button class="btn btn-outline-secondary">
-        <a href="../../index.php">inicio</a>
+        <a href="../../index.php"><i class="fa-solid fa-house"></i></a>
     </button>
 
     <button class="btn btn-outline-secondary">
-        <a href="./formulario_registro.php">registrar</a>
+        <a href="./formulario_registro.php"><i class="fa-solid fa-user-plus"></i></a>
     </button>
 
     
@@ -234,7 +239,11 @@ function Login_html()
             </form>
         </div>
     </div>
-    <a href="../../index.php">inicio</a>
+    <button class="btn btn-outline-secondary">
+        <a href="../../index.php">
+            <i class="fa-solid fa-house">inicio</i>
+        </a>
+    </button>
 </body>
 
 </html>
@@ -419,7 +428,11 @@ HTML;
 <button class="btn btn-secondary">
     <a href="../productos/productos.php">agregar productos</a>
 </button>
-<a href="../../index.php">inicio</a>
+<button class="btn btn-outline-secondary">
+    <a href="../../index.php">
+        <i class="fa-solid fa-house"></i>
+    </a>
+</button>
 HTML;
     echo $html;
 }
@@ -536,7 +549,11 @@ HTML;
         </div>
         <p> resultado : {$total}</p>
     </div>
-    <a href="../../index.php">inicio</a>
+    <button class="btn btn-outline-secondary">
+        <a href="../../index.php">
+            <i class="fa-solid fa-house"></i>
+        </a>
+    </button>
 HTML;
     echo $html;
 }

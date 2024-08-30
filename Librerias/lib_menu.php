@@ -45,8 +45,8 @@ HTML;
 if (!isset($_SESSION["correo"])) {
     $menu .= <<<HTML
             <li>
-                <a href="./vistas/pagina-principal/login.php">
-                    <i>iniciar sesión</i>
+                <a href="./vistas/pagina-principal/login.php" >
+                    <i>iniciar sesion</i>
                     <ul class="menu-vertical">
                         <li>
                             <a href="./vistas/usuarios/formulario_registro.php">
