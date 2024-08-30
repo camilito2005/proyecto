@@ -422,16 +422,15 @@ HTML;
 </tbody>
 </table>
 </div>
+
 <button class="btn btn-secondary">
-    <a href="../catalogo/catalogo.php">catalogo</a>
+    <a href="../catalogo/catalogo.php"><i class="fa-solid fa-album-collection">ver catalogo</i></a>
 </button>
 <button class="btn btn-secondary">
-    <a href="../productos/productos.php">agregar productos</a>
+    <a href="../productos/productos.php"><i class="fa-sharp fa-solid fa-plus"></i></a>
 </button>
 <button class="btn btn-outline-secondary">
-    <a href="../../index.php">
-        <i class="fa-solid fa-house"></i>
-    </a>
+    <a href="../../index.php"><i class="fa-solid fa-house"></i></a>
 </button>
 HTML;
     echo $html;
