@@ -10,13 +10,15 @@ if ($accion == "index") {
     header("Location: ../vistas/catalogo/catalogo.php");
 }
 if ($accion == "ver") {
+    header('Location: ../vistas/catalogo/carrito.php');
     if (empty($_SESSION['carrito'])) {
         echo 'no hay nada en el carrito';
         header('Location: ..vistas/catalogo/carrito.php');
-        } else {
+
+    } 
+    else {
         return  $_SESSION['carrito'];
-        }
-    //header('Location: ../vistas/catalogo/carrito.php');
+    }
 }
 
 if ($accion == "agregar") {

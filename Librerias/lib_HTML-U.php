@@ -244,6 +244,9 @@ function Login_html()
             <i class="fa-solid fa-house">inicio</i>
         </a>
     </button>
+    <button class="btn btn-outline-secondary">
+        <a href="../../index.php"><i class="fa-solid fa-house"></i></a>
+    </button>
 </body>
 
 </html>
@@ -481,7 +484,7 @@ HTML;
     } else {
         $html .= <<<HTML
             <a href='../pagina-principal/login.php'>
-                <i>iniciar sesion </i>
+                <i class="fa-light fa-right-to-bracket">inicia sesion</i>
             </a>
 HTML;
     }
@@ -543,6 +546,7 @@ HTML;
                 <form action="../../Librerias/lib_carrito.php?accion=ver" method="post">
                     <button>ver carrito</button>
                 </form>
+                
             </div>
             <!-- <a href="">ver carrito</a> -->
         </div>
@@ -550,7 +554,7 @@ HTML;
     </div>
     <button class="btn btn-outline-secondary">
         <a href="../../index.php">
-            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-house">inicio</i>
         </a>
     </button>
 HTML;
