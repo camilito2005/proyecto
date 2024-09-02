@@ -11,8 +11,9 @@ if ($accion == "index") {
 }
 if ($accion == "ver") {
     if (empty($_SESSION['carrito'])) {
-        echo 'no hay nada en el carrito';
-        header('Location: ..vistas/catalogo/carrito.php');
+        echo 'no hay nada en el carrito';die;
+        //echo '<a href="../vistas/catalogo/catalogo.php">agregar al carrito</a>';
+        header('Location: ../vistas/catalogo/carrito.php');
         } else {
         return  $_SESSION['carrito'];
         }
@@ -21,6 +22,7 @@ if ($accion == "ver") {
 
 if ($accion == "agregar") {
     if ($_SERVER['REQUEST_METHOD'] === 'POST')  {
+
         $id = $_POST['id'];
         $nombre = $_POST['nombre'];
         $descripcion = $_POST['descripcion'];
@@ -28,15 +30,17 @@ if ($accion == "agregar") {
         $stock = $_POST['stock'];
         $foto = $_POST['foto'];
         $cantidad=$_POST['cantidad'];
-        // $imagen = $_POST['imagen'];
         if (!isset($_SESSION['carrito'])) {
+
             $_SESSION['carrito'] = array();
         }
         if (array_key_exists($id, $_SESSION['carrito'])) {
+
             $precioF=$precio*$cantidad;
             $_SESSION['carrito'][$id]['cantidad'] += $cantidad;
             $_SESSION['carrito'][$id]['precio'] += $precio;
         } else {
+
             $_SESSION['carrito'][$id] = array(
                 'id'=>$id,
                 'nombre' => $nombre,

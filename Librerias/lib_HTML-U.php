@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 function Formulario_clientes()
 {
@@ -10,8 +9,9 @@ function Formulario_clientes()
 <!--<link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">-->
 <link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <!-- <link rel="stylesheet" href="../../css/registro.css"> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,13 +76,13 @@ function Formulario_clientes()
             </form>
             <button class="btn btn-outline-secondary">
                 <a href="../usuarios/usuarios.php">
-                    <i class="fa-duotone fa-solid fa-users-viewfinder">ver registros</i>
+                    <i class="fa-duotone fa-solid fa-users-viewfinder"></i>usuarios
                 </a>
             </button>
 
             <button class="btn btn-outline-secondary">
                 <a href="../../index.php">
-                    <i class="fa-solid fa-house">inicio</i>
+                    <i class="fa-solid fa-house"></i>inicio
                 </a>
             </button>
         </div>
@@ -109,10 +109,10 @@ function Mostrar_usuarios()
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tabla</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -138,7 +138,7 @@ function Mostrar_usuarios()
                     <th scope="col">DIRECCION</th>
                     <th scope="col">CORREO</th>
                     <th scope="col">CONTRASEÑA</th>
-                    <th>EDITAR/ELIMINAR</th>
+                    <th scope="col">modificar/ELIMINAR</th>
                 </tr>
             </thead>
             <tbody>            
@@ -184,13 +184,12 @@ SQL;
                     <td>$correo</td>
                     <td>$contraseña</td>
                     <td>
-                    <a href="../../Librerias/lib_usuarios.php?accion=modificar&id=$id">modificar</a>
-                    <a href="usuarios.php?accion=eliminar&id=$id">eliminar</a>
+                    <a href="../../Librerias/lib_usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
+                    <a href="usuarios.php?accion=eliminar&id=$id"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
             </tbody>
 HTML;
-        echo $html;
     }
     $mostrar .= <<<HTML
     
@@ -220,7 +219,9 @@ function Login_html()
 <html lang="en">
 
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>inicia sesion</title>
@@ -233,15 +234,18 @@ function Login_html()
                 <h2 class="text-center text-secondary"> bienvenido </h2>
                 <p class="text-center text-secondary"> inicia sesion </p>
                 <input class="form-control" placeholder="correo" required type="text" name="correo"><br><br>
-                <input class="form-control" placeholder="contraseña" required type="password" name="contraseña"><br><b>
+                <input class="form-control" placeholder="contraseña" required type="password" name="contraseña"><br><br>
                     <input class="btn btn-primary" name="inicio" class="btn" type="submit" value="entrar"><br><br>
-                    <a class="mr-auto navbar-brand" href="../usuarios/formulario_registro.php">registro</a>
+                    <a class="mr-auto navbar-brand" href="../usuarios/formulario_registro.php"><i class="fa-solid fa-user-plus"></i></a><br><br>
+                    <div>
+                        <a class="mr-auto navbar-brand" href="../../Librerias/lib_usuarios.php?accion=recuperar">olvidaste tu contraseña?</a>
+                    </div>
             </form>
         </div>
     </div>
     <button class="btn btn-outline-secondary">
         <a href="../../index.php">
-            <i class="fa-solid fa-house">inicio</i>
+            <i class="fa-solid fa-house"></i>
         </a>
     </button>
 </body>
@@ -261,7 +265,9 @@ function Formulario_productos()
 <head>
 <link rel="shortcut icon" href="../../fotos/comercio-electronico.png" type="image/x-icon">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <!-- <link rel="stylesheet" href="../../css/fomu_productos.css"> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -337,8 +343,9 @@ HTML;
 <head>
 <link rel="shortcut icon" href="../../fotos/mostrar_productos.png" type="image/x-icon">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/busqueda.css">
@@ -354,7 +361,7 @@ HTML;
         </nav>
     </div>
     <a href="../../Librerias/lib_productos.php?accion=excel" class="btn btn-small btn-warning">
-        <i class="fa-solid fa-pen-to-square"></i>
+        <i class="fa-solid fa-file-excel"></i>
     </a>
     <a href="../../Librerias/lib_productos.php?accion=pdf" target="_blank" class="btn btn-success">
         <i class="fa-solid fa-file-pdf"></i>
@@ -401,9 +408,7 @@ HTML;
     </a>
     <form action="/ti/librerias/lib_Productos.php?accion=eliminar&id={$filas['id']}" method="post">
         <button name="eliminar" class="btn btn-small btn-danger" type="submit" onclick="return Pregunta()">
-            <i class="fa-solid fa-trash">
-
-            </i>
+            <i class="fa-solid fa-trash"></i>
         </button>
     </form>
 </td>
@@ -423,15 +428,25 @@ HTML;
 </table>
 </div>
 
-<button class="btn btn-secondary">
-    <a href="../catalogo/catalogo.php"><i class="fa-solid fa-album-collection">ver catalogo</i></a>
-</button>
-<button class="btn btn-secondary">
-    <a href="../productos/productos.php"><i class="fa-sharp fa-solid fa-plus"></i></a>
-</button>
-<button class="btn btn-outline-secondary">
-    <a href="../../index.php"><i class="fa-solid fa-house"></i></a>
-</button>
+<form action="../catalogo/catalogo.php"  method="post">
+    <button class="btn btn-outline-secondary" value="catalogo">
+        <i class="fa-solid fa-shop"></i>
+    </button>
+</form>
+
+<form action="../productos/productos.php"  method="post">
+    <button class="btn btn-outline-secondary" value="agregar productos">
+        <i class="fa-sharp fa-solid fa-plus"></i>
+    </button>
+</form>
+
+
+<form action="../../index.php"  method="post">
+    <button class="btn btn-outline-secondary" value="inicio">
+        <i class="fa-solid fa-house"></i>
+    </button>
+</form>
+
 HTML;
     echo $html;
 }
@@ -442,7 +457,9 @@ function Catalogo()
 <html lang="en">
 
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <!-- <link rel="stylesheet" href="../../css/card.css"> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -472,16 +489,18 @@ HTML;
     session_start();
     if (isset($_SESSION["correo"])) {
         $html .= <<<HTML
-              <form action="../../controlador/carrito.php" method="post">
-        <input type="submit" name="cerrar"value="cerrar sesion">
-        </form> {$_SESSION["correo"]}
+            <form action="../../controlador/carrito.php" method="post">
+                <button type="submit" name="cerrar"value="cerrar sesion">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </form> {$_SESSION["correo"]}
 
         
 HTML;
     } else {
         $html .= <<<HTML
             <a href='../pagina-principal/login.php'>
-                <i>iniciar sesion </i>
+                <i class="fa-solid fa-right-to-bracket"></i>
             </a>
 HTML;
     }
@@ -541,12 +560,12 @@ HTML;
     $html .= <<<HTML
     <div>
                 <form action="../../Librerias/lib_carrito.php?accion=ver" method="post">
-                    <button>ver carrito</button>
+                    <button><i class="fa-solid fa-cart-shopping"></i></button>
                 </form>
             </div>
-            <!-- <a href="">ver carrito</a> -->
+            <!-- <a href="../../Librerias/lib_carrito.php?accion=ver"><i class="fa-solid fa-cart-shopping"></i></a> -->
         </div>
-        <p> resultado : {$total}</p>
+        <p> total : {$total}</p>
     </div>
     <button class="btn btn-outline-secondary">
         <a href="../../index.php">
@@ -558,27 +577,30 @@ HTML;
 }
 
 function Carrito_HTML()
-{
-    $correo = $_SESSION["correo"];    
+{   
     $html = <<<HTML
     <!DOCTYPE html>
     <html lang="en">
     
     <head>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    
-        <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>carrito</title>
     </head>
     
     <body>
-        <div>
+        <!-- <div>
             <form action="../../Librerias/lib_carrito.php?accion=eliminarT" method="post">
                 <input type="submit" value="vaciar el carrito">
             </form>
+        </div> -->
+        
+        <div>
+            <a href="../../controlador/carrito.php?carri=eliminarT"><i class="fa-solid fa-eraser"></i></a>
         </div>
-        <!-- <a href="../../controlador/carrito.php?carri=eliminarT"> Vaciar el carrito</a> -->
 HTML;
     session_start();
     if (isset($correo)) {
@@ -613,7 +635,6 @@ SQL;
                     <div>
                         <img src="/{$zapatico['foto']}" height="100%" width="100%" class="card-img-top" alt="...">
                     </div>
-                    <!-- <img src="{$zapatico['imagen']}alt="" class="card-img-top"> -->
                     <div class="card-body">
 
                     <h3 class="card-title ">num :{$zapatico['id']}</h3>
@@ -647,9 +668,12 @@ HTML;
     endforeach;
     $html .= <<<HTML
         <div>
-            <form action="../../Librerias/lib_carrito.php?accion=index" method="post">
+        <!-- <a href="../../Librerias/lib_carrito.php?accion=index"><i class="fa-solid fa-house"></i></a> -->
+        <a href="../../Librerias/lib_carrito.php?accion=index"><i class="fa-solid fa-shop"></i></a>
+        
+            <!-- <form action="../../Librerias/lib_carrito.php?accion=index" method="post">
                 <input type="submit" value="volver a la tienda">
-            </form>
+            </form> -->
         </div>
     
     

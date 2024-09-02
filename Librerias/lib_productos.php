@@ -1,7 +1,6 @@
 <?php
 $accion = $_GET["accion"];
 
-session_start();
 
 function Insertar_productos()
 {
@@ -70,8 +69,10 @@ SQL;
     <html lang="en">
     
     <head>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-        <!-- <link rel="stylesheet" href="../../css/fomu_productos.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <!-- <link rel="stylesheet" href="../../css/fomu_productos.css"> -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Modificar productos</title>
@@ -114,10 +115,17 @@ HTML;
 HTML;
     }
     $html .= <<<HTML
-                <input type="submit" class="btn btn-primary" name="modificar" value="modificar productos"></input>
-                <button class="btn btn-outline-secondary">
-                    <a href="../productos/verProductos.php">regresar</a>
+                <button type="submit" class="btn btn-primary" name="modificar" value="modificar productos" class="btn btn-outline-secondary">
+                    <i class="fa-solid fa-pen"></i>modificar
                 </button>
+
+                <button class="btn btn-outline-secondary">
+                    <a href="../productos/verProductos.php"><i class="fa-solid fa-backward"></i></a>regresar
+                </button>
+
+                <!-- <button class="btn btn-outline-secondary">
+                    <a href="../index.php"><i class="fa-solid fa-house"></i></a>inicio
+                </button> -->
             </form>
         </div>
     </body>

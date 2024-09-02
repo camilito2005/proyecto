@@ -190,6 +190,8 @@ SQL;
     $html = <<<HTML
     <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>modificar registro</title>
@@ -239,12 +241,15 @@ HTML;
 HTML;
     }
     $html .= <<<HTML
-<input type="submit" class="btn btn-primary" name="modificar" value="modificar productos"></input><br><br>
+            <button type="submit" class="btn btn-primary" name="modificar" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-pen"></i>modificar
+            </button>
+
             <button class="btn btn-outline-secondary">
-                <a href="../usuarios/usuarios.php">regresar</a>
+                <a href="../usuarios/usuarios.php"><i class="fa-solid fa-backward"></i></a>regresar
             </button><br><br>
             <button class="btn btn-outline-secondary">
-                <a href="../pagina-principal/index.php">inicio</a>
+                <a href="../pagina-principal/index.php"><i class="fa-solid fa-house"></i></a>inicio
             </button>
         </form>
     </div>
@@ -298,6 +303,58 @@ function Cerrar_sesion()
     header("Location: ../vistas/pagina-principal/login.php");
 }
 
+function Recuperar_contraseña(){
+    include_once "../conexion.php";
+    $conexion = Conexion();
+
+    if (!isset($_POST["correo"])) {
+        die("correo electronico es requerido");
+    }
+
+    $correo = $_POST["correo"];
+
+    $token = bin2hex(random_bytes(32));
+    $hora_experacion_token = date('Y-m-d H:i:s',strtotime('+1 hour'));
+    
+    $consulta =<<<SQL
+INSERT INTO Restablecer_contraseña (correo, token, expires_at) VALUES ('$correo','$token','$hora_experacion_token');
+SQL;
+
+$resultado_consulta = pg_query($consulta,$conexion);
+
+$link_de_restableciento = "http://localhost/ti/Librerias/lib_usuarios.php?token=$token";
+
+$enviar = $correo;
+$subject = 'Restablecer Contraseña';
+$mensaje = "Para restablecer tu contraseña, por favor haz clic en el siguiente enlace: $link_de_restableciento";
+$cabezera = 'From: no-reply@tu_dominio.com' . "\r\n" .
+           'Reply-To: no-reply@tu_dominio.com' . "\r\n" .
+           'X-Mailer: PHP/' . phpversion();
+
+
+mail($enviar, $subject, $mensaje, $cabezera);
+echo 'hemos enviado un enlace para restablecer tu contraseña.';
+
+}
+
+function Formulario_restablecer_contraseña(){
+
+    include_once "../conexion.php";
+    $conexion = Conexion();
+
+    if (!isset($_GET["token"])) {
+        die ("token es requerido");
+    }
+
+    $token = $_GET["token"];
+
+    $consulta =<<<SQL
+    SELECT * FROM Restablecer_contraseña WHERE token = ? AND expires_at > NOW()
+SQL;
+
+
+}
+
 if ($accion == "sesion") {
     Cerrar_sesion();
 }
@@ -315,6 +372,9 @@ if ($accion =="actualizar") {
 
 if ($opciones == "search") {
     Buscar($search);
+}
+if ($accion == "recuperar") {
+    Recuperar_contraseña();
 }
 
 ?>

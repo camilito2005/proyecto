@@ -1,5 +1,4 @@
 <!-- <?php
-session_start();
 if (isset($_SESSION["correo"])) {
    echo '<p class="text-center">Bienvenido, ' . htmlspecialchars($_SESSION["correo"]) . '</p>';
 }
@@ -100,7 +99,9 @@ echo <<<HTML
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facturas</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <style>
         /* Estilo personalizado para limitar el ancho máximo del formulario */
         .form-container {
@@ -180,7 +181,7 @@ HTML;
 if (!$correo) {
     echo <<<HTML
     <div class="mt-4 text-center">
-            <a href="./pagina-principal/login.php" class="btn btn-secondary">Inicio de sesión</a>
+            <a href="./pagina-principal/login.php" class="btn btn-secondary"><i class="fa-solid fa-right-to-bracket"></i></a>
         </div>
     </div>
 HTML;
