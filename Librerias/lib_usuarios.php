@@ -303,57 +303,80 @@ function Cerrar_sesion()
     header("Location: ../vistas/pagina-principal/login.php");
 }
 
-function Recuperar_contraseña(){
-    include_once "../conexion.php";
-    $conexion = Conexion();
+function restablecer_contraseña(){
 
-    if (!isset($_POST["correo"])) {
-        die("correo electronico es requerido");
+    try {
+        $pdo = new PDO('pgsql:host=localhost;dbname=pagina', 'postgres', 'camilo');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        if (!isset($_POST['correo'])) {
+            die('Correo electrónico es requerido');
+        }
+
+        $correo = trim($_POST['correo']);
+
+        $token = bin2hex(openssl_random_pseudo_bytes(32));
+        $hora_expiracion = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+        $stmt = $pdo->prepare('INSERT INTO password_reset (correo, token, expires_at) VALUES (?, ?, ?)');
+        $stmt->execute([$correo, $token, $hora_expiracion]);
+
+        $resetLink = "http://localhost/ti/vistas/usuarios/restablecer_contraseña.php?token=$token";
+
+        $to = $correo;
+        $subject = 'Restablecer Contraseña';
+        $message = "Para restablecer tu contraseña, por favor haz clic en el siguiente enlace: $resetLink";
+        $headers = 'From: no-reply@marrugobarrioscamilo2005@gmail.com' . "\r\n" .
+                'Reply-To: no-reply@marrugobarrioscamilo2005@gmail.com' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+        $mail_sent = mail($to, $subject, $message, $headers);
+
+        if ($mail_sent) {
+            echo 'Hemos enviado un enlace para restablecer tu contraseña...';
+        } else {
+            echo 'Hubo un problema al enviar el correo. Por favor, inténtelo de nuevo más tarde.';
+        }
+    } catch (PDOException $e) {
+        echo 'Error: ' . $e->getMessage();
     }
 
-    $correo = $_POST["correo"];
-
-    $token = bin2hex(random_bytes(32));
-    $hora_experacion_token = date('Y-m-d H:i:s',strtotime('+1 hour'));
-    
-    $consulta =<<<SQL
-INSERT INTO Restablecer_contraseña (correo, token, expires_at) VALUES ('$correo','$token','$hora_experacion_token');
-SQL;
-
-$resultado_consulta = pg_query($consulta,$conexion);
-
-$link_de_restableciento = "http://localhost/ti/Librerias/lib_usuarios.php?token=$token";
-
-$enviar = $correo;
-$subject = 'Restablecer Contraseña';
-$mensaje = "Para restablecer tu contraseña, por favor haz clic en el siguiente enlace: $link_de_restableciento";
-$cabezera = 'From: no-reply@tu_dominio.com' . "\r\n" .
-           'Reply-To: no-reply@tu_dominio.com' . "\r\n" .
-           'X-Mailer: PHP/' . phpversion();
-
-
-mail($enviar, $subject, $mensaje, $cabezera);
-echo 'hemos enviado un enlace para restablecer tu contraseña.';
-
 }
+
 
 function Formulario_restablecer_contraseña(){
 
-    include_once "../conexion.php";
-    $conexion = Conexion();
+    $pdo = new PDO('pgsql:host=localhost;dbname=pagina', 'postgres', 'camilo');
 
-    if (!isset($_GET["token"])) {
-        die ("token es requerido");
+    //$conexion = Conexion();
+    
+    if (!isset($_GET['token'])) {
+        die('Token es requerido');
     }
+    
+    $token = $_GET['token'];
+    
+    $stmt = $pdo->prepare('SELECT * FROM Restablecer_contraseña WHERE token = ? AND expires_at > NOW()');
+    $stmt->execute([$token]);
+    $reset = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$reset) {
+        die('El token es inválido o ha expirado.');
+    }
+    ?>
+    
+    <form action="reset_password_action.php" method="post">
+        <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
+        <label for="password">Nueva Contraseña:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Restablecer Contraseña</button>
+    </form>
 
-    $token = $_GET["token"];
-
-    $consulta =<<<SQL
-    SELECT * FROM Restablecer_contraseña WHERE token = ? AND expires_at > NOW()
-SQL;
-
+    <?php
+        
 
 }
+
 
 if ($accion == "sesion") {
     Cerrar_sesion();
@@ -375,6 +398,9 @@ if ($opciones == "search") {
 }
 if ($accion == "recuperar") {
     Recuperar_contraseña();
+}
+if ($accion == "correo_enviado") {
+    restablecer_contraseña();
 }
 
 ?>

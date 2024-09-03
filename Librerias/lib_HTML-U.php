@@ -256,7 +256,7 @@ function Login_html()
                 <input class="form-control" placeholder="contraseña" required type="password" name="contraseña"><br><br>
                     <input class="btn btn-primary" name="inicio" class="btn" type="submit" value="entrar"><br><br>
                     <div>
-                        <a class="mr-auto navbar-brand" href="../../Librerias/lib_usuarios.php?accion=recuperar">olvidaste tu contraseña?</a>
+                        <a class="mr-auto navbar-brand" href="../usuarios/correo_restablecer_contraseña.php?accion=recuperar">olvidaste tu contraseña?</a>
                     </div>
             </form>
 
@@ -525,7 +525,7 @@ HTML;
 
             <form id="myForm" action="../../Librerias/lib_usuarios.php?accion=sesion" onsubmit="showLoading()" method="post">
                 <button type="submit"  name="cerrar"value="cerrar sesion">
-                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <i class="fa-solid fa-right-from-bracket"></i>cerrar sesion 
                 </button>
             </form> 
             <div class="container-fluid">{$_SESSION["correo"]}
@@ -535,8 +535,8 @@ HTML;
     } else {
         $html .= <<<HTML
             <form id="myForm" action="../pagina-principal/login.php" onsubmit="showLoading()" method="post">
-                <button type="submit"  name="cerrar"value="cerrar sesion">
-                    <i class="fa-solid fa-right-from-bracket"></i>
+                <button type="submit"  name="cerrar"value="iniciar">
+                    <i class="fa-solid fa-right-from-bracket"></i>iniciar sesion
                 </button>
             </form> 
 HTML;
@@ -604,9 +604,9 @@ HTML;
         </div>
         <p> total : {$total}</p>
     </div>
-    <form id="myForm" action="../catalogo/catalogo.php" onsubmit="showLoading()" method="post">
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-eye"></i>
+            <i class="fa-solid fa-house"></i>
             </button>
     </form>
 HTML;
@@ -720,3 +720,54 @@ HTML;
 HTML;
     echo $html;
 }
+function Formulario_enviar_correo(){
+    echo <<<HTML
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+</head>
+<body>
+    <h2>Restablecer Contraseña</h2>
+    <form action="../../Librerias/lib_usuarios.php?accion=correo_enviado" method="post">
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" name="correo" id="correo" required>
+        <input type="submit" value="Enviar Enlace de Restablecimiento">
+    </form>
+</body>
+</html>
+HTML;
+}
+function Formulario_restablecer_contraseña(){
+
+    $pdo = new PDO('pgsql:host=localhost;dbname=pagina', 'postgres', 'camilo');
+    //$conexion = Conexion();
+
+if (!isset($_GET['token'])) {
+    die('Token es requerido');
+}
+
+$token = $_GET['token'];
+
+echo $token;
+
+$stmt = $pdo->prepare('SELECT * FROM Restablecer_contraseña WHERE token = ? AND expires_at > NOW()');
+$stmt->execute([$token]);
+$reset = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$reset) {
+    die('El token es inválido o ha expirado.');
+}
+
+    echo <<<HTML
+<form action="reset_password_action.php" method="post">
+    <input type="hidden" name="token" value="htmlspecialchars{($token)}">
+    <label for="password">Nueva Contraseña:</label>
+    <input type="password" id="password" name="password" required>
+    <button type="submit">Restablecer Contraseña</button>
+</form>
+HTML;
+}
+
