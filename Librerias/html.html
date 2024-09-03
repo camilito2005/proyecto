@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="../css/cargando.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ejemplo de Cargando</title>
+    
 </head>
 <body>
+    <div id="loading">Cargando...</div>
     
-    <button value="">
+    <form id="myForm" action="process.php" method="POST" onsubmit="showLoading()">
+        <!-- Tu formulario aquí -->
+        <button type="submit">Enviar</button>
+    </form>
 
-    </button>
+    <script src="../js/cargando.js"></script>
 </body>
 </html>

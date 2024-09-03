@@ -6,6 +6,7 @@ function Formulario_clientes()
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="../css/cargando.css">
 <!--<link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">-->
 <link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">
 
@@ -20,8 +21,9 @@ function Formulario_clientes()
     <title>Registro</title>
     <div class="contenedor">
         <div class="formulario_registro">
-            <form class="col-4 p-3 m-auto" action="?accion=registrar" method="post">
+            <form id="myForm" onsubmit="showLoading()"  class="col-4 p-3 m-auto" action="?accion=registrar" method="post">
                 <h3 class="text-center text-secondary">registro de clientes</h3>
+                <div id="loading">Cargando...</div>
 
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">dni</label>
@@ -74,6 +76,9 @@ function Formulario_clientes()
                 <input class="btn btn-primary" type="submit" name="registro" value="registrar"><br><br>
                 
             </form>
+
+            <script src="../js/cargando.js"></script>
+
             <button class="btn btn-outline-secondary">
                 <a href="../usuarios/usuarios.php">
                     <i class="fa-duotone fa-solid fa-users-viewfinder"></i>usuarios
@@ -222,15 +227,18 @@ function Login_html()
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>inicia sesion</title>
 </head>
 
 <body>
+<div id="loading">Cargando...</div>
     <div class="mx-auto contenedor">
         <div class="formulario_registro">
-            <form class="mx-auto col-4 p-3 " action="../../Librerias/lib_usuarios.php?accion=login" method="post">
+            <form id="myForm" class="mx-auto col-4 p-3 " action="../../Librerias/lib_usuarios.php?accion=login" onsubmit="showLoading()" method="post">
                 <h2 class="text-center text-secondary"> bienvenido </h2>
                 <p class="text-center text-secondary"> inicia sesion </p>
                 <input class="form-control" placeholder="correo" required type="text" name="correo"><br><br>
@@ -241,6 +249,7 @@ function Login_html()
                         <a class="mr-auto navbar-brand" href="../../Librerias/lib_usuarios.php?accion=recuperar">olvidaste tu contraseña?</a>
                     </div>
             </form>
+
         </div>
     </div>
     <button class="btn btn-outline-secondary">
@@ -253,16 +262,73 @@ function Login_html()
 </html>
 
 HTML;
-
     echo $html;
 }
 function Formulario_productos()
+{
+    echo <<<HTML
+        <!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="shortcut icon" href="../../fotos/comercio-electronico.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="../../js/cargando.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+</head>
+
+<body>
+<div id="loading">Cargando...</div>
+<div class="contenedor">
+    <form id="myForm" class="col-4 p-3 m-auto" action="../../librerias/lib_productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+        <h3>Agregar productos</h3>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del producto</label>
+            <input type="text" class="form-control" name="nombre" id="nombre" required>
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea class="form-control" name="descripcion" id="descripcion" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="precio" class="form-label">Precio:</label>
+            <input type="number" class="form-control" name="precio" id="precio" required>
+        </div>
+        <div class="mb-3">
+            <label for="cantidad" class="form-label">Cantidad</label>
+            <input type="number" class="form-control" name="cantidad" id="cantidad" required>
+        </div>
+        <div class="mb-3">
+            <label for="foto" class="form-label">Seleccione la foto</label>
+            <input type="file" class="form-control" name="foto" id="foto" accept="image/*" required>
+        </div>
+        <input class="btn btn-primary" name="enviar" type="submit" value="Agregar">
+        <button class="btn btn-outline-secondary">
+            <a href="../catalogo/catalogo.php">Ver productos</a>
+        </button>
+    </form>
+</div>
+</body>
+
+</html>
+HTML;
+
+}
+
+/*function Formulario_p()
 {
     $html = <<<HTML
         <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    
+<link rel="stylesheet" href="../css/cargando.css">
 <link rel="shortcut icon" href="../../fotos/comercio-electronico.png" type="image/x-icon">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -275,8 +341,9 @@ function Formulario_productos()
 </head>
 
 <body>
+<div id="loading">Cargando...</div>
 <div class="contenedor">
-        <form class="col-4 p-3 m-auto" action="../../librerias/lib_productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data">
+        <form id="myForm" onsubmit="showLoading()" class="col-4 p-3 m-auto" action="../../librerias/lib_productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data">
             <h3>agregar productos</h3>
             <!-- <div class="mb-3"disabled>
                         <label for="exampleInputEmail1" class="form-label">id</label>
@@ -314,13 +381,14 @@ function Formulario_productos()
                 <a href="../catalogo/catalogo.php">ver productos</a>
             </button><br><br>
         </form>
+        <script src="../js/cargando.js"></script>
     </div>
 </body>
 
 </html>
 HTML;
     echo $html;
-}
+}*/
 function Mostrar_productos()
 {
 
@@ -341,11 +409,13 @@ HTML;
 <html lang="en">
 
 <head>
+<link rel="stylesheet" href="../../css/cargando.css">
 <link rel="shortcut icon" href="../../fotos/mostrar_productos.png" type="image/x-icon">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/busqueda.css">
@@ -353,6 +423,8 @@ HTML;
 </head>
 
 <body>
+    
+<div id="loading">Cargando...</div>
     <script src="../../js/busqueda.js" defer></script>
 
     <div class="input-search">
@@ -406,8 +478,8 @@ HTML;
     <a href="../../Librerias/lib_productos.php?accion=modificar&id={$filas['id']}" class="btn btn-small btn-warning">
         <i class="fa-solid fa-pen-to-square"></i>
     </a>
-    <form action="/ti/librerias/lib_Productos.php?accion=eliminar&id={$filas['id']}" method="post">
-        <button name="eliminar" class="btn btn-small btn-danger" type="submit" onclick="return Pregunta()">
+    <form id="myForm" action="/ti/librerias/lib_Productos.php?accion=eliminar&id={$filas['id']}" method="post">
+        <button name="eliminar" class="btn btn-small btn-danger" type="submit" onsubmit="showLoading()" onclick="return Pregunta()">
             <i class="fa-solid fa-trash"></i>
         </button>
     </form>
@@ -428,20 +500,20 @@ HTML;
 </table>
 </div>
 
-<form action="../catalogo/catalogo.php"  method="post">
-    <button class="btn btn-outline-secondary" value="catalogo">
+<form id="myForm" action="../catalogo/catalogo.php" onsubmit="showLoading()" method="post">
+    <button class="btn btn-outline-secondary"  value="catalogo">
         <i class="fa-solid fa-shop"></i>
     </button>
 </form>
 
-<form action="../productos/productos.php"  method="post">
-    <button class="btn btn-outline-secondary" value="agregar productos">
+<form id="myForm" action="../productos/productos.php" onsubmit="showLoading()" method="post">
+    <button class="btn btn-outline-secondary"  value="agregar productos">
         <i class="fa-sharp fa-solid fa-plus"></i>
     </button>
 </form>
 
 
-<form action="../../index.php"  method="post">
+<form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
     <button class="btn btn-outline-secondary" value="inicio">
         <i class="fa-solid fa-house"></i>
     </button>
@@ -460,13 +532,16 @@ function Catalogo()
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <!-- <link rel="stylesheet" href="../../css/card.css"> -->
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>catalogo</title>
 </head>
 
 <body>
+    
+<div id="loading">Cargando...</div>
     <div class="row">
         
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -489,13 +564,14 @@ HTML;
     session_start();
     if (isset($_SESSION["correo"])) {
         $html .= <<<HTML
-            <form action="../../controlador/carrito.php" method="post">
-                <button type="submit" name="cerrar"value="cerrar sesion">
+            <form id="myForm" action="../../controlador/carrito.php" onsubmit="showLoading()" method="post">
+                <button type="submit"  name="cerrar"value="cerrar sesion">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
-            </form> {$_SESSION["correo"]}
-
-        
+            </form> 
+            <div class="container-fluid">{$_SESSION["correo"]}
+                
+            </div>
 HTML;
     } else {
         $html .= <<<HTML

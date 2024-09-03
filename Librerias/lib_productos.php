@@ -24,6 +24,8 @@ function Insertar_productos()
                 $archivo_temporal = $_FILES["foto"]["tmp_name"];
                 $foto_nombre = basename($_FILES["foto"]["name"]);
                 $directorio_destino = "../../ti/fotos/";
+                echo realpath('../../ti/fotos/');
+
                 //include "/Applications/XAMPP/htdocs/ti/fotos";
                 //Aquí se verifica si se ha subido un archivo con el nombre 'foto'. Si es así, se obtienen el nombre del archivo y su ruta temporal. Se define el directorio destino donde se guardará el archivo.
 
@@ -40,6 +42,7 @@ echo $query;
                     $resultado = pg_query($conexion, $consulta);
                     if ($resultado) {
                         header("Location: ../vistas/catalogo/catalogo.php");
+                        exit;
                     } else {
                         if (!$resultado)
                             echo "error";
@@ -212,7 +215,9 @@ while ($row = pg_fetch_assoc($resultado)) {
     $rowNumber++;
 }
 // Crear el archivo Excel
-header ( "Pragma: " );
+
+
+    header ( "Pragma: " );
 	header ( "Cache-Control: cache" );
 	header ( "Content-type: application/x-msexcel" );
 	header ( "Content-Disposition: attachment; filename=productos.xls" );

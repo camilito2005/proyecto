@@ -16,13 +16,11 @@ SET client_min_messages = warning;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
-
 --
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
 
 SET default_tablespace = '';
 
@@ -40,7 +38,6 @@ CREATE TABLE public."Restablecer_contraseña" (
     created_at timestamp without time zone DEFAULT now()
 );
 
-
 ALTER TABLE public."Restablecer_contraseña" OWNER TO postgres;
 
 --
@@ -51,7 +48,6 @@ CREATE TABLE public.cargo (
     id integer NOT NULL,
     descripcion character varying(255) NOT NULL
 );
-
 
 ALTER TABLE public.cargo OWNER TO postgres;
 
@@ -66,15 +62,13 @@ CREATE SEQUENCE public.cargo_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER TABLE public.cargo_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.cargo_id_seq OWNER TO postgres;
 
 --
 -- Name: cargo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.cargo_id_seq OWNED BY public.cargo.id;
-
 
 --
 -- Name: categorias; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -86,7 +80,6 @@ CREATE TABLE public.categorias (
     fecha_creacion timestamp without time zone NOT NULL,
     fecha_actualizacion timestamp without time zone NOT NULL
 );
-
 
 ALTER TABLE public.categorias OWNER TO postgres;
 
@@ -101,15 +94,13 @@ CREATE SEQUENCE public.categorias_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER TABLE public.categorias_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.categorias_id_seq OWNER TO postgres;
 
 --
 -- Name: categorias_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.categorias_id_seq OWNED BY public.categorias.id;
-
 
 --
 -- Name: password_resets_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -122,15 +113,13 @@ CREATE SEQUENCE public.password_resets_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER TABLE public.password_resets_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.password_resets_id_seq OWNER TO postgres;
 
 --
 -- Name: password_resets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.password_resets_id_seq OWNED BY public."Restablecer_contraseña".id;
-
 
 --
 -- Name: productos; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -148,7 +137,6 @@ CREATE TABLE public.productos (
     fecha_actualizacion timestamp without time zone
 );
 
-
 ALTER TABLE public.productos OWNER TO postgres;
 
 --
@@ -162,15 +150,13 @@ CREATE SEQUENCE public.productos_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER TABLE public.productos_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.productos_id_seq OWNER TO postgres;
 
 --
 -- Name: productos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.productos_id_seq OWNED BY public.productos.id;
-
 
 --
 -- Name: usuarios; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
@@ -187,7 +173,6 @@ CREATE TABLE public.usuarios (
     "contraseña" text NOT NULL
 );
 
-
 ALTER TABLE public.usuarios OWNER TO postgres;
 
 --
@@ -201,8 +186,7 @@ CREATE SEQUENCE public.usuarios_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
-ALTER TABLE public.usuarios_id_seq OWNER TO postgres;
+ALTER SEQUENCE public.usuarios_id_seq OWNER TO postgres;
 
 --
 -- Name: usuarios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -210,13 +194,11 @@ ALTER TABLE public.usuarios_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.usuarios_id_seq OWNED BY public.usuarios.id;
 
-
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public."Restablecer_contraseña" ALTER COLUMN id SET DEFAULT nextval('public.password_resets_id_seq'::regclass);
-
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
@@ -224,13 +206,11 @@ ALTER TABLE ONLY public."Restablecer_contraseña" ALTER COLUMN id SET DEFAULT ne
 
 ALTER TABLE ONLY public.cargo ALTER COLUMN id SET DEFAULT nextval('public.cargo_id_seq'::regclass);
 
-
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.categorias ALTER COLUMN id SET DEFAULT nextval('public.categorias_id_seq'::regclass);
-
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
@@ -238,13 +218,11 @@ ALTER TABLE ONLY public.categorias ALTER COLUMN id SET DEFAULT nextval('public.c
 
 ALTER TABLE ONLY public.productos ALTER COLUMN id SET DEFAULT nextval('public.productos_id_seq'::regclass);
 
-
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.usuarios ALTER COLUMN id SET DEFAULT nextval('public.usuarios_id_seq'::regclass);
-
 
 --
 -- Data for Name: Restablecer_contraseña; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -253,7 +231,6 @@ ALTER TABLE ONLY public.usuarios ALTER COLUMN id SET DEFAULT nextval('public.usu
 COPY public."Restablecer_contraseña" (id, correo, token, expires_at, created_at) FROM stdin;
 \.
 
-
 --
 -- Data for Name: cargo; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -261,13 +238,11 @@ COPY public."Restablecer_contraseña" (id, correo, token, expires_at, created_at
 COPY public.cargo (id, descripcion) FROM stdin;
 \.
 
-
 --
 -- Name: cargo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.cargo_id_seq', 1, false);
-
 
 --
 -- Data for Name: categorias; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -276,20 +251,17 @@ SELECT pg_catalog.setval('public.cargo_id_seq', 1, false);
 COPY public.categorias (id, categoria_producto, fecha_creacion, fecha_actualizacion) FROM stdin;
 \.
 
-
 --
 -- Name: categorias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.categorias_id_seq', 1, false);
 
-
 --
 -- Name: password_resets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.password_resets_id_seq', 1, false);
-
 
 --
 -- Data for Name: productos; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -300,13 +272,11 @@ COPY public.productos (id, nombre, descripcion, precio, categoria, stock, imagen
 24	zapatos	zapatos	100.00	\N	10	../../ti/fotos/zapatos (1).jpeg	2024-12-08	\N
 \.
 
-
 --
 -- Name: productos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.productos_id_seq', 29, true);
-
 
 --
 -- Data for Name: usuarios; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -316,13 +286,11 @@ COPY public.usuarios (id, dni, nombre, apellido, telefono, direccion, correo, "c
 1	1234	camilo	marrugo	19003	la boquilla	c@gmail.com	12345
 \.
 
-
 --
 -- Name: usuarios_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('public.usuarios_id_seq', 20, true);
-
 
 --
 -- Name: cargo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
@@ -331,14 +299,12 @@ SELECT pg_catalog.setval('public.usuarios_id_seq', 20, true);
 ALTER TABLE ONLY public.cargo
     ADD CONSTRAINT cargo_pkey PRIMARY KEY (id);
 
-
 --
 -- Name: categorias_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.categorias
     ADD CONSTRAINT categorias_pkey PRIMARY KEY (id);
-
 
 --
 -- Name: password_resets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
@@ -347,14 +313,12 @@ ALTER TABLE ONLY public.categorias
 ALTER TABLE ONLY public."Restablecer_contraseña"
     ADD CONSTRAINT password_resets_pkey PRIMARY KEY (id);
 
-
 --
 -- Name: productos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.productos
     ADD CONSTRAINT productos_pkey PRIMARY KEY (id);
-
 
 --
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
@@ -365,8 +329,6 @@ REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
-
 --
 -- PostgreSQL database dump complete
 --
-
