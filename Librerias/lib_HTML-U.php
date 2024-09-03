@@ -6,7 +6,7 @@ function Formulario_clientes()
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="../css/cargando.css">
+<link rel="stylesheet" href="../../css/cargando.css">
 <!--<link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">-->
 <link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">
 
@@ -14,11 +14,14 @@ function Formulario_clientes()
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <!-- <link rel="stylesheet" href="../../css/registro.css"> -->
+    <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <body>
 
     <title>Registro</title>
+    
+<div id="loading">Cargando...</div>
     <div class="contenedor">
         <div class="formulario_registro">
             <form id="myForm" onsubmit="showLoading()"  class="col-4 p-3 m-auto" action="?accion=registrar" method="post">
@@ -79,20 +82,19 @@ function Formulario_clientes()
 
             <script src="../js/cargando.js"></script>
 
-            <button class="btn btn-outline-secondary">
-                <a href="../usuarios/usuarios.php">
-                    <i class="fa-duotone fa-solid fa-users-viewfinder"></i>usuarios
-                </a>
-            </button>
+            <form id="myForm" action="../usuarios/usuarios.php" onsubmit="showLoading()" method="post">
+                <button class="btn btn-outline-secondary" value="inicio">
+                <i class="fa-duotone fa-solid fa-users-viewfinder"></i>usuarios
+                </button>
+            </form>
 
-            <button class="btn btn-outline-secondary">
-                <a href="../../index.php">
-                    <i class="fa-solid fa-house"></i>inicio
-                </a>
-            </button>
+            <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+                <button class="btn btn-outline-secondary" value="inicio">
+                    <i class="fa-solid fa-house"></i>
+                </button>
+            </form>
         </div>
     </div>
-    
         
     </body>
     </head>
@@ -112,15 +114,19 @@ function Mostrar_usuarios()
 <head>
 <link rel="shortcut icon" href="../../fotos/mostrar-contraseña.png" type="image/x-icon">
 
+<link rel="stylesheet" href="../../css/cargando.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tabla</title>
 </head>
 
 <body>
+    
+<div id="loading">Cargando...</div>
     <h3 class="text-center text-secondary">usuarios</h3>
     <div class="input-search">
         <nav>
@@ -201,13 +207,18 @@ HTML;
         </tbody>
         </table>
     </div>
-    <button class="btn btn-outline-secondary">
-        <a href="../../index.php"><i class="fa-solid fa-house"></i></a>
-    </button>
 
-    <button class="btn btn-outline-secondary">
-        <a href="./formulario_registro.php"><i class="fa-solid fa-user-plus"></i></a>
-    </button>
+    <form id="myForm" action="./formulario_registro.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+        <i class="fa-solid fa-user-plus"></i>
+        </button>
+    </form>
+
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-house"></i>
+        </button>
+    </form>
 
     
     <script src="../../js/script.js"></script>
@@ -244,7 +255,6 @@ function Login_html()
                 <input class="form-control" placeholder="correo" required type="text" name="correo"><br><br>
                 <input class="form-control" placeholder="contraseña" required type="password" name="contraseña"><br><br>
                     <input class="btn btn-primary" name="inicio" class="btn" type="submit" value="entrar"><br><br>
-                    <a class="mr-auto navbar-brand" href="../usuarios/formulario_registro.php"><i class="fa-solid fa-user-plus"></i></a><br><br>
                     <div>
                         <a class="mr-auto navbar-brand" href="../../Librerias/lib_usuarios.php?accion=recuperar">olvidaste tu contraseña?</a>
                     </div>
@@ -252,11 +262,19 @@ function Login_html()
 
         </div>
     </div>
-    <button class="btn btn-outline-secondary">
-        <a href="../../index.php">
+ 
+    <form id="myForm" action="../usuarios/formulario_registro.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-user-plus"></i>
+        </button>
+    </form>
+
+
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
             <i class="fa-solid fa-house"></i>
-        </a>
-    </button>
+        </button>
+    </form>
 </body>
 
 </html>
@@ -308,8 +326,17 @@ function Formulario_productos()
             <input type="file" class="form-control" name="foto" id="foto" accept="image/*" required>
         </div>
         <input class="btn btn-primary" name="enviar" type="submit" value="Agregar">
-        <button class="btn btn-outline-secondary">
-            <a href="../catalogo/catalogo.php">Ver productos</a>
+    </form>
+
+    <form id="myForm" action="../catalogo/catalogo.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-eye"></i>
+            </button>
+    </form>
+
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-house"></i>
         </button>
     </form>
 </div>
@@ -319,76 +346,6 @@ function Formulario_productos()
 HTML;
 
 }
-
-/*function Formulario_p()
-{
-    $html = <<<HTML
-        <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    
-<link rel="stylesheet" href="../css/cargando.css">
-<link rel="shortcut icon" href="../../fotos/comercio-electronico.png" type="image/x-icon">
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <!-- <link rel="stylesheet" href="../../css/fomu_productos.css"> -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
-</head>
-
-<body>
-<div id="loading">Cargando...</div>
-<div class="contenedor">
-        <form id="myForm" onsubmit="showLoading()" class="col-4 p-3 m-auto" action="../../librerias/lib_productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data">
-            <h3>agregar productos</h3>
-            <!-- <div class="mb-3"disabled>
-                        <label for="exampleInputEmail1" class="form-label">id</label>
-                        <input type="text"  class="form-control" name="dni" " >
-                    </div> -->
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">nombre del producto</label>
-                <input type="text" class="form-control" name="nombre">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">descripcion</label>
-                <textarea class="form-control" name="descripcion" id="descripcion" required></textarea>
-                <!-- <input type="text" class="form-control" name="descripcion"> -->
-            </div>
-            <div class="col-md-4">
-                <label for="precio" class="form-label">Precio:</label>
-                <input type="number" class="form-control" name="precio" required id="precio"><br>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">cantidad</label>
-                <input type="number" class="form-control" name="cantidad">
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label" required> seleccione la foto</label>
-                <input type="file" class="form-control" name="foto" accept="image/*">
-            </div>
-
-            <input class="btn btn-primary" name="enviar" type="submit" value="agregar"><br><br>
-
-            <!-- <input type="submit" class="btn btn-primary" name="modificar" value="modificar productos"></input>
-            <button class="btn btn-outline-secondary">
-                <a href="../usuarios/usuarios.php">regresar</a>
-            </button> -->
-            <button class="btn btn-outline-secondary">
-                <a href="../catalogo/catalogo.php">ver productos</a>
-            </button><br><br>
-        </form>
-        <script src="../js/cargando.js"></script>
-    </div>
-</body>
-
-</html>
-HTML;
-    echo $html;
-}*/
 function Mostrar_productos()
 {
 
@@ -529,6 +486,7 @@ function Catalogo()
 <html lang="en">
 
 <head>
+<link rel="shortcut icon" href="../fotos/imagen-del-producto.png" type="image/x-icon">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
@@ -564,20 +522,23 @@ HTML;
     session_start();
     if (isset($_SESSION["correo"])) {
         $html .= <<<HTML
-            <form id="myForm" action="../../controlador/carrito.php" onsubmit="showLoading()" method="post">
+
+            <form id="myForm" action="../../Librerias/lib_usuarios.php?accion=sesion" onsubmit="showLoading()" method="post">
                 <button type="submit"  name="cerrar"value="cerrar sesion">
                     <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </form> 
             <div class="container-fluid">{$_SESSION["correo"]}
-                
+
             </div>
 HTML;
     } else {
         $html .= <<<HTML
-            <a href='../pagina-principal/login.php'>
-                <i class="fa-solid fa-right-to-bracket"></i>
-            </a>
+            <form id="myForm" action="../pagina-principal/login.php" onsubmit="showLoading()" method="post">
+                <button type="submit"  name="cerrar"value="cerrar sesion">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </form> 
 HTML;
     }
     $html .= <<<HTML
@@ -618,7 +579,7 @@ HTML;
                     </div>
                     <div class="card-footer">
                         <button class="btn-buy button1">COMPRALO YA¡</button>
-                        <form action="../../Librerias/lib_carrito.php?accion=agregar" method="post" enctype="multipart/form-data">
+                        <form id="myForm" action="../../Librerias/lib_carrito.php?accion=agregar" onsubmit="showLoading()" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="{$filas['id']}">
                             <input name="nombre" type="hidden" value="{$filas['nombre']}">
                             <input name="descripcion" type="hidden" value="{$filas['descripcion']}">
@@ -635,19 +596,19 @@ HTML;
     }
     $html .= <<<HTML
     <div>
-                <form action="../../Librerias/lib_carrito.php?accion=ver" method="post">
+                <form action="../../Librerias/lib_carrito.php?accion=ver" onsubmit="showLoading()" id="myForm"  method="post">
                     <button><i class="fa-solid fa-cart-shopping"></i></button>
                 </form>
             </div>
-            <!-- <a href="../../Librerias/lib_carrito.php?accion=ver"><i class="fa-solid fa-cart-shopping"></i></a> -->
+            <a href="../../Librerias/lib_carrito.php?accion=ver"><i class="fa-solid fa-cart-shopping"></i></a> 
         </div>
         <p> total : {$total}</p>
     </div>
-    <button class="btn btn-outline-secondary">
-        <a href="../../index.php">
-            <i class="fa-solid fa-house"></i>
-        </a>
-    </button>
+    <form id="myForm" action="../catalogo/catalogo.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-eye"></i>
+            </button>
+    </form>
 HTML;
     echo $html;
 }

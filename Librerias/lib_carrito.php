@@ -11,11 +11,14 @@ if ($accion == "index") {
 }
 if ($accion == "ver") {
     if (empty($_SESSION['carrito'])) {
-        echo 'no hay nada en el carrito';die;
+        echo 'no hay nada en el carrito';die('<a href="../vistas/catalogo/catalogo.php"></a>');
         //echo '<a href="../vistas/catalogo/catalogo.php">agregar al carrito</a>';
-        header('Location: ../vistas/catalogo/carrito.php');
-        } else {
-        return  $_SESSION['carrito'];
+        
+        
+        } else if(!empty($_SESSION['carrito'])) {
+            header('Location: ../vistas/catalogo/carrito.php');
+            return  $_SESSION['carrito'];
+
         }
     //header('Location: ../vistas/catalogo/carrito.php');
 }
