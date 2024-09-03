@@ -90,13 +90,13 @@ if ($accion == "eliminarU") {
             unset($_SESSION['carrito'][$id]);
         }
         header('Location: ../vistas/catalogo/carrito.php');
-        break;
+        exit;
 }   
 if ($accion == "eliminarT") {
     //$carrito->eliminarTodo();
         unset($_SESSION['carrito']);
         header('Location: ../vistas/catalogo/catalogo.php');
-        break;
+        exit;
 } 
 
 if (isset($_POST["cerrar"])) {

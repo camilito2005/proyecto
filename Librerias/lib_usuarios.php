@@ -156,7 +156,6 @@ function Login()
 
     $correo = pg_escape_string($correo);
     $contraseña = pg_escape_string($contraseña);
-    $nombre = "";
 
     $consulta = <<<SQL
         SELECT correo,contraseña FROM usuarios WHERE correo = '$correo' AND contraseña = '$contraseña'
@@ -395,9 +394,6 @@ if ($accion =="actualizar") {
 
 if ($opciones == "search") {
     Buscar($search);
-}
-if ($accion == "recuperar") {
-    Recuperar_contraseña();
 }
 if ($accion == "correo_enviado") {
     restablecer_contraseña();
