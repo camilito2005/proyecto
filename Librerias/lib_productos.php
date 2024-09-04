@@ -178,56 +178,13 @@ SQL;
     }
 }
 function Excel (){
-    require "Classes/PHPExcel.php";
 
-    include_once "../conexion.php";
-    $conexion = Conexion();
-    if (!$conexion) {
-        die("Conexión fallida: ");
-    }
-    $sql = <<<SQL
-    SELECT * FROM productos
-SQL;
-$resultado = pg_query($conexion, $sql);
-
-if (!$resultado) {
-    die ("error en la consulta");
-}
-
-$objPHPExcel = new PHPExcel();
-$objPHPExcel->getActiveSheet()->setTitle('Productos');
-
-$headers = ['ID', 'nombre del producto', 'descripcion','precio','cantidad', 'imagen']; // Ajusta según tus columnas
-$col = 'A';
-foreach ($headers as $header) {
-    $objPHPExcel->getActiveSheet()->setCellValue($col . '1', $header);
-    $col++;
-}
-
-// Agregar los datos a la hoja de cálculo
-$rowNumber = 2;
-while ($row = pg_fetch_assoc($resultado)) {
-    $col = 'A';
-    foreach ($row as $data) {
-        $objPHPExcel->getActiveSheet()->setCellValue($col . $rowNumber, $data);
-        $col++;
-    }
-    $rowNumber++;
-}
 // Crear el archivo Excel
-
 
     header ( "Pragma: " );
 	header ( "Cache-Control: cache" );
 	header ( "Content-type: application/x-msexcel" );
 	header ( "Content-Disposition: attachment; filename=productos.xls" );
-
-
-// Guardar el archivo Excel y forzar la descarga
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-$objWriter->save('php://output');
-exit;
-
 }
 
 function Pdf(){
@@ -261,7 +218,9 @@ if ($accion == "actualizar") {
     Actualizar_productos();
 }
 if ($accion == "excel") {
-    Excel();
+    include_once "./lib_HTML-U.php";
+    Mostrar_productos_excel();
+    //Excel();
 }
 if ($accion == "pdf") {
     Pdf();

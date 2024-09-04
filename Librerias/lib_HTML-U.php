@@ -491,6 +491,80 @@ HTML;
 HTML;
     echo $html;
 }
+
+
+function Mostrar_productos_excel(){
+    
+    date_default_timezone_set('America/Bogota');
+    $fecha = date('d-m-Y g:i:s A');
+
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="../../css/cargando.css">
+<link rel="shortcut icon" href="../../fotos/mostrar_productos.png" type="image/x-icon">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/busqueda.css">
+    <title>Productos</title>
+</head>
+
+<body>
+    <h3 class="text-center text-secondary">productos</h3>
+    <div class="mx-auto col-8 p-6" id="resultados-conainer">
+        <table class="table" id="resultado">
+            <thead class="bs-info">
+                <tr>
+                    <th scope="col">id</th>
+                    <th>imagen</th>
+                    <th>nombre del prodcuto</th>
+                    <th>descripcion</th>
+                    <th>precio</th>
+                    <th>cantidad</th>
+                    <th>EDITAR/ELIMINAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <div class="container">
+HTML;
+    include "../conexion.php";
+    $conexion = Conexion();
+    $consulta = pg_query($conexion, "SELECT * FROM productos");
+    $numero = pg_num_rows($consulta);
+
+    while ($filas = pg_fetch_assoc($consulta)) {
+        $html .= <<<HTML
+                <tr>
+                <td>{$filas["id"]}</td>
+                <td>
+                    <div class="card mx-4 mt-4 mx-auto" style="width: 10rem;">
+                        <img src="/{$filas['imagen']}" height="70%" width="100%" class="card-img-top">
+                    </div>
+                        </td>
+                        <td>{$filas["nombre"]}</td>
+                        <th>{$filas["descripcion"]}</th>
+                        <td>{$filas["precio"]}</td>
+                        <td>{$filas["stock"]}</td>
+                        </tr>
+                    </div>
+                </div>
+HTML;
+    }
+    $html .= <<<HTML
+    <p>total : {$numero}</p>
+    <p>fecha y hora : {$fecha}</p>
+    
+            </tbody>
+        </table>
+    </div>
+
+HTML;
+}
 function Catalogo()
 {
     $html = <<<HTML
@@ -585,7 +659,7 @@ HTML;
                 <p>{$mensaje}</p>
                 <p>{$mensaje_0}</p>
 
-                <td>{$id}</td>
+                <!--<td>{$id}</td>-->
 
                     <img src="/{$imagen}" height="100%" width="100%" class="card-img-top" alt=""><br>
 
