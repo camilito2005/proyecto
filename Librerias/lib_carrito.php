@@ -83,17 +83,6 @@ if ($accion == "actualizar") {
         header('Location: ../vistas/catalogo/carrito.php');
     }
 }
-        
-/*if ($accion == "eliminarU") {
-    $id = $_POST['id'];
-        //$carrito->eliminarCarrito($id);
-        if (isset($_SESSION['carrito'][$id])) {
-            unset($_SESSION['carrito'][$id]);
-            header('Location: ../vistas/catalogo/carrito.php');
-        exit;
-        }
-        
-} */
 if ($accion == "eliminarU") {
     $id = $_POST['id'];
 

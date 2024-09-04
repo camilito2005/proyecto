@@ -90,7 +90,7 @@ function Formulario_clientes()
 
             <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
                 <button class="btn btn-outline-secondary" value="inicio">
-                    <i class="fa-solid fa-house"></i>
+                    <i class="fa-solid fa-house"></i>inicio
                 </button>
             </form>
         </div>
@@ -210,13 +210,13 @@ HTML;
 
     <form id="myForm" action="./formulario_registro.php" onsubmit="showLoading()" method="post">
         <button class="btn btn-outline-secondary" value="inicio">
-        <i class="fa-solid fa-user-plus"></i>
+        <i class="fa-solid fa-user-plus"></i>agregar usuarios
         </button>
     </form>
 
     <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
         <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-house"></i>inicio
         </button>
     </form>
 
@@ -265,14 +265,14 @@ function Login_html()
  
     <form id="myForm" action="../usuarios/formulario_registro.php" onsubmit="showLoading()" method="post">
         <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-user-plus"></i>
+            <i class="fa-solid fa-user-plus"></i>agregar usuarios
         </button>
     </form>
 
 
     <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
         <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-house"></i>inicio
         </button>
     </form>
 </body>
@@ -329,14 +329,14 @@ function Formulario_productos()
     </form>
 
     <form id="myForm" action="../catalogo/catalogo.php" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-eye"></i>
+            <button class="btn btn-outline-secondary" >
+            <i class="fa-solid fa-eye"></i>ver catalogo
             </button>
     </form>
 
     <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
         <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-house"></i>inicio
         </button>
     </form>
 </div>
@@ -357,7 +357,7 @@ function Mostrar_productos()
         echo $_SESSION["correo"];
         $html = <<<HTML
 <form action='../../Librerias/lib_usuarios.php?accion=sesion' method='post'>
-    <input type='submit' value="cerrar sesion">
+    <input type='submit' value="cerrar sesion">cerrar sesion
 </form>
 HTML;
     }
@@ -389,6 +389,18 @@ HTML;
             <input  type="search" id="search" placeholder="search">
         </nav>
     </div>
+    <!--<form id="myForm" action="../../Librerias/lib_productos.php?accion=excel" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary"  value="agregar productos">
+        <i class="fa-solid fa-file-excel"></i>excel
+        </button>
+    </form>
+
+    <form id="myForm" action="../../Librerias/lib_productos.php?accion=pdf" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" target="_blank">
+            <i class="fa-solid fa-file-pdf"></i>pdf
+        </button>
+    </form>-->
+
     <a href="../../Librerias/lib_productos.php?accion=excel" class="btn btn-small btn-warning">
         <i class="fa-solid fa-file-excel"></i>
     </a>
@@ -459,20 +471,20 @@ HTML;
 
 <form id="myForm" action="../catalogo/catalogo.php" onsubmit="showLoading()" method="post">
     <button class="btn btn-outline-secondary"  value="catalogo">
-        <i class="fa-solid fa-shop"></i>
+        <i class="fa-solid fa-shop"></i>ver catalogo
     </button>
 </form>
 
 <form id="myForm" action="../productos/productos.php" onsubmit="showLoading()" method="post">
     <button class="btn btn-outline-secondary"  value="agregar productos">
-        <i class="fa-sharp fa-solid fa-plus"></i>
+        <i class="fa-sharp fa-solid fa-plus"></i>agregar productos
     </button>
 </form>
 
 
 <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
     <button class="btn btn-outline-secondary" value="inicio">
-        <i class="fa-solid fa-house"></i>
+        <i class="fa-solid fa-house"></i>inicio
     </button>
 </form>
 
@@ -598,7 +610,7 @@ HTML;
     $html .= <<<HTML
     <div>
                 <form action="../../Librerias/lib_carrito.php?accion=ver" onsubmit="showLoading()" id="myForm"  method="post">
-                    <button><i class="fa-solid fa-cart-shopping"></i></button>
+                    <button><i class="fa-solid fa-cart-shopping"></i>ver carrito</button>
                 </form>
             </div>
             <!--<a href="../../Librerias/lib_carrito.php?accion=ver" id="loadingLink" class="loading-link">
@@ -611,7 +623,7 @@ HTML;
     </div>
     <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-house"></i>
+            <i class="fa-solid fa-house"></i>inicio
             </button>
     </form>
 HTML;
@@ -661,54 +673,45 @@ HTML;
     require_once '../../modelo/Modelocarrito.php';
     $modelo = new Carrito();
     $zapatos = $modelo->ver();
-    // if (empty($_SESSION['carrito'])) {
-    //     // echo 'no hay nada en el carrito';
-    //     header('Location: ../catalogo/carrito.php');
-    // } else {
-    //     return  $_SESSION['carrito'];
-    // }
-    include "../../conexion.php";
+    /*include "../../conexion.php";
     $conexion = Conexion();
     $consulta = <<<SQL
         SELECT * FROM productos
 SQL;
-    $resultado = pg_query($conexion, $consulta);
+    $resultado = pg_query($conexion, $consulta);*/
 
     foreach ($zapatos as $id => $zapatico):
     $totalProducto = $zapatico['precio'] * $zapatico['cantidad'];
 
         $html .= <<<HTML
             <div class="container">
-                <div class="card mx-4 mt-4 mx-auto" style="width: 21rem;">
-                    <!-- <div> -->
-                    <!--<p>fotico:  {$zapatico['stock']}</p> en la foto sale la descripcion -->
-                    <!-- </div> -->
+                <div class="card mx-4 mt-4 mx-auto" style="width: 29rem;">
                     <div>
                         <img src="/{$zapatico['foto']}" height="100%" width="100%" class="card-img-top" alt="...">
                     </div>
                     <div class="card-body">
 
-                    <h3 class="card-title ">num :{$zapatico['id']}</h3>
+                    <h3 class="card-title ">numero de ferencia :{$zapatico['id']}</h3>
                         <h3 class="card-title ">nombre :{$zapatico['nombre']}
                         </h3>
     
-                        <p class="">precio $ : {$zapatico['precio']}</p> <!-- en el precio aparece el stcok o disponibles -->
-                        <!--<p class="">disponibles : {$zapatico['stock']}p>  en el stock aparece la ruta de la foto -->
+                        <p class="">precio $ : {$zapatico['precio']}</p> 
     
-                        <p class="">disponibles : {$zapatico['stock']}</p> <!-- en la descripcion aparece el precio -->
-                        <p class="">descripcion : {$zapatico['descripcion']}</p> <!-- en la descripcion aparece el precio -->
+                        <p class="">disponibles : {$zapatico['stock']}</p>
+                        <p class="">descripcion : {$zapatico['descripcion']}</p> 
                         <p>Total: \${$totalProducto}</p>
     
     
                     </div>
                     <div class="card-footer">
-                    <form action="../../Librerias/lib_carrito.php?accion=actualizar" method="post" class="form-inline">
+                    <button class="btn-buy button1">COMPRALO YA¡</button>
+                    <form action="../../Librerias/lib_carrito.php?accion=actualizar" onsubmit="showLoading()" id="myForm" method="post" class="form-inline">
                         <input type="hidden" name="id" value="{$id}">
                         <label for="cantidad">Cantidad:</label>
                         <input type="number" name="cantidad" value="{$zapatico['cantidad']}" min="1" max="{$zapatico['stock']}" class="form-control mx-2">
                         <button type="submit" class="btn btn-outline-primary">Actualizar</button>
                     </form>
-                        <form action="../../Librerias/lib_carrito.php?accion=eliminarU" method="post">
+                        <form action="../../Librerias/lib_carrito.php?accion=eliminarU" onsubmit="showLoading()" id="myForm"  method="post">
                             <input type="hidden" name="id" value="{$id}">
                             <button type="submit" class="btn btn-outline-danger"> Eliminar</button>
                         </form>
