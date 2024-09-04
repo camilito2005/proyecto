@@ -492,6 +492,7 @@ function Catalogo()
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../../css/cargando.css">
     <script src="../../js/cargando.js"></script>
+    <script src="../../js/cargando2.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>catalogo</title>
@@ -600,7 +601,11 @@ HTML;
                     <button><i class="fa-solid fa-cart-shopping"></i></button>
                 </form>
             </div>
-            <a href="../../Librerias/lib_carrito.php?accion=ver"><i class="fa-solid fa-cart-shopping"></i></a> 
+            <!--<a href="../../Librerias/lib_carrito.php?accion=ver" id="loadingLink" class="loading-link">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a> -->
+
+        <div id="loadingSpinner" class="loading-spinner" style="display: none;">Cargando...</div>
         </div>
         <p> total : {$total}</p>
     </div>
@@ -623,21 +628,30 @@ function Carrito_HTML()
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>carrito</title>
     </head>
     
     <body>
+    <div id="loading">Cargando...</div>
         <!-- <div>
             <form action="../../Librerias/lib_carrito.php?accion=eliminarT" method="post">
-                <input type="submit" value="vaciar el carrito">
+                <input type="submit" value="">
             </form>
-        </div> -->
+        </div> 
         
         <div>
-            <a href="../../controlador/carrito.php?carri=eliminarT"><i class="fa-solid fa-eraser"></i></a>
-        </div>
+            <a href="../../Librerias/lib_carrito.php?accion=eliminarT"><i class="fa-solid fa-eraser"></i></a>
+        </div>-->
+
+        <form id="myForm" action="../../controlador/carrito.php?carri=eliminarT" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" value="inicio">
+                <i class="fa-solid fa-eraser"></i>vaciar el carrito
+            </button>
+        </form>
 HTML;
     session_start();
     if (isset($correo)) {
@@ -705,8 +719,13 @@ HTML;
     endforeach;
     $html .= <<<HTML
         <div>
-        <!-- <a href="../../Librerias/lib_carrito.php?accion=index"><i class="fa-solid fa-house"></i></a> -->
-        <a href="../../Librerias/lib_carrito.php?accion=index"><i class="fa-solid fa-shop"></i></a>
+        <form id="myForm" action="../../Librerias/lib_carrito.php?accion=index" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" value="inicio">
+                <i class="fa-solid fa-shop"></i>volver a la tienda
+            </button>
+        </form>
+        <!-- <a href="../../Librerias/lib_carrito.php?accion=index"><i class="fa-solid fa-house"></i></a> 
+        <a href="../../Librerias/lib_carrito.php?accion=index"><i class="fa-solid fa-shop"></i></a>-->
         
             <!-- <form action="../../Librerias/lib_carrito.php?accion=index" method="post">
                 <input type="submit" value="volver a la tienda">
@@ -740,7 +759,7 @@ function Formulario_enviar_correo(){
 </html>
 HTML;
 }
-function Formulario_restablecer_contraseña(){
+function Form_restablecer_contraseña(){
 
     $pdo = new PDO('pgsql:host=localhost;dbname=pagina', 'postgres', 'camilo');
     //$conexion = Conexion();

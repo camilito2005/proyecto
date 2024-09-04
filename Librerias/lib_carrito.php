@@ -11,8 +11,9 @@ if ($accion == "index") {
 }
 if ($accion == "ver") {
     if (empty($_SESSION['carrito'])) {
-        echo 'no hay nada en el carrito';die('<a href="../vistas/catalogo/catalogo.php"></a>');
+        echo 'no hay nada en el carrito <br> <a href="../vistas/catalogo/catalogo.php">volver a la tienda </a>';
         //echo '<a href="../vistas/catalogo/catalogo.php">agregar al carrito</a>';
+        exit;
         
         
         } else if(!empty($_SESSION['carrito'])) {
@@ -83,15 +84,33 @@ if ($accion == "actualizar") {
     }
 }
         
-if ($accion == "eliminarU") {
+/*if ($accion == "eliminarU") {
     $id = $_POST['id'];
         //$carrito->eliminarCarrito($id);
         if (isset($_SESSION['carrito'][$id])) {
             unset($_SESSION['carrito'][$id]);
-        }
-        header('Location: ../vistas/catalogo/carrito.php');
+            header('Location: ../vistas/catalogo/carrito.php');
         exit;
-}   
+        }
+        
+} */
+if ($accion == "eliminarU") {
+    $id = $_POST['id'];
+
+    if (isset($_SESSION['carrito'][$id])) {
+        unset($_SESSION['carrito'][$id]);
+
+        if (empty($_SESSION['carrito'])) {
+            header('Location: ../vistas/catalogo/catalogo.php');
+        } else {
+            header('Location: ../vistas/catalogo/carrito.php');
+        }
+        exit; 
+    } else {
+        echo 'El artículo no está en el carrito.<br>';
+        echo '<a href="../vistas/catalogo/carrito.php">Volver al carrito</a>';
+    }
+}  
 if ($accion == "eliminarT") {
     //$carrito->eliminarTodo();
         unset($_SESSION['carrito']);

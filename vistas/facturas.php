@@ -102,6 +102,8 @@ echo <<<HTML
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/cargando.css">
+    <script src="../js/cargando.js"></script>
     <style>
         /* Estilo personalizado para limitar el ancho máximo del formulario */
         .form-container {
@@ -111,13 +113,15 @@ echo <<<HTML
     </style>
 </head>
 <body>
+    
+<div id="loading">Cargando...</div>
     <div class="container mt-5">
 HTML;
 
 // Mostrar botón de cerrar sesión si el usuario está autenticado
 if ($correo) {
     echo <<<HTML
-        <form action="../controlador/carrito.php" method="post" class="mb-4">
+        <form action="../controlador/carrito.php" onsubmit="showLoading()" method="post" class="mb-4">
             <button type="submit" name="cerrar" class="btn btn-danger">Cerrar sesión</button>
         </form>
         <p class="text-center">Bienvenido, $correo</p>
@@ -177,6 +181,11 @@ echo <<<HTML
                 <button type="submit" class="btn btn-primary">Realizar Factura</button>
             </form>
         </div>
+        <form id="myForm" action="../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-house"></i>
+            </button>
+    </form>
 HTML;
 if (!$correo) {
     echo <<<HTML
