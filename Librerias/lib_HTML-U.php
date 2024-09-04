@@ -534,22 +534,38 @@ function Mostrar_productos_excel(){
 HTML;
     include "../conexion.php";
     $conexion = Conexion();
-    $consulta = pg_query($conexion, "SELECT * FROM productos");
-    $numero = pg_num_rows($consulta);
+    $consulta = <<<SQL
+    SELECT * FROM productos
+SQL;
+$resultado_consulta = pg_query($conexion, $consulta);
 
-    while ($filas = pg_fetch_assoc($consulta)) {
+    $numero = pg_num_rows($resultado_consulta);
+
+    while ($filas = pg_fetch_assoc($resultado_consulta)) {
+        $id = $filas["id"];
+        $imagen = $filas["imagen"];
+        $nombre = $filas["nombre"];
+        $descripcion = $filas["descripcion"];
+        $precio = $filas["precio"];
+        $stock = $filas["stock"];
+        echo $id;
+        echo $imagen;
+        echo $nombre;
+        echo $descripcion;
+        echo $precio;
+        echo $stock;
         $html .= <<<HTML
                 <tr>
-                <td>{$filas["id"]}</td>
+                <td>{$id}</td>
                 <td>
                     <div class="card mx-4 mt-4 mx-auto" style="width: 10rem;">
-                        <img src="/{$filas['imagen']}" height="70%" width="100%" class="card-img-top">
+                        <img src="/{$imagen}" height="70%" width="100%" class="card-img-top">
                     </div>
                         </td>
-                        <td>{$filas["nombre"]}</td>
-                        <th>{$filas["descripcion"]}</th>
-                        <td>{$filas["precio"]}</td>
-                        <td>{$filas["stock"]}</td>
+                        <td>{$nombre}</td>
+                        <th>{$descripcion}</th>
+                        <td>{$precio}</td>
+                        <td>{$stock}</td>
                         </tr>
                     </div>
                 </div>
