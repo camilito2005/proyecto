@@ -563,42 +563,58 @@ HTML;
 HTML;
     include "../../conexion.php";
     $conexion = Conexion();
-    $ramdom = pg_query($conexion, "SELECT * FROM productos");
-    $total = pg_num_rows($ramdom);
-    while ($filas = pg_fetch_assoc($ramdom)) {
+    $consulta = pg_query($conexion, "SELECT * FROM productos");
+    $total = pg_num_rows($consulta);
+    while ($filas = pg_fetch_assoc($consulta)) {
+        $imagen = $filas["imagen"];
+        $nombre = $filas["nombre"];
+        $id = $filas["id"];
+        $descripcion = $filas["descripcion"];
+        $precio = $filas["precio"];
+        $disponible = $filas["stock"];
+
+        if ($disponible<5) {
+            $mensaje = "quedan pocos"." $disponible";
+        }
+        if ($disponible < 0) {
+            $mensaje_0 = "agotado";
+        }
+
         $html .= <<<HTML
                 <div class="card mx-4 mt-4 mx-auto" style="width: 21rem;">
+                <p>{$mensaje}</p>
+                <p>{$mensaje_0}</p>
 
-                <td>{$filas['id']}</td>
+                <td>{$id}</td>
 
-                    <img src="/{$filas['imagen']}" height="100%" width="100%" class="card-img-top" alt=""><br>
+                    <img src="/{$imagen}" height="100%" width="100%" class="card-img-top" alt=""><br>
 
                     <div class="card-title">
-                        {$filas['nombre']}
+                        {$nombre}
                     </div>
                     <div class="card-body">
                         <p>
-                            {$filas['descripcion']}
+                            {$descripcion}
                         </p>
 
                         <p>precio: $
-                            {$filas['precio']}
+                            {$precio}
                         </p>
                         <p>
                             disponibles:
-                            {$filas['stock']}
+                            {$disponible}
                         </p>
 
                     </div>
                     <div class="card-footer">
                         <button class="btn-buy button1">COMPRALO YA¡</button>
                         <form id="myForm" action="../../Librerias/lib_carrito.php?accion=agregar" onsubmit="showLoading()" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="{$filas['id']}">
-                            <input name="nombre" type="hidden" value="{$filas['nombre']}">
-                            <input name="descripcion" type="hidden" value="{$filas['descripcion']}">
-                            <input name="precio" type="hidden" value="{$filas['precio']}">
-                            <input name="stock" type="hidden" value="{$filas['stock']}">
-                            <input name="foto" type="hidden" value="{$filas['imagen']}">
+                            <input type="hidden" name="id" value="{$id}">
+                            <input name="nombre" type="hidden" value="{$nombre}">
+                            <input name="descripcion" type="hidden" value="{$descripcion}">
+                            <input name="precio" type="hidden" value="{$precio}">
+                            <input name="stock" type="hidden" value="{$disponible}">
+                            <input name="foto" type="hidden" value="{$imagen}">
                             <input name="carrito" type="submit" class="btn btn-primary" value="agregar al carrito">
                         </form>
                         
@@ -685,32 +701,28 @@ SQL;
 
         $html .= <<<HTML
             <div class="container">
-                <div class="card mx-4 mt-4 mx-auto" style="width: 29rem;">
+                <div class="card mx-4 mt-4 mx-auto" style="width: 23rem;">
                     <div>
                         <img src="/{$zapatico['foto']}" height="100%" width="100%" class="card-img-top" alt="...">
                     </div>
                     <div class="card-body">
 
-                    <h3 class="card-title ">numero de ferencia :{$zapatico['id']}</h3>
-                        <h3 class="card-title ">nombre :{$zapatico['nombre']}
-                        </h3>
-    
-                        <p class="">precio $ : {$zapatico['precio']}</p> 
-    
-                        <p class="">disponibles : {$zapatico['stock']}</p>
-                        <p class="">descripcion : {$zapatico['descripcion']}</p> 
-                        <p>Total: \${$totalProducto}</p>
-    
-    
+                        <h4 class="card-title ">numero de ferencia :{$zapatico['id']}</h4>
+                            <h4 class="card-title ">nombre :{$zapatico['nombre']}</h4>
+                            <p class="">precio $ : {$zapatico['precio']}</p> 
+        
+                            <p class="">disponibles : {$zapatico['stock']}</p>
+                            <p class="">descripcion : {$zapatico['descripcion']}</p> 
+                            <p>Total: \${$totalProducto}</p>
                     </div>
                     <div class="card-footer">
-                    <button class="btn-buy button1">COMPRALO YA¡</button>
-                    <form action="../../Librerias/lib_carrito.php?accion=actualizar" onsubmit="showLoading()" id="myForm" method="post" class="form-inline">
-                        <input type="hidden" name="id" value="{$id}">
-                        <label for="cantidad">Cantidad:</label>
-                        <input type="number" name="cantidad" value="{$zapatico['cantidad']}" min="1" max="{$zapatico['stock']}" class="form-control mx-2">
-                        <button type="submit" class="btn btn-outline-primary">Actualizar</button>
-                    </form>
+                        <button class="btn-buy button1">COMPRALO YA¡</button>
+                        <form action="../../Librerias/lib_carrito.php?accion=actualizar" onsubmit="showLoading()" id="myForm" method="post" class="form-inline">
+                            <input type="hidden" name="id" value="{$id}">
+                            <label for="cantidad">Cantidad:</label>
+                            <input type="number" name="cantidad" value="{$zapatico['cantidad']}" min="1" max="{$zapatico['stock']}" class="form-control mx-2">
+                            <button type="submit" class="btn btn-outline-primary">Actualizar</button>
+                        </form>
                         <form action="../../Librerias/lib_carrito.php?accion=eliminarU" onsubmit="showLoading()" id="myForm"  method="post">
                             <input type="hidden" name="id" value="{$id}">
                             <button type="submit" class="btn btn-outline-danger"> Eliminar</button>
