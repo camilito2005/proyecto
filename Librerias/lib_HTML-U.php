@@ -567,17 +567,15 @@ $resultado_consulta = pg_query($conexion, $consulta);
                         <td>{$precio}</td>
                         <td>{$stock}</td>
                         </tr>
-                    </div>
-                </div>
 HTML;
     }
     $html .= <<<HTML
     <p>total : {$numero}</p>
     <p>fecha y hora : {$fecha}</p>
     
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
 
 HTML;
 }
@@ -719,10 +717,6 @@ HTML;
                     <button><i class="fa-solid fa-cart-shopping"></i>ver carrito</button>
                 </form>
             </div>
-            <!--<a href="../../Librerias/lib_carrito.php?accion=ver" id="loadingLink" class="loading-link">
-                <i class="fa-solid fa-cart-shopping"></i>
-            </a> -->
-
         <div id="loadingSpinner" class="loading-spinner" style="display: none;">Cargando...</div>
         </div>
         <p> total : {$total}</p>
@@ -755,16 +749,6 @@ function Carrito_HTML()
     
     <body>
     <div id="loading">Cargando...</div>
-        <!-- <div>
-            <form action="../../Librerias/lib_carrito.php?accion=eliminarT" method="post">
-                <input type="submit" value="">
-            </form>
-        </div> 
-        
-        <div>
-            <a href="../../Librerias/lib_carrito.php?accion=eliminarT"><i class="fa-solid fa-eraser"></i></a>
-        </div>-->
-
         <form id="myForm" action="../../controlador/carrito.php?carri=eliminarT" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary" value="inicio">
                 <i class="fa-solid fa-eraser"></i>vaciar el carrito
@@ -836,10 +820,6 @@ HTML;
                 <input type="submit" value="volver a la tienda">
             </form> -->
         </div>
-    
-    
-        <!--  -->
-    
     </body>
 HTML;
     echo $html;
@@ -847,21 +827,48 @@ HTML;
 function Formulario_enviar_correo(){
     echo <<<HTML
     <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
+
 <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restablecer Contraseña</title>
+    <title>Restablecer contraseña</title>
 </head>
 <body>
-    <h2>Restablecer Contraseña</h2>
-    <form action="../../Librerias/lib_usuarios.php?accion=correo_enviado" method="post">
-        <label for="email">Correo Electrónico:</label>
-        <input type="email" name="correo" id="correo" required>
-        <input type="submit" value="Enviar Enlace de Restablecimiento">
+<div id="loading">Cargando...</div>
+    <div class="mx-auto contenedor">
+        <div class="formulario_registro">
+            <form id="myForm" class="mx-auto col-4 p-3 " action="../../Librerias/lib_usuarios.php?accion=correo_enviado" onsubmit="showLoading()" method="post">
+                <h2 class="text-center text-secondary"> Restablecer Contraseña </h2>
+                <label for="">introduce tu correo electronico al cual le llegara un link</label>
+                <input class="form-control" id="correo" placeholder="correo" required type="email" name="correo"><br><br>
+                    <input class="btn btn-primary" name="inicio" class="btn" type="submit" value="enviar"><br><br>
+            </form>
+
+        </div>
+    </div>
+ 
+    <form id="myForm" action="../usuarios/formulario_registro.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-user-plus"></i>agregar usuarios
+        </button>
+    </form>
+
+
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-house"></i>inicio
+        </button>
     </form>
 </body>
+
 </html>
+
 HTML;
 }
 function Form_restablecer_contraseña(){

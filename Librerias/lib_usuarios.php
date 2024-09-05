@@ -304,42 +304,60 @@ function Cerrar_sesion()
 
 function restablecer_contraseña(){
 
+
+    // Obtener la fecha y hora actuales
+    //$fecha_actual = new DateTime(); 
+    // Si la hora está entre 00:00 y 03:59, ajusta la fecha al día anterior
+//if ($hora_actual >= 0 && $hora_actual < 4) {
+    //$fecha_actual->modify('-1 day'); // Ajusta al día anterior
+//}
+    
     try {
-        $pdo = new PDO('pgsql:host=localhost;dbname=pagina', 'postgres', 'camilo');
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        if (!isset($_POST['correo'])) {
-            die('Correo electrónico es requerido');
+        include_once "../conexion.php";
+        $conexion = Conexion();
+    
+        if (!$conexion) {
+            echo ('Error al conectar a la base de datos.');
         }
-
-        $correo = trim($_POST['correo']);
-
+    
+        if (!isset($_POST['correo'])) {
+            echo ('Correo electrónico es requerido');
+        }
+    
+        $correo = $_POST['correo'];
+    
         $token = bin2hex(openssl_random_pseudo_bytes(32));
         $hora_expiracion = date('Y-m-d H:i:s', strtotime('+1 hour'));
-
-        $stmt = $pdo->prepare('INSERT INTO password_reset (correo, token, expires_at) VALUES (?, ?, ?)');
-        $stmt->execute([$correo, $token, $hora_expiracion]);
-
+    
+        $query = 'INSERT INTO password_reset (correo, token, expires_at) VALUES ($1, $2, $3)';
+        $result = pg_query_params($conexion, $query, [$correo, $token, $hora_expiracion]);
+    
+        if (!$result) {
+            $error = pg_last_error($conexion);
+            echo ('Error al insertar en la base de datos: ' . $error);
+        }
+    
         $resetLink = "http://localhost/ti/vistas/usuarios/restablecer_contraseña.php?token=$token";
-
+    
         $to = $correo;
         $subject = 'Restablecer Contraseña';
         $message = "Para restablecer tu contraseña, por favor haz clic en el siguiente enlace: $resetLink";
         $headers = 'From: no-reply@marrugobarrioscamilo2005@gmail.com' . "\r\n" .
                 'Reply-To: no-reply@marrugobarrioscamilo2005@gmail.com' . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
-
+    
         $mail_sent = mail($to, $subject, $message, $headers);
-
+    
         if ($mail_sent) {
             echo 'Hemos enviado un enlace para restablecer tu contraseña...';
+            echo ' <br>  <a href="../vistas/pagina-principal/login.php">volver </a>';
         } else {
-            echo 'Hubo un problema al enviar el correo. Por favor, inténtelo de nuevo más tarde.';
+            throw new Exception('Hubo un problema al enviar el correo. Por favor, inténtelo de nuevo más tarde.');
         }
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         echo 'Error: ' . $e->getMessage();
     }
-
+    
 }
 
 
