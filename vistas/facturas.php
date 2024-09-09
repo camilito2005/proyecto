@@ -104,8 +104,8 @@ echo <<<HTML
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/cargando.css">
     <script src="../js/cargando.js"></script>
+    <script src="../js/facturas.js"></script>
     <style>
-        /* Estilo personalizado para limitar el ancho máximo del formulario */
         .form-container {
             max-width: 600px;
             margin: auto;
@@ -118,79 +118,67 @@ echo <<<HTML
     <div class="container mt-5">
 HTML;
 
-// Mostrar botón de cerrar sesión si el usuario está autenticado
 if ($correo) {
     echo <<<HTML
-        <form action="../controlador/carrito.php" onsubmit="showLoading()" method="post" class="mb-4">
+        <form action="../Librerias/lib_usuarios.php?accion=sesion" onsubmit="showLoading()" method="post" class="mb-4">
             <button type="submit" name="cerrar" class="btn btn-danger">Cerrar sesión</button>
         </form>
         <p class="text-center">Bienvenido, $correo</p>
 HTML;
 }
-
-// Mostrar formulario de facturación
 echo <<<HTML
-        <h4 class="text-center mb-4">Facturas</h4>
+    <h4 class="text-center mb-4">Facturas</h4>
 
-        <div class="form-container">
-            <form action="" method="post" class="bg-light p-4 rounded shadow">
-                <div class="form-group">
-                    <label for="telefono">Teléfono</label>
-                    <input type="text" class="form-control" id="telefono" name="telefono">
-                </div>
-                <div class="form-group">
-                    <label for="direccion">Dirección</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion">
-                </div>
-                <div class="form-group">
-                    <label for="correo">Correo</label>
-                    <input type="email" class="form-control" id="correo" name="correo">
-                </div>
-                <div class="form-group">
-                    <label for="hora">Hora</label>
-                    <input type="text" class="form-control" id="hora" name="hora">
-                </div>
-                <div class="form-group">
-                    <label for="cliente">Cliente</label>
-                    <input type="text" class="form-control" id="cliente" name="cliente">
-                </div>
-                <div class="form-group">
-                    <label for="vendedor">Vendedor</label>
-                    <input type="text" class="form-control" id="vendedor" name="vendedor">
-                </div>
-                <div class="form-group">
-                    <label for="producto">Producto</label>
-                    <select class="form-control" id="producto" name="producto">
-                        <option value="" disabled selected>Seleccionar</option>
+    <div class="form-container">
+        <form action="" method="post" class="bg-light p-4 rounded shadow">
+            <div class="form-group">
+                <label for="producto">Producto</label>
+                <select class="form-control" id="producto" name="producto" onchange="cargarDatos()">
+                    <option value="" disabled selected>Seleccionar</option>
 HTML;
 
-// Conectar a la base de datos y mostrar opciones de productos
 $conexion = Conexion();
 $datos = pg_query($conexion, "SELECT * FROM productos");
 
 while ($d = pg_fetch_array($datos)) {
     $nombre = htmlspecialchars($d["nombre"]);
     echo <<<HTML
-                        <option value="$nombre">$nombre</option>
+                    <option value="$nombre">$nombre</option>
 HTML;
 }
 
 echo <<<HTML
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary">Realizar Factura</button>
-            </form>
-        </div>
-        <form id="myForm" action="../index.php" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-house"></i>
-            </button>
+                </select>
+                <div id="datosProducto"></div>
+
+                <label for="nombre">Nombre:</label>
+                <input class="form-control" type="text" id="nombre" name="nombre" readonly>
+
+                <label for="descripcion">Descripción:</label>
+                <input class="form-control" type="text" id="descripcion" name="descripcion" readonly>
+
+                <label for="cantidad">Cantidad:</label>
+                <input class="form-control" type="number" id="cantidad" name="cantidad" min="1" onchange="calcularTotal()">
+
+                <label for="precio">Precio:</label>
+                <input class="form-control" type="text" id="precio" name="precio" readonly>
+
+                <label for="total">Total:</label>
+                <input class="form-control" type="text" id="total" name="total" readonly>
+            </div>
+            <button type="submit" class="btn btn-primary">Realizar Factura</button>
+        </form>
+    </div>
+    <form id="myForm" action="../index.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+        <i class="fa-solid fa-house"></i>
+        </button>
     </form>
 HTML;
 if (!$correo) {
     echo <<<HTML
     <div class="mt-4 text-center">
-            <a href="./pagina-principal/login.php" class="btn btn-secondary"><i class="fa-solid fa-right-to-bracket"></i></a>
+            <a href="./pagina-principal/login.php" class="btn btn-secondary"><i class="fa-solid fa-right-to-bracket"></i>  inicia sesion</a>
         </div>
     </div>
 HTML;
