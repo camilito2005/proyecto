@@ -303,15 +303,12 @@ function Cerrar_sesion()
 }
 
 function restablecer_contraseña(){
-
-
     // Obtener la fecha y hora actuales
     //$fecha_actual = new DateTime(); 
     // Si la hora está entre 00:00 y 03:59, ajusta la fecha al día anterior
 //if ($hora_actual >= 0 && $hora_actual < 4) {
     //$fecha_actual->modify('-1 day'); // Ajusta al día anterior
 //}
-    
     try {
         include_once "../conexion.php";
         $conexion = Conexion();
@@ -323,7 +320,6 @@ function restablecer_contraseña(){
         if (!isset($_POST['correo'])) {
             echo ('Correo electrónico es requerido');
         }
-    
         $correo = $_POST['correo'];
     
         $token = bin2hex(openssl_random_pseudo_bytes(32));
@@ -336,9 +332,14 @@ function restablecer_contraseña(){
             $error = pg_last_error($conexion);
             echo ('Error al insertar en la base de datos: ' . $error);
         }
-    
+        if ($result) {
+            
         $resetLink = "http://localhost/ti/vistas/usuarios/restablecer_contraseña.php?token=$token";
+
+        echo "<a href='http://localhost/ti/vistas/usuarios/restablecer_contraseña.php?accion=contraseña&token=$token'>formulario para restablecer contraseña</a>";
+        echo ' <br>  <a href="../vistas/pagina-principal/login.php">volver </a>';
     
+        }
         $to = $correo;
         $subject = 'Restablecer Contraseña';
         $message = "Para restablecer tu contraseña, por favor haz clic en el siguiente enlace: $resetLink";
@@ -363,36 +364,45 @@ function restablecer_contraseña(){
 
 function Formulario_restablecer_contraseña(){
 
-    $pdo = new PDO('pgsql:host=localhost;dbname=pagina', 'postgres', 'camilo');
+    include_once "../../conexion.php";
 
-    //$conexion = Conexion();
-    
+    $conexion = conexion();
+
+
+        $token = $_GET['token'];
+        echo $token;
+
     if (!isset($_GET['token'])) {
         die('Token es requerido');
     }
-    
-    $token = $_GET['token'];
-    
-    $stmt = $pdo->prepare('SELECT * FROM Restablecer_contraseña WHERE token = ? AND expires_at > NOW()');
-    $stmt->execute([$token]);
-    $reset = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
+    // Usar parámetros de consulta para evitar inyecciones SQL
+    $query = 'SELECT * FROM Restablecer_contraseña WHERE token = $1 AND expires_at > NOW()';
+    $result = pg_query_params($conexion, $query, array($token));
+
+    if (!$result) {
+        die('Error en la consulta: ' . pg_last_error());
+    }
+
+    $reset = pg_fetch_assoc($result);
+
     if (!$reset) {
         die('El token es inválido o ha expirado.');
     }
-    ?>
-    
+
+    pg_free_result($result);
+    pg_close($conn);
+
+    echo <<<HTML
     <form action="reset_password_action.php" method="post">
-        <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
+        <input type="hidden" name="token" value="<?= htmlspecialchars($token); ?>">
         <label for="password">Nueva Contraseña:</label>
         <input type="password" id="password" name="password" required>
         <button type="submit">Restablecer Contraseña</button>
     </form>
-
-    <?php
-        
-
+HTML;
 }
+
 
 
 if ($accion == "sesion") {
