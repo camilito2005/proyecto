@@ -192,8 +192,9 @@ function Pdf(){
     //require "../fpdf/fpdf.php";
     require '../fpdf17/fpdf.php';
 
-    $pdf = new FPDF();
+    /*$pdf = new FPDF();
     $pdf->AddPage();
+
 
     // Establecer fuente
     $pdf->SetFont('Arial', 'B', 16);
@@ -202,7 +203,89 @@ function Pdf(){
     $pdf->Cell(40, 10, 'prueba ');
 
     // Salida del archivo PDF
-    $pdf->Output();
+    $pdf->Output();*/
+    // Títulos y encabezado
+
+    /*$pdf = new FPDF();
+    $pdf->AddPage();
+    
+    // Establecer la fuente
+    $pdf->SetFont('Arial', 'B', 12);
+    
+    // Títulos y encabezado
+    $pdf->Cell(0, 10, 'CERTIFICADO DE RETENCIÓN EN LA FUENTE', 0, 1, 'C');
+    $pdf->Ln(10); // Espacio entre líneas
+    
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, 'BIBLIOTECA PÚBLICA PILOTO DE MEDELLIN PARA AMERICA LATINA', 0, 1, 'C');
+    $pdf->Ln(10);
+    
+    $pdf->Cell(0, 10, 'CERTIFICA:', 0, 1);
+    $pdf->Ln(10);
+    
+    $pdf->Cell(0, 10, 'Que durante el período gravable comprendido entre 01-Ene-2019 hasta 31-Dic-2019 efectuamos retención:', 0, 1);
+    $pdf->Ln(10);
+    
+    // Detalles
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(40, 10, 'A:', 0, 0);
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, '[Nombre del Beneficiario]', 0, 1);
+    $pdf->Ln(5);
+    
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(40, 10, 'NIT:', 0, 0);
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, '[Número de Identificación Tributaria del Beneficiario]', 0, 1);
+    $pdf->Ln(5);
+    
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(40, 10, 'CONCEPTO:', 0, 0);
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, 'ReteFuente Compras 2.5%', 0, 1);
+    $pdf->Ln(5);
+    
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(40, 10, 'BASE:', 0, 0);
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, '$[Monto de la Base]', 0, 1);
+    $pdf->Ln(5);
+    
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(40, 10, 'VALOR RETENIDO:', 0, 0);
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, '($ [Monto del Valor Retenido])', 0, 1);
+    $pdf->Ln(10);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    $pdf->Cell(0, 10, 'El presente certificado se expide únicamente para efectos tributarios en MEDELLIN, al [Fecha de Expidición].', 0, 1);
+    
+    // Salida del PDF
+    $pdf->Output('certificado_retenido.pdf', 'I');*/
+
+
+$pdf = new FPDF();
+$pdf->AddPage();
+
+// Establecer fuente
+$pdf->SetFont('Arial', '', 12);
+
+// Obtener la posición X actual
+$x_ini = $pdf->GetX();
+
+// Añadir una celda
+$pdf->Cell(100, 10, 'Texto en la primera celda');
+
+// Obtener la nueva posición X después de añadir la celda
+$x_fin = $pdf->GetX();
+
+// Calcular el ancho restante
+$ancho_restante = $pdf->GetPageWidth() - $x_fin;
+
+// Usar el ancho restante para ajustar la siguiente celda
+$pdf->Cell($ancho_restante, 10, 'Texto en la segunda celda', 0, 1);
+
+$pdf->Output();
+
 }
 
 if ($accion == "registrar_productos") {
