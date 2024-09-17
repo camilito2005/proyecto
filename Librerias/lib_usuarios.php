@@ -377,7 +377,7 @@ function Formulario_restablecer_contraseña(){
     }
 
     // Usar parámetros de consulta para evitar inyecciones SQL
-    $query = 'SELECT * FROM Restablecer_contraseña WHERE token = $1 AND expires_at > NOW()';
+    $query = 'SELECT * FROM password_reset WHERE token = $1 AND expires_at > NOW()';
     $result = pg_query_params($conexion, $query, array($token));
 
     if (!$result) {
@@ -391,16 +391,59 @@ function Formulario_restablecer_contraseña(){
     }
 
     pg_free_result($result);
-    pg_close($conn);
+    pg_close($conexion);
 
     echo <<<HTML
-    <form action="reset_password_action.php" method="post">
-        <input type="hidden" name="token" value="<?= htmlspecialchars($token); ?>">
+    <form action="../usuarios/restablecer_contraseña.php?accion=restablecer" method="post">
+        <input type="hidden" name="token" value="$token">
         <label for="password">Nueva Contraseña:</label>
         <input type="password" id="password" name="password" required>
         <button type="submit">Restablecer Contraseña</button>
     </form>
 HTML;
+}
+
+function Restablecer(){
+    
+    include_once "../../conexion.php";
+
+if (isset($_POST['token'], $_POST['password'])) {
+    $token = $_POST['token'];
+    $password = $_POST['password'];
+    $conexion = Conexion();
+
+    echo $token;
+    //echo $password;
+    
+    // Verificar el token
+    $result = pg_query_params($conexion, "SELECT correo, expires_at FROM password_reset WHERE token = $1", array($token));
+    //echo $result;
+    //var_dump($result);
+    $reset = pg_fetch_assoc($result);
+
+    if ($reset && $reset['expires_at'] > date('Y-m-d H:i:s')) {
+        // Token válido, actualizar la contraseña
+        $email = $reset['correo'];
+        //$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Actualizar la contraseña del usuario
+        pg_query_params($conexion, "UPDATE usuarios SET contraseña = $1 WHERE correo = $2", array($password, $email));
+
+        // Eliminar el token usado
+        pg_query_params($conexion, "DELETE FROM password_reset WHERE token = $1", array($token));
+
+        echo "La contraseña ha sido actualizada con éxito.";
+        echo '<a href="../usuarios/usuarios.php">ver registros </a>';
+
+    } else {
+        echo "El enlace de restablecimiento no es inválido o ha expirado.";
+        echo '<a href="../pagina-principal/login.php">volver</a>';
+
+    }
+
+    pg_close($conexion);
+}
+
 }
 
 

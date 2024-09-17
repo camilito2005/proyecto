@@ -206,21 +206,21 @@ function Pdf(){
     $pdf->Output();*/
     // Títulos y encabezado
 
-    /*$pdf = new FPDF();
+    $pdf = new FPDF();
     $pdf->AddPage();
     
     // Establecer la fuente
     $pdf->SetFont('Arial', 'B', 12);
     
     // Títulos y encabezado
-    $pdf->Cell(0, 10, 'CERTIFICADO DE RETENCIÓN EN LA FUENTE', 0, 1, 'C');
+    $pdf->Cell(0, 10, 'CERTIFICADO DE RETENCIÓN EN LA FUENTE', 1, 1, 'C');
     $pdf->Ln(10); // Espacio entre líneas
     
     $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(0, 10, 'BIBLIOTECA PÚBLICA PILOTO DE MEDELLIN PARA AMERICA LATINA', 0, 1, 'C');
+    $pdf->Cell(0, 10, 'BIBLIOTECA PÚBLICA PILOTO DE MEDELLIN PARA AMERICA LATINA', 1, 1, 'C');
     $pdf->Ln(10);
     
-    $pdf->Cell(0, 10, 'CERTIFICA:', 0, 1);
+    $pdf->Cell(0, 10, 'CERTIFICA:', 1, 1);
     $pdf->Ln(10);
     
     $pdf->Cell(0, 10, 'Que durante el período gravable comprendido entre 01-Ene-2019 hasta 31-Dic-2019 efectuamos retención:', 0, 1);
@@ -260,10 +260,10 @@ function Pdf(){
     $pdf->Cell(0, 10, 'El presente certificado se expide únicamente para efectos tributarios en MEDELLIN, al [Fecha de Expidición].', 0, 1);
     
     // Salida del PDF
-    $pdf->Output('certificado_retenido.pdf', 'I');*/
+    $pdf->Output('certificado_retenido.pdf', 'I');
 
 
-$pdf = new FPDF();
+/*$pdf = new FPDF();
 $pdf->AddPage();
 
 // Establecer fuente
@@ -284,7 +284,7 @@ $ancho_restante = $pdf->GetPageWidth() - $x_fin;
 // Usar el ancho restante para ajustar la siguiente celda
 $pdf->Cell($ancho_restante, 10, 'Texto en la segunda celda', 0, 1);
 
-$pdf->Output();
+$pdf->Output();*/
 
 }
 
