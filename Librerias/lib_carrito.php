@@ -112,5 +112,25 @@ if (isset($_POST["cerrar"])) {
     session_destroy();
     header("Location: ../vistas/pagina-principal/login.php");
 }
+
+if ($accion == "comprar") {
+    if ($_SERVER['REQUEST_METHOD']=== 'POST') {
+        $id = $_POST["id"];
+        $nombre = $_POST["nombre"];
+        $descripcion = $_POST["descripcion"];
+        $precio = $_POST["precio"];
+        $disponible = $_POST["stock"];
+        //$imagen = $_POST["foto"];
+
+        echo "<br>$id<br>";
+        echo "<br>$nombre<br>";
+        echo "<br>$descripcion<br>";
+        echo "<br>$precio<br>";
+        echo "<br>$disponible<br>";
+        //echo "<img src='/$imagen' height='100%' width='100%' class='card-img-top' alt=''><br>";
+
+    }
+
+}
 ?>
 

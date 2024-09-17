@@ -761,7 +761,17 @@ HTML;
 
                     </div>
                     <div class="card-footer">
-                        <button class="btn-buy button1">COMPRALO YA¡</button>
+                        <form id="myForm" action="../../Librerias/lib_carrito.php?accion=comprar" onsubmit="showLoading()" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="id" value="{$id}">
+                            <input name="nombre" type="hidden" value="{$nombre}">
+                            <input name="descripcion" type="hidden" value="{$descripcion}">
+                            <input name="precio" type="hidden" value="{$precio}">
+                            <input name="stock" type="hidden" value="{$disponible}">
+                            <input name="foto" type="hidden" value="{$imagen}">
+                            <input name="carrito" type="submit" class="btn-buy button1" value="COMPRALOS YA!">
+                        </form>
+
+                        <!--<button class="">COMPRALO YA¡</button>-->
                         <form id="myForm" action="../../Librerias/lib_carrito.php?accion=agregar" onsubmit="showLoading()" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="{$id}">
                             <input name="nombre" type="hidden" value="{$nombre}">
