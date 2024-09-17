@@ -871,7 +871,7 @@ function Formulario_enviar_correo(){
 
 HTML;
 }
-function Form_restablecer_contraseña(){
+/*function Form_restablecer_contraseña(){
 
     $pdo = new PDO('pgsql:host=localhost;dbname=pagina', 'postgres', 'camilo');
     //$conexion = Conexion();
@@ -900,5 +900,5 @@ if (!$reset) {
     <button type="submit">Restablecer Contraseña</button>
 </form>
 HTML;
-}
+}*/
 

@@ -336,6 +336,8 @@ function restablecer_contraseña(){
             
         $resetLink = "http://localhost/ti/vistas/usuarios/restablecer_contraseña.php?token=$token";
 
+        echo "este es un simulacro de el link que deberia mandar en caso de llegar al correo, pero como no llega ";
+
         echo "<a href='http://localhost/ti/vistas/usuarios/restablecer_contraseña.php?accion=contraseña&token=$token'>formulario para restablecer contraseña</a>";
         echo ' <br>  <a href="../vistas/pagina-principal/login.php">volver </a>';
     
@@ -370,7 +372,7 @@ function Formulario_restablecer_contraseña(){
 
 
         $token = $_GET['token'];
-        echo $token;
+        //echo $token;
 
     if (!isset($_GET['token'])) {
         die('Token es requerido');
@@ -394,12 +396,42 @@ function Formulario_restablecer_contraseña(){
     pg_close($conexion);
 
     echo <<<HTML
-    <form action="../usuarios/restablecer_contraseña.php?accion=restablecer" method="post">
-        <input type="hidden" name="token" value="$token">
-        <label for="password">Nueva Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Restablecer Contraseña</button>
-    </form>
+    <html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../../js/contraseña.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">Restablecer Contraseña</h2>
+        <form action="../usuarios/restablecer_contraseña.php?accion=restablecer" onsubmit="return validateForm()" method="post" class="mt-4">
+            <input type="hidden" name="token" value="$token">
+            
+            <div class="form-group">
+                <label for="password">Nueva Contraseña:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirmar Nueva Contraseña:</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                <div id="passwordError" class="error-message"></div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
+        </form>
+    </div>
+
+    <!-- Incluir Bootstrap JS y dependencias -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+</body>
+</html>
 HTML;
 }
 
@@ -410,6 +442,14 @@ function Restablecer(){
 if (isset($_POST['token'], $_POST['password'])) {
     $token = $_POST['token'];
     $password = $_POST['password'];
+
+    $confirmPassword = $_POST['confirm_password'];
+
+    if ($password !== $confirmPassword) {
+        echo "Las contraseñas no coinciden.";
+        exit;
+    }
+
     $conexion = Conexion();
 
     echo $token;
