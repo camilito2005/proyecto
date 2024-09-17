@@ -120,7 +120,7 @@ HTML;
 
 if ($correo) {
     echo <<<HTML
-        <form action="../Librerias/lib_usuarios.php?accion=sesion" onsubmit="showLoading()" method="post" class="mb-4">
+        <form action="./usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="mb-4">
             <button type="submit" name="cerrar" class="btn btn-danger">Cerrar sesión</button>
         </form>
         <p class="text-center">Bienvenido, $correo</p>

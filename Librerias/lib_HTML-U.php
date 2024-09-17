@@ -2,7 +2,7 @@
 
 function Formulario_clientes()
 {
-    $formulario = <<<HTML
+    echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +24,7 @@ function Formulario_clientes()
 <div id="loading">Cargando...</div>
     <div class="contenedor">
         <div class="formulario_registro">
-            <form id="myForm" onsubmit="showLoading()"  class="col-4 p-3 m-auto" action="?accion=registrar" method="post">
+            <form id="myForm" onsubmit="showLoading()"  class="col-4 p-3 m-auto" action="usuarios.php?accion=registrar" method="post">
                 <h3 class="text-center text-secondary">registro de clientes</h3>
                 <div id="loading">Cargando...</div>
 
@@ -100,8 +100,6 @@ function Formulario_clientes()
     </head>
 </html>
 HTML;
-
-    echo $formulario;
 }
 
 function Mostrar_usuarios()
@@ -195,7 +193,7 @@ SQL;
                     <td>$correo</td>
                     <td>$contraseña</td>
                     <td>
-                    <a href="../../Librerias/lib_usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
+                    <a href="../usuarios/usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
                     <a href="usuarios.php?accion=eliminar&id=$id"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
@@ -249,14 +247,14 @@ function Login_html()
 <div id="loading">Cargando...</div>
     <div class="mx-auto contenedor">
         <div class="formulario_registro">
-            <form id="myForm" class="mx-auto col-4 p-3 " action="../../Librerias/lib_usuarios.php?accion=login" onsubmit="showLoading()" method="post">
+            <form id="myForm" class="mx-auto col-4 p-3 " action="../pagina-principal/login.php?accion=login" onsubmit="showLoading()" method="post">
                 <h2 class="text-center text-secondary"> bienvenido </h2>
                 <p class="text-center text-secondary"> inicia sesion </p>
                 <input class="form-control" placeholder="correo" required type="text" name="correo"><br><br>
                 <input class="form-control" placeholder="contraseña" required type="password" name="contraseña"><br><br>
                     <input class="btn btn-primary" name="inicio" class="btn" type="submit" value="entrar"><br><br>
                     <div>
-                        <a class="mr-auto navbar-brand" href="../usuarios/correo_restablecer_contraseña.php?accion=recuperar">olvidaste tu contraseña?</a>
+                        <a class="mr-auto navbar-brand" href="../usuarios/usuarios.php?accion=recuperar">olvidaste tu contraseña?</a>
                     </div>
             </form>
 
@@ -303,7 +301,7 @@ function Formulario_productos()
 <body>
 <div id="loading">Cargando...</div>
 <div class="contenedor">
-    <form id="myForm" class="col-4 p-3 m-auto" action="../../librerias/lib_productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+    <form id="myForm" class="col-4 p-3 m-auto" action="../productos/productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
         <h3>Agregar productos</h3>
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre del producto</label>
@@ -348,15 +346,13 @@ HTML;
 }
 function Mostrar_productos()
 {
-
-    $sesion = $_SESSION["correo"];
     
     date_default_timezone_set('America/Bogota');
     $fecha = date('d-m-Y g:i:s A');
     if (isset($_SESSION["correo"])) {
         echo $_SESSION["correo"];
         $html = <<<HTML
-<form action='../../Librerias/lib_usuarios.php?accion=sesion' method='post'>
+<form action='../usuarios/usuarios.php?accion=cerrar' method='post'>
     <input type='submit' value="cerrar sesion">cerrar sesion
 </form>
 HTML;
@@ -401,10 +397,10 @@ HTML;
         </button>
     </form>-->
 
-    <a href="../../Librerias/lib_productos.php?accion=excel" class="btn btn-small btn-warning">
+    <a href="../productos/productos.php?accion=excel" class="btn btn-small btn-warning">
         <i class="fa-solid fa-file-excel"></i>
     </a>
-    <a href="../../Librerias/lib_productos.php?accion=pdf" target="_blank" class="btn btn-success">
+    <a href="../productos/productos.php?accion=pdf" target="_blank" class="btn btn-success">
         <i class="fa-solid fa-file-pdf"></i>
     </a>
     <h3 class="text-center text-secondary">productos</h3>
@@ -444,10 +440,10 @@ HTML;
 <td>{$filas["stock"]}</td>
 
 <td>
-    <a href="../../Librerias/lib_productos.php?accion=modificar&id={$filas['id']}" class="btn btn-small btn-warning">
+    <a href="../productos/productos.php?accion=modificar&id={$filas['id']}" class="btn btn-small btn-warning">
         <i class="fa-solid fa-pen-to-square"></i>
     </a>
-    <form id="myForm" action="/ti/librerias/lib_Productos.php?accion=eliminar&id={$filas['id']}" method="post">
+    <form id="myForm" action="../productos/productos.php?accion=eliminar&id={$filas['id']}" method="post">
         <button name="eliminar" class="btn btn-small btn-danger" type="submit" onsubmit="showLoading()" onclick="return Pregunta()">
             <i class="fa-solid fa-trash"></i>
         </button>
@@ -492,6 +488,74 @@ HTML;
     echo $html;
 }
 
+/*function Modificar_productos(){
+    include("../../conexion.php");
+$id = $_GET["id"];
+$sql = $conexion->query(" SELECT * FROM productos WHERE id=$id");
+
+echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="../../css/fomu_productos.css"> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="contenedor">
+        <form class="col-4 p-3 m-auto" action="../../controlador/CONTROLADOR-Productos.php" method="post">
+            <h3>modificar productos</h3>
+            <input type="hidden" name="id" value="{$_GET['id']}">
+HTML;
+            // include "../../controlador/actualizar-usuarios.php";
+            while ($camilo = $sql->fetch_object()) { 
+
+                echo <<<HTML
+                <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">id</label>
+                        <input type="text" disabled class="form-control" name="id" value="<?= $camilo->id ?>" >
+                    </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">nombre del producto</label>
+                    <input type="text" class="form-control" name="nombre" value="<?= $camilo->nombre ?>">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">descrpcion</label>
+                    <input type="text" class="form-control" name="descripcion" value="<?= $camilo->descripcion ?>">
+                </div>
+                <div class="col-md-4">
+                    <label for="precio" class="form-label">Precio:</label>
+                    <input type="number" class="form-control" name="precio" value="<?= $camilo->precio ?>" id="precio"><br>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">cantidad</label>
+                    <input type="number" class="form-control" name="cantidad"  value="<?= $camilo->stock ?>">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label" required>foto</label>
+                    <input type="file" class="form-control" disabled name="foto" value="<?= $camilo->imagen ?>">
+                </div>
+
+
+HTML; }
+            echo <<<HTML
+            <input type="submit" class="btn btn-primary" name="modificar" value="modificar productos">
+            <button class="btn btn-outline-secondary">
+                <a href="../productos/verProductos.php">regresar</a>
+            </button>
+        </form>
+    </div>
+</body>
+
+</html>
+HTML;
+
+}*/
+
 
 function Mostrar_productos_excel(){
     
@@ -532,7 +596,7 @@ function Mostrar_productos_excel(){
             <tbody>
                 <div class="container">
 HTML;
-    include "../conexion.php";
+    include "../../conexion.php";
     $conexion = Conexion();
     $consulta = <<<SQL
     SELECT * FROM productos
@@ -624,7 +688,7 @@ HTML;
     if (isset($_SESSION["correo"])) {
         $html .= <<<HTML
 
-            <form id="myForm" action="../../Librerias/lib_usuarios.php?accion=sesion" onsubmit="showLoading()" method="post">
+            <form id="myForm" action="../usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post">
                 <button type="submit"  name="cerrar"value="cerrar sesion">
                     <i class="fa-solid fa-right-from-bracket"></i>cerrar sesion 
                 </button>
@@ -661,17 +725,19 @@ HTML;
         $precio = $filas["precio"];
         $disponible = $filas["stock"];
 
-        if ($disponible<5) {
-            $mensaje = "quedan pocos"." $disponible";
+        //echo $disponible;
+
+        /*if ($disponible<5) {
+            $mensaje = "quedan pocos "." $disponible";
         }
         if ($disponible < 0) {
             $mensaje_0 = "agotado";
-        }
+        }*/
 
         $html .= <<<HTML
                 <div class="card mx-4 mt-4 mx-auto" style="width: 21rem;">
-                <p>{$mensaje}</p>
-                <p>{$mensaje_0}</p>
+                <!--<p>{$mensaje}</p>
+                <p>{$mensaje_0}</p>-->
 
                 <!--<td>{$id}</td>-->
 
@@ -843,7 +909,7 @@ function Formulario_enviar_correo(){
 <div id="loading">Cargando...</div>
     <div class="mx-auto contenedor">
         <div class="formulario_registro">
-            <form id="myForm" class="mx-auto col-4 p-3 " action="../../Librerias/lib_usuarios.php?accion=correo_enviado" onsubmit="showLoading()" method="post">
+            <form id="myForm" class="mx-auto col-4 p-3 " action="../usuarios/usuarios.php?accion=correo_enviado" onsubmit="showLoading()" method="post">
                 <h2 class="text-center text-secondary"> Restablecer Contraseña </h2>
                 <label for="">introduce tu correo electronico al cual le llegara un link</label>
                 <input class="form-control" id="correo" placeholder="correo" required type="email" name="correo"><br><br>

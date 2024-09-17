@@ -23,8 +23,8 @@ function Insertar_productos()
             if ($_FILES["file"]["error"] == UPLOAD_ERR_OK) {
                 $archivo_temporal = $_FILES["foto"]["tmp_name"];
                 $foto_nombre = basename($_FILES["foto"]["name"]);
-                $directorio_destino = "../../ti/fotos/";
-                echo realpath('../../ti/fotos/');
+                $directorio_destino = "../../../ti/fotos/";
+                echo realpath('../../../ti/fotos/');
 
                 //include "/Applications/XAMPP/htdocs/ti/fotos";
                 //Aquí se verifica si se ha subido un archivo con el nombre 'foto'. Si es así, se obtienen el nombre del archivo y su ruta temporal. Se define el directorio destino donde se guardará el archivo.
@@ -32,7 +32,7 @@ function Insertar_productos()
                 if (move_uploaded_file($archivo_temporal, $directorio_destino . $foto_nombre)) {
                     $foto = $directorio_destino . $foto_nombre;
 
-                    include "../conexion.php";
+                    include "../../conexion.php";
                     $conexion = Conexion();
 
                     $consulta = <<<SQL
@@ -41,7 +41,7 @@ SQL;
 echo $query;
                     $resultado = pg_query($conexion, $consulta);
                     if ($resultado) {
-                        header("Location: ../vistas/catalogo/catalogo.php");
+                        header("Location: ../catalogo/catalogo.php");
                         exit;
                     } else {
                         if (!$resultado)
@@ -58,7 +58,7 @@ echo $query;
 }function Modificar_Productos()
 {
 
-    include("../conexion.php");
+    include("../../conexion.php");
     $conexion = Conexion();
     $id = $_GET["id"];
     $sql = <<<SQL
@@ -83,7 +83,7 @@ SQL;
     
     <body>
         <div class="contenedor">
-            <form class="col-4 p-3 m-auto" action="lib_productos.php?accion=actualizar&id=$id" method="post">
+            <form class="col-4 p-3 m-auto" action="productos.php?accion=actualizar&id=$id" method="post">
                 <h3>modificar productos</h3>
                 <input type="hidden" name="id" value="{$_GET['id']}">
 HTML;
@@ -139,7 +139,7 @@ echo $html;
 }
 function Actualizar_productos(){
 
-    include_once "../conexion.php";
+    include_once "../../conexion.php";
     $conexion = Conexion();
 
     $id = $_GET["id"];
@@ -153,7 +153,7 @@ function Actualizar_productos(){
 SQL;
 $consulta = pg_query($conexion,$sql);
 if ($consulta) {
-    header("Location: ../../ti/vistas/productos/verProductos.php");
+    header("Location: ./productos/verProductos.php");
 }
 else {
     echo "error";
@@ -162,7 +162,7 @@ else {
 
 function Eliminar_productos()
 {
-    include_once "../conexion.php";
+    include_once "../../conexion.php";
     $conexion = Conexion();
     $id = $_GET['id'];
     $consulta = <<<SQL
@@ -171,7 +171,7 @@ SQL;
 
     $resultado = pg_query($conexion, $consulta);
     if ($resultado) {
-        header("Location: ../vistas/productos/verProductos.php");
+        header("Location: ../productos/verProductos.php");
         exit;
     } else {
         echo "error";
@@ -190,7 +190,7 @@ function Excel (){
 function Pdf(){
 
     //require "../fpdf/fpdf.php";
-    require '../fpdf17/fpdf.php';
+    require '../../fpdf17/fpdf.php';
 
     /*$pdf = new FPDF();
     $pdf->AddPage();
@@ -286,26 +286,5 @@ $pdf->Cell($ancho_restante, 10, 'Texto en la segunda celda', 0, 1);
 
 $pdf->Output();*/
 
-}
-
-if ($accion == "registrar_productos") {
-    Insertar_productos();
-}
-if ($accion == "eliminar") {
-    Eliminar_productos();
-}
-if ($accion== "modificar") {
-    Modificar_Productos();
-}
-if ($accion == "actualizar") {
-    Actualizar_productos();
-}
-if ($accion == "excel") {
-    include_once "./lib_HTML-U.php";
-    Mostrar_productos_excel();
-    //Excel();
-}
-if ($accion == "pdf") {
-    Pdf();
 }
 ?>

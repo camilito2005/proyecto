@@ -77,7 +77,8 @@ SQL;
         $resultadoc = pg_query($conexion, $consulta);
 
         if ($resultadoc) {
-            header("Location: ./usuarios.php");
+            //header("Location: ./usuarios.php");
+            echo "usuario registrado correctamente";
         } else {
             if (!$resultadoc) {
                 echo "error";
@@ -87,6 +88,7 @@ SQL;
         echo "campos vacios, porfavor llene los campos";
     }
 }
+
 function Actualizar_usuarios(){
     $id = $_GET["id"];
     // $dni = $_POST["dni"];
@@ -97,7 +99,7 @@ function Actualizar_usuarios(){
     $correo = $_POST["correo"];
     $contraseña = $_POST["contraseña"];
 
-    include_once "../conexion.php";
+    include_once "../../conexion.php";
     $conexion = Conexion();
 
     $consulta = <<<SQL
@@ -107,7 +109,7 @@ SQL;
 $resultado_consulta = pg_query($conexion,$consulta);
 
 if ($resultado_consulta) {
-    header("Location: ../../ti/vistas/usuarios/usuarios.php");
+    header("Location: ./usuarios.php");
 }
 else {
     echo "error al realizar la operacion ";
@@ -142,7 +144,7 @@ function Login()
 {
     session_start();
 
-    include_once "../conexion.php";
+    include_once "../../conexion.php";
 
     $conexion = Conexion();
 
@@ -168,7 +170,7 @@ SQL;
     if ($filas) {
         $_SESSION["correo"] = $correo;
 
-        header("Location: ../vistas/catalogo/catalogo.php");
+        header("Location: ../catalogo/catalogo.php");
     } else {
         echo "contraseña incorrecta ";
     }
@@ -177,7 +179,7 @@ SQL;
 function Modificar_usuarios()
 {
 
-    include_once "../conexion.php";
+    include_once "../../conexion.php";
     $conexion = Conexion();
     $id = $_GET["id"];
 
@@ -198,7 +200,7 @@ SQL;
 
 <body>
     <div class="contenedor">
-        <form class="col-4 p-3 m-auto" action="lib_usuarios.php?accion=actualizar&id=$id" method="post">
+        <form class="col-4 p-3 m-auto" action="usuarios.php?accion=actualizar&id=$id" method="post">
             <h3>modificar registro de usuarios</h3>
                 <input type="hidden" name="id" value="{$id}">
 HTML;
@@ -299,18 +301,13 @@ function Cerrar_sesion()
 {
     session_start();
     session_destroy();
-    header("Location: ../vistas/pagina-principal/login.php");
+    header("Location: ../pagina-principal/login.php");
 }
 
 function restablecer_contraseña(){
-    // Obtener la fecha y hora actuales
-    //$fecha_actual = new DateTime(); 
-    // Si la hora está entre 00:00 y 03:59, ajusta la fecha al día anterior
-//if ($hora_actual >= 0 && $hora_actual < 4) {
-    //$fecha_actual->modify('-1 day'); // Ajusta al día anterior
-//}
+
     try {
-        include_once "../conexion.php";
+        include_once "../../conexion.php";
         $conexion = Conexion();
     
         if (!$conexion) {
@@ -338,7 +335,7 @@ function restablecer_contraseña(){
 
         echo "este es un simulacro de el link que deberia mandar en caso de llegar al correo, pero como no llega ";
 
-        echo "<a href='http://localhost/ti/vistas/usuarios/restablecer_contraseña.php?accion=contraseña&token=$token'>formulario para restablecer contraseña</a>";
+        echo "<a href='http://localhost/ti/vistas/usuarios/usuarios.php?accion=contraseña&token=$token'>formulario para restablecer contraseña</a>";
         echo ' <br>  <a href="../vistas/pagina-principal/login.php">volver </a>';
     
         }
@@ -407,7 +404,7 @@ function Formulario_restablecer_contraseña(){
 <body>
     <div class="container">
         <h2 class="mt-5">Restablecer Contraseña</h2>
-        <form action="../usuarios/restablecer_contraseña.php?accion=restablecer" onsubmit="return validateForm()" method="post" class="mt-4">
+        <form action="../usuarios/usuarios.php?accion=restablecer" onsubmit="return validateForm()" method="post" class="mt-4">
             <input type="hidden" name="token" value="$token">
             
             <div class="form-group">
@@ -488,26 +485,13 @@ if (isset($_POST['token'], $_POST['password'])) {
 
 
 
-if ($accion == "sesion") {
-    Cerrar_sesion();
-}
-if ($accion == "login") {
-    Login();
-}
 
-if ($accion=="modificar"){
-    Modificar_usuarios();
-}
 
-if ($accion =="actualizar") {
-    Actualizar_usuarios();
-}
+
 
 if ($opciones == "search") {
     Buscar($search);
 }
-if ($accion == "correo_enviado") {
-    restablecer_contraseña();
-}
+
 
 ?>
