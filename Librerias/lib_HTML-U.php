@@ -643,7 +643,171 @@ HTML;
 
 HTML;
 }
-function Catalogo()
+
+function Catalogo() {
+    $html = <<<HTML
+    <!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link rel="shortcut icon" href="../fotos/imagen-del-producto.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <script src="../../js/cargando.js"></script>
+    <script src="../../js/cargando2.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card-img-top {
+            height: 300px; /* Altura fija para todas las imágenes */
+            object-fit: cover; /* Ajusta la imagen sin distorsionarla */
+        }
+        .agotado {
+            color: red; /* Color para el texto de agotado */
+            font-weight: bold;
+        }
+        .loading-spinner {
+            display: none; /* Cambia esto a block para mostrar */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading">Cargando...</div>
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Catálogo</a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <form class="d-flex" action="#" method="post">
+                    <input name="busqueda" class="form-control me-2" type="search" id="buscador" placeholder="Buscar productos">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <h4 class="text-center text-secondary">Productos</h4>
+    
+HTML;
+
+    session_start();
+    if (isset($_SESSION["correo"])) {
+        $html .= <<<HTML
+        <div class="container-fluid text-end">
+            <span>{$_SESSION["correo"]}</span>
+            <form id="myForm" action="../usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="d-inline">
+                <button type="submit" class="btn btn-danger btn-sm" name="cerrar" value="cerrar sesion">
+                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+                </button>
+            </form>
+        </div>
+HTML;
+    } else {
+        $html .= <<<HTML
+        <div class="container-fluid text-end">
+            <form id="myForm" action="../pagina-principal/login.php" onsubmit="showLoading()" method="post" class="d-inline">
+                <button type="submit" class="btn btn-primary btn-sm" name="cerrar" value="iniciar">
+                    <i class="fa-solid fa-right-from-bracket"></i> Iniciar sesión
+                </button>
+            </form>
+        </div>
+HTML;
+    }
+
+    $html .= <<<HTML
+    <div class="container">
+        <div class="row">
+HTML;
+
+    include "../../conexion.php";
+    $conexion = Conexion();
+    $consulta = pg_query($conexion, "SELECT * FROM productos");
+    $total = pg_num_rows($consulta);
+    
+    while ($filas = pg_fetch_assoc($consulta)) {
+        $imagen = $filas["imagen"];
+        $nombre = $filas["nombre"];
+        $id = $filas["id"];
+        $descripcion = $filas["descripcion"];
+        $precio = $filas["precio"];
+        $disponible = $filas["stock"];
+        
+        $precio_number_format = number_format($precio, 2);
+        
+        $mensaje_agotado = $disponible <= 0 ? '<p class="agotado">Agotado</p>' : '';
+
+        $html .= <<<HTML
+            <div class="col-md-4">
+                <div class="card mx-4 mt-4">
+                    <img src="/{$imagen}" class="card-img-top" alt="{$nombre}">
+                    <div class="card-body">
+                        <h5 class="card-title">{$nombre}</h5>
+                        <p class="card-text">{$descripcion}</p>
+                        <p class="card-text"><strong>Precio: $ {$precio_number_format}</strong></p>
+                        <p class="card-text">Disponibles: {$disponible} {$mensaje_agotado}</p>
+                    </div>
+                    <div class="card-footer">
+                        <form id="myForm" action="../../Librerias/lib_carrito.php?accion=comprar" onsubmit="showLoading()" method="post" enctype="multipart/form-data" class="d-inline">
+                            <input type="hidden" name="id" value="{$id}">
+                            <input name="nombre" type="hidden" value="{$nombre}">
+                            <input name="descripcion" type="hidden" value="{$descripcion}">
+                            <input name="precio" type="hidden" value="{$precio}">
+                            <input name="stock" type="hidden" value="{$disponible}">
+                            <input name="foto" type="hidden" value="{$imagen}">
+                            <input name="carrito" type="submit" class="btn btn-success" value="Comprar"{$disponible}>
+                        </form>
+                        <form id="myForm" action="../../Librerias/lib_carrito.php?accion=agregar" onsubmit="showLoading()" method="post" enctype="multipart/form-data" class="d-inline">
+                            <input type="hidden" name="id" value="{$id}">
+                            <input name="nombre" type="hidden" value="{$nombre}">
+                            <input name="descripcion" type="hidden" value="{$descripcion}">
+                            <input name="precio" type="hidden" value="{$precio}">
+                            <input name="stock" type="hidden" value="{$disponible}">
+                            <input name="foto" type="hidden" value="{$imagen}">
+                            <input name="carrito" type="submit" class="btn btn-primary" value="Agregar al carrito" {$disponible}>
+                        </form>
+                    </div>
+                </div>
+            </div>
+HTML;
+    }
+
+    $html .= <<<HTML
+        </div>
+        <div class="text-center">
+            <form action="../../Librerias/lib_carrito.php?accion=ver" onsubmit="showLoading()" method="post" class="mt-4">
+                <button class="btn btn-info"><i class="fa-solid fa-cart-shopping"></i> Ver carrito</button>
+            </form>
+        </div>
+        <p class="text-center">Total de productos: {$total}</p>
+    </div>
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post" class="text-center mt-4">
+        <button class="btn btn-outline-secondary">
+            <i class="fa-solid fa-house"></i> Inicio
+        </button>
+    </form>
+HTML;
+    
+    echo $html;
+}
+
+
+function Catalogo1()
 {
     $html = <<<HTML
     <!DOCTYPE html>
@@ -1098,6 +1262,155 @@ HTML;
 HTML;
     }
 }
+function FormularioFactura1() {
+    include_once "../conexion.php";
+    session_start();
+
+    date_default_timezone_set('America/Bogota');
+    $fecha = date('Y-m-d g:i:s');
+
+    $correo = isset($_SESSION["correo"]) ? htmlspecialchars($_SESSION["correo"]) : null;
+
+    echo <<<HTML
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Facturas</title>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <style>
+            .form-container {
+                max-width: 600px;
+                margin: auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                background-color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo center">Facturas</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+HTML;
+
+    if ($correo) {
+        echo <<<HTML
+                <li><form action="./usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="mb-0">
+                    <button type="submit" name="cerrar" class="btn red">Cerrar sesión</button>
+                </form></li>
+                <li><span class="white-text">Bienvenido, $correo</span></li>
+HTML;
+    } else {
+        echo <<<HTML
+                <li><a href="./pagina-principal/login.php" class="btn grey">Iniciar sesión</a></li>
+HTML;
+    }
+
+    echo <<<HTML
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container mt-5">
+            <h4 class="center-align">Realizar Factura</h4>
+            <div class="form-container">
+                <form action="facturas.php?accion=factura" method="post" class="bg-light p-4">
+                    <div class="input-field">
+                        <select id="producto" name="producto" onchange="cargarDatos()">
+                            <option value="" disabled selected>Seleccionar</option>
+HTML;
+
+    $conexion = Conexion();
+    $datos = pg_query($conexion, "SELECT * FROM productos");
+
+    while ($d = pg_fetch_array($datos)) {
+        $nombre = htmlspecialchars($d["nombre"]);
+        echo <<<HTML
+                            <option value="$nombre">$nombre</option>
+HTML;
+    }
+
+    echo <<<HTML
+                        </select>
+                        <label for="producto">Producto</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="text" id="nombre" required name="nombre" readonly>
+                        <label for="nombre">Nombre</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="text" id="descripcion" required name="descripcion" readonly>
+                        <label for="descripcion">Descripción</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="number" id="cantidad" required name="cantidad" min="1" onchange="calcularTotal()">
+                        <label for="cantidad">Cantidad</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="text" id="precio" required name="precio" readonly>
+                        <label for="precio">Precio</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="text" id="total" required name="total" readonly>
+                        <label for="total">Total</label>
+                    </div>
+
+                    <button type="submit" class="btn blue">Realizar Factura</button>
+                </form>
+            </div>
+            <form id="myForm" action="../index.php" onsubmit="showLoading()" method="post" class="mt-4">
+                <button class="btn btn-outline-secondary" value="inicio">
+                    <i class="fa-solid fa-house"></i>
+                </button>
+            </form>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var elems = document.querySelectorAll('select');
+                var instances = M.FormSelect.init(elems);
+            });
+
+            function cargarDatos() {
+                var producto = document.getElementById('producto').value;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        document.getElementById('nombre').value = data.nombre;
+                        document.getElementById('descripcion').value = data.descripcion;
+                        document.getElementById('precio').value = data.precio;
+                        calcularTotal();
+                    }
+                };
+                xhttp.open("GET", "../Librerias/lib_facturas.php?accion=cargardatos&nombre=" + encodeURIComponent(producto), true);
+                xhttp.send();
+            }
+
+            function calcularTotal() {
+                var cantidad = document.getElementById('cantidad').value;
+                var precio = document.getElementById('precio').value;
+                var total = cantidad * precio;
+                document.getElementById('total').value = total.toFixed(2);
+            }
+        </script>
+    </body>
+    </html>
+HTML;
+}
+
+
+
 /*function Form_restablecer_contraseña(){
 
     $pdo = new PDO('pgsql:host=localhost;dbname=pagina', 'postgres', 'camilo');
@@ -1128,4 +1441,4 @@ if (!$reset) {
 </form>
 HTML;
 }*/
-
+?>
