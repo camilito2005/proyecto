@@ -102,10 +102,8 @@ function Formulario_clientes()
 HTML;
 }
 
-function Mostrar_usuarios()
-{
-
-    $mostrar = <<<HTML
+function Mostrar_usuarios(){
+    echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 
@@ -117,12 +115,15 @@ function Mostrar_usuarios()
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="../../js/cargando.js"></script>
+    <script src="../../js/pregunta.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tabla</title>
 </head>
 
 <body>
+    <script>
+</script>
     
 <div id="loading">Cargando...</div>
     <h3 class="text-center text-secondary">usuarios</h3>
@@ -145,8 +146,8 @@ function Mostrar_usuarios()
                     <th scope="col">APELLIDOS</th>
                     <th scope="col">TELEFONO</th>
                     <th scope="col">DIRECCION</th>
-                    <th scope="col">CORREO</th>
-                    <th scope="col">CONTRASEÑA</th>
+                    <!--<th scope="col">CORREO</th>
+                    <th scope="col">CONTRASEÑA</th>-->
                     <th scope="col">modificar/ELIMINAR</th>
                 </tr>
             </thead>
@@ -160,7 +161,7 @@ SQL;
     $query = pg_query($conexion, $consulta1);
 
 
-    $areglo = [];
+    //$areglo = [];
 
     while ($fila = pg_fetch_object($query)) {
         // $arreglo[] = [
@@ -178,10 +179,10 @@ SQL;
         $apellido = $fila->apellido;
         $telefono = $fila->telefono;
         $direccion = $fila->direccion;
-        $correo = $fila->correo;
-        $contraseña = $fila->contraseña;
+        /*$correo = $fila->correo;
+        $contraseña = $fila->contraseña;*/
 
-        $mostrar .= <<<HTML
+        echo <<<HTML
             <tbody>
                 <tr>
                     <td>$id</td>
@@ -190,17 +191,17 @@ SQL;
                     <td>$apellido</td>
                     <td>$telefono</td>
                     <td>$direccion</td>
-                    <td>$correo</td>
-                    <td>$contraseña</td>
+                    <!--<td>$correo</td>
+                    <td>$contraseña</td>-->
                     <td>
                     <a href="../usuarios/usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
-                    <a href="usuarios.php?accion=eliminar&id=$id"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
+                    <a href="usuarios.php?accion=eliminar&id=$id" onclick="return pregunta()"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
             </tbody>
 HTML;
     }
-    $mostrar .= <<<HTML
+    echo <<<HTML
     
         </tbody>
         </table>
@@ -219,9 +220,7 @@ HTML;
     </form>
 
     
-    <script src="../../js/script.js"></script>
 HTML;
-    echo $mostrar;
 }
 
 function Login_html()
@@ -426,6 +425,7 @@ HTML;
     $numero = pg_num_rows($mostrar);
 
     while ($filas = pg_fetch_assoc($mostrar)) {
+        $precio = number_format($filas["precio"]);
         $html .= <<<HTML
 <tr>
 <td>{$filas["id"]}</td>
@@ -436,7 +436,7 @@ HTML;
 </td>
 <td>{$filas["nombre"]}</td>
 <th>{$filas["descripcion"]}</th>
-<td>{$filas["precio"]}</td>
+<td>{$precio}</td>
 <td>{$filas["stock"]}</td>
 
 <td>
@@ -725,12 +725,14 @@ HTML;
         $precio = $filas["precio"];
         $disponible = $filas["stock"];
 
+        $precio_number_format =number_format($precio);
+
         //echo $disponible;
 
         /*if ($disponible<5) {
             $mensaje = "quedan pocos "." $disponible";
         }
-        if ($disponible < 0) {
+        if ($disponible <= 0) {
             $mensaje_0 = "agotado";
         }*/
 
@@ -752,7 +754,7 @@ HTML;
                         </p>
 
                         <p>precio: $
-                            {$precio}
+                            {$precio_number_format}
                         </p>
                         <p>
                             disponibles:
@@ -825,7 +827,7 @@ function Carrito_HTML()
     
     <body>
     <div id="loading">Cargando...</div>
-        <form id="myForm" action="../../controlador/carrito.php?carri=eliminarT" onsubmit="showLoading()" method="post">
+        <form id="myForm" action="../../Librerias/lib_carrito.php?accion=eliminarT" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary" value="inicio">
                 <i class="fa-solid fa-eraser"></i>vaciar el carrito
             </button>
@@ -836,9 +838,15 @@ HTML;
         echo $correo;
     }
 
-    require_once '../../modelo/Modelocarrito.php';
+    /*require_once '../../modelo/Modelocarrito.php';
     $modelo = new Carrito();
-    $zapatos = $modelo->ver();
+    $zapatos = $modelo->ver();*/
+    if (empty($_SESSION['carrito'])) {
+        header('Location: ../catalogo/carrito.php');
+        exit(); 
+    } else {
+        $zapatos = $_SESSION['carrito']; 
+    }
     /*include "../../conexion.php";
     $conexion = Conexion();
     $consulta = <<<SQL
@@ -946,6 +954,149 @@ function Formulario_enviar_correo(){
 </html>
 
 HTML;
+}
+
+function FormularioFactura(){
+
+    include_once "../conexion.php";
+    session_start();
+
+    date_default_timezone_set('America/Bogota');
+        $fecha = date('Y-m-d g:i:s');
+        echo $fecha;
+
+    $correo = isset($_SESSION["correo"]) ? htmlspecialchars($_SESSION["correo"]) : null;
+
+    if ($correo) {
+        echo <<<HTML
+        <form action="./usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="mb-4">
+            <button type="submit" name="cerrar" class="btn btn-danger">Cerrar sesión</button>
+        </form>
+        <p class="text-center">Bienvenido, $correo</p>
+HTML;
+
+    echo <<<HTML
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Facturas</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../css/cargando.css">
+        <script src="../js/cargando.js"></script>
+        <script src="../js/facturas1.js"></script>
+        <style>
+            .form-container {
+                max-width: 600px;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        
+    <div id="loading">Cargando...</div>
+        <div class="container mt-5">
+HTML;
+
+    echo <<<HTML
+        <h4 class="text-center mb-4">Facturas</h4>
+
+        <div class="form-container">
+            <form action="facturas.php?accion=factura" method="post" class="bg-light p-4 rounded shadow">
+                <div class="form-group">
+                    <label for="producto">Producto</label>
+                    <select class="form-control" id="producto" name="producto" onchange="cargarDatos()">
+                        <option value="" disabled selected>Seleccionar</option>
+HTML;
+
+    $conexion = Conexion();
+    $datos = pg_query($conexion, "SELECT * FROM productos");
+
+    while ($d = pg_fetch_array($datos)) {
+        $nombre = htmlspecialchars($d["nombre"]);
+        echo <<<HTML
+                        <option value="$nombre">$nombre</option>
+HTML;
+    }
+
+    echo <<<HTML
+                    </select>
+                    <div id="datosProducto"></div>
+
+                    <label for="nombre">Nombre:</label>
+                    <input class="form-control" type="text" id="nombre" required name="nombre" readonly>
+
+                    <label for="descripcion">Descripción:</label>
+                    <input class="form-control" type="text" id="descripcion" required name="descripcion" readonly>
+
+                    <label for="cantidad">Cantidad:</label>
+                    <input class="form-control" type="number" id="cantidad" required name="cantidad" min="1" onchange="calcularTotal()">
+
+                    <label for="precio">Precio:</label>
+                    <input class="form-control" type="text" id="precio" required name="precio" readonly>
+
+                    <label for="total">Total:</label>
+                    <input class="form-control" type="text" id="total" required name="total" readonly>
+                </div>
+                <button type="submit" class="btn btn-primary">Realizar Factura</button>
+            </form>
+        </div>
+        <form id="myForm" action="../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-house"></i>
+            </button>
+        </form>
+HTML;
+
+    echo <<<HTML
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+HTML;
+    }
+
+    if (!$correo) {
+        echo <<<HTML
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Facturas</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../css/cargando.css">
+        <script src="../js/cargando.js"></script>
+        <script src="../js/facturas.js"></script>
+    </head>
+    <body>
+        <p>inicia sesion para continuar</p>
+        <div class="mt-4 text-center">
+                <a href="./pagina-principal/login.php" class="btn btn-secondary"><i class="fa-solid fa-right-to-bracket"></i>  inicia sesion</a>
+            </div>
+        </div>
+
+        <form id="myForm" action="../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-house"></i>
+            </button>
+        </form>
+HTML;
+
+    echo <<<HTML
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+HTML;
+    }
 }
 /*function Form_restablecer_contraseña(){
 

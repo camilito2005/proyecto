@@ -3,7 +3,7 @@
 
 class Carrito
 {
-    public function aggCarrito($id, $nombre, $foto, $descripcion, $precio, $stock)
+    /*public function aggCarrito($id, $nombre, $foto, $descripcion, $precio, $stock)
     {
         if (!isset($_SESSION['carrito'])) {
             $_SESSION['carrito'] = array();
@@ -21,17 +21,17 @@ class Carrito
                 // 'cantidad' => $cantidad,
             );
         }
-    }
-    public function eliminarCarrito($id)
+    }*/
+    /*public function eliminarCarrito($id)
     {
         if (isset($_SESSION['carrito'][$id])) {
             unset($_SESSION['carrito'][$id]);
         }
-    }
-    public function eliminarTodo()
+    }*/
+    /*public function eliminarTodo()
     {
         unset($_SESSION['carrito']);
-    }
+    }*/
     public function ver(){
         if (empty($_SESSION['carrito'])) {
             // echo 'no hay nada en el carrito';

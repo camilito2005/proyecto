@@ -24,6 +24,7 @@ if ($accion == "ver") {
     //header('Location: ../vistas/catalogo/carrito.php');
 }
 
+
 if ($accion == "agregar") {
     if ($_SERVER['REQUEST_METHOD'] === 'POST')  {
 

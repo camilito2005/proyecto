@@ -137,9 +137,6 @@ SQL;
     }
 }
 
-
-
-
 function Login()
 {
     session_start();
@@ -228,11 +225,11 @@ HTML;
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label" required>correo</label>
-                    <input type="email" class="form-control" name="correo" value="{$filas->correo}">
+                    <input type="email" disabled class="form-control" name="correo" value="{$filas->correo}">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label" required>contraseña</label>
-                    <input type="password" class="form-control" name="contraseña" value="{$filas->contraseña}">
+                    <input type="password" disabled class="form-control" name="contraseña" value="{$filas->contraseña}">
                 </div>
                 <!-- <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label" required>rol</label>

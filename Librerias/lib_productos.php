@@ -153,7 +153,7 @@ function Actualizar_productos(){
 SQL;
 $consulta = pg_query($conexion,$sql);
 if ($consulta) {
-    header("Location: ./productos/verProductos.php");
+    header("Location: ./verProductos.php");
 }
 else {
     echo "error";

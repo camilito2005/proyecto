@@ -10,7 +10,7 @@ function cargarDatos() {
             calcularTotal();
         }
     };
-    xhttp.open("GET", "../Librerias/lib_facturas.php?nombre=" + encodeURIComponent(producto), true);
+    xhttp.open("GET", "../vistas/facturas.php?accion=cargardatos&nombre=" + encodeURIComponent(producto), true);
     xhttp.send();
 }
 
