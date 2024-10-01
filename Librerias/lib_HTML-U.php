@@ -101,8 +101,120 @@ function Formulario_clientes()
 </html>
 HTML;
 }
+function Formulario_clientes1() {
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="../../js/cargando.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .contenedor {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+        }
+        .formulario_registro {
+            padding: 20px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
 
-function Mostrar_usuarios(){
+<div class="contenedor">
+    <div class="formulario_registro">
+        <form id="myForm" onsubmit="showLoading()" action="usuarios.php?accion=registrar" method="post">
+            <h3 class="text-center text-secondary">Registro de Clientes</h3>
+            <div id="loading">Cargando...</div>
+
+            <div class="mb-3">
+                <label for="dni" class="form-label">DNI</label>
+                <input class="form-control" required type="text" name="dni" placeholder="Introduzca su DNI">
+            </div>
+
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input class="form-control" required type="text" name="nombre" placeholder="Introduzca su nombre">
+            </div>
+
+            <div class="mb-3">
+                <label for="apellido" class="form-label">Apellidos</label>
+                <input class="form-control" required type="text" name="apellido" placeholder="Introduzca sus apellidos">
+            </div>
+
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Número Telefónico</label>
+                <input class="form-control" required type="tel" name="telefono" placeholder="Introduzca su número telefónico">
+            </div>
+
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input class="form-control" required type="text" name="direccion" placeholder="Dirección">
+            </div>
+
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo Electrónico</label>
+                <input class="form-control" required type="email" name="correo" placeholder="Introduzca su correo electrónico">
+            </div>
+
+            <div class="mb-3">
+                <label for="contraseña" class="form-label">Contraseña</label>
+                <input class="form-control" required type="password" name="contraseña" placeholder="Contraseña">
+            </div>
+
+            <div class="mb-3">
+                <label for="confirm_contraseña" class="form-label">Confirmar Contraseña</label>
+                <input class="form-control" required type="password" name="confirm_contraseña" placeholder="Confirmar contraseña">
+            </div>
+
+            <input class="btn btn-primary" type="submit" name="registro" value="Registrar"><br><br>
+
+        </form>
+
+        <form action="../usuarios/usuarios.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-duotone fa-solid fa-users-viewfinder"></i> Usuarios
+            </button>
+        </form>
+
+        <form action="../../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-house"></i> Inicio
+            </button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+HTML;
+}
+
+
+function Mostrar_usuarios1(){
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -134,8 +246,6 @@ function Mostrar_usuarios(){
             </form>
         </nav>
     </div>
-    <!--<form class="mx-auto col-4 p-3" action="../../Librerias/lib_usuarios.php?accion=search" method="post">
-    </form>-->
     <div class="mx-auto col-8 p-4">
         <table class="table">
             <thead class="bs-info">
@@ -146,8 +256,7 @@ function Mostrar_usuarios(){
                     <th scope="col">APELLIDOS</th>
                     <th scope="col">TELEFONO</th>
                     <th scope="col">DIRECCION</th>
-                    <!--<th scope="col">CORREO</th>
-                    <th scope="col">CONTRASEÑA</th>-->
+                    <th scope="col">CORREO</th>
                     <th scope="col">modificar/ELIMINAR</th>
                 </tr>
             </thead>
@@ -179,8 +288,8 @@ SQL;
         $apellido = $fila->apellido;
         $telefono = $fila->telefono;
         $direccion = $fila->direccion;
-        /*$correo = $fila->correo;
-        $contraseña = $fila->contraseña;*/
+        $correo = $fila->correo;
+        $contraseña = $fila->contraseña;
 
         echo <<<HTML
             <tbody>
@@ -191,8 +300,8 @@ SQL;
                     <td>$apellido</td>
                     <td>$telefono</td>
                     <td>$direccion</td>
-                    <!--<td>$correo</td>
-                    <td>$contraseña</td>-->
+                    <td>$correo</td>
+                    <!--<td>$contraseña</td>-->
                     <td>
                     <a href="../usuarios/usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
                     <a href="usuarios.php?accion=eliminar&id=$id" onclick="return pregunta()"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
@@ -222,6 +331,128 @@ HTML;
     
 HTML;
 }
+
+function Mostrar_usuarios() {
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" href="../../fotos/mostrar-contraseña.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="../../js/cargando.js"></script>
+    <script src="../../js/pregunta.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Usuarios</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .input-search {
+            margin-bottom: 20px;
+        }
+        .btn-outline-secondary {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loading">Cargando...</div>
+    <h3 class="text-center text-secondary">Usuarios</h3>
+    
+    <div class="input-search text-center">
+        <nav>
+            <form method="post">
+                <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
+            </form>
+        </nav>
+    </div>
+
+    <div class="table-container mx-auto col-12 col-md-8">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">DNI</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Teléfono</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Modificar/Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+HTML;
+
+    include_once "../../conexion.php";
+    $conexion = Conexion();
+    $consulta1 = "SELECT * FROM usuarios";
+    $query = pg_query($conexion, $consulta1);
+
+    while ($fila = pg_fetch_object($query)) {
+        $id = $fila->id;
+        $dni = $fila->dni;
+        $nombre = $fila->nombre;
+        $apellido = $fila->apellido;
+        $telefono = $fila->telefono;
+        $direccion = $fila->direccion;
+        $correo = $fila->correo;
+
+        echo <<<HTML
+                <tr>
+                    <td>$id</td>
+                    <td>$dni</td>
+                    <td>$nombre</td>
+                    <td>$apellido</td>
+                    <td>$telefono</td>
+                    <td>$direccion</td>
+                    <td>$correo</td>
+                    <td>
+                        <a href="../usuarios/usuarios.php?accion=modificar&id=$id" class="text-primary"><i class="fa-solid fa-pen"></i></a>
+                        <a href="usuarios.php?accion=eliminar&id=$id" class="text-danger" onclick="return pregunta()"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+HTML;
+    }
+
+    echo <<<HTML
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mx-auto col-12 col-md-8">
+        <form id="myForm" action="./formulario_registro.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
+            </button>
+        </form>
+
+        <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-house"></i> Inicio
+            </button>
+        </form>
+    </div>
+    
+</body>
+</html>
+HTML;
+}
+
 
 function Login_html()
 {
@@ -350,75 +581,55 @@ function Mostrar_productos()
     $fecha = date('d-m-Y g:i:s A');
     if (isset($_SESSION["correo"])) {
         echo $_SESSION["correo"];
-        $html = <<<HTML
+        echo <<<HTML
 <form action='../usuarios/usuarios.php?accion=cerrar' method='post'>
     <input type='submit' value="cerrar sesion">cerrar sesion
 </form>
 HTML;
     }
-    $html .= <<<HTML
+    echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 <link rel="stylesheet" href="../../css/cargando.css">
-<link rel="shortcut icon" href="../../fotos/mostrar_productos.png" type="image/x-icon">
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="../../fotos/mostrar_productos.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css/busqueda.css">
     <title>Productos</title>
 </head>
 
 <body>
     
 <div id="loading">Cargando...</div>
-    <script src="../../js/busqueda.js" defer></script>
+<div class="container">
+        <h3 class="text-center">Productos</h3>
+        <div class="input-field">
+            <input type="search" id="search" placeholder="Buscar">
+            <label for="search">Buscar</label>
+        </div>
+        <a href="../productos/productos.php?accion=excel" class="btn btn-warning"><i class="fa-solid fa-file-excel"></i></a>
+        <a href="../productos/productos.php?accion=pdf" target="_blank" class="btn btn-success"><i class="fa-solid fa-file-pdf"></i></a>
 
-    <div class="input-search">
-        <nav>
-            <input  type="search" id="search" placeholder="search">
-        </nav>
-    </div>
-    <!--<form id="myForm" action="../../Librerias/lib_productos.php?accion=excel" onsubmit="showLoading()" method="post">
-        <button class="btn btn-outline-secondary"  value="agregar productos">
-        <i class="fa-solid fa-file-excel"></i>excel
-        </button>
-    </form>
-
-    <form id="myForm" action="../../Librerias/lib_productos.php?accion=pdf" onsubmit="showLoading()" method="post">
-        <button class="btn btn-outline-secondary" target="_blank">
-            <i class="fa-solid fa-file-pdf"></i>pdf
-        </button>
-    </form>-->
-
-    <a href="../productos/productos.php?accion=excel" class="btn btn-small btn-warning">
-        <i class="fa-solid fa-file-excel"></i>
-    </a>
-    <a href="../productos/productos.php?accion=pdf" target="_blank" class="btn btn-success">
-        <i class="fa-solid fa-file-pdf"></i>
-    </a>
-    <h3 class="text-center text-secondary">productos</h3>
-    <div class="mx-auto col-8 p-6" id="resultados-conainer">
-        <table class="table" id="resultado">
-            <thead class="bs-info">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <th scope="col">id</th>
-                    <th>imagen</th>
-                    <th>nombre del prodcuto</th>
-                    <th>descripcion</th>
-                    <th>precio</th>
-                    <th>cantidad</th>
-                    <th>EDITAR/ELIMINAR</th>
+                    <th>ID</th>
+                    <th>Imagen</th>
+                    <th>Nombre del Producto</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <div class="container">
 HTML;
+
     include "../../conexion.php";
     $conexion = Conexion();
     $mostrar = pg_query($conexion, "SELECT * FROM productos");
@@ -426,38 +637,28 @@ HTML;
 
     while ($filas = pg_fetch_assoc($mostrar)) {
         $precio = number_format($filas["precio"]);
-        $html .= <<<HTML
+        echo <<<HTML
 <tr>
-<td>{$filas["id"]}</td>
-<td>
-    <div class="card mx-4 mt-4 mx-auto" style="width: 10rem;">
-        <img src="/{$filas['imagen']}" height="70%" width="100%" class="card-img-top">
-    </div>
-</td>
-<td>{$filas["nombre"]}</td>
-<th>{$filas["descripcion"]}</th>
-<td>{$precio}</td>
-<td>{$filas["stock"]}</td>
-
-<td>
-    <a href="../productos/productos.php?accion=modificar&id={$filas['id']}" class="btn btn-small btn-warning">
-        <i class="fa-solid fa-pen-to-square"></i>
-    </a>
-    <form id="myForm" action="../productos/productos.php?accion=eliminar&id={$filas['id']}" method="post">
-        <button name="eliminar" class="btn btn-small btn-danger" type="submit" onsubmit="showLoading()" onclick="return Pregunta()">
-            <i class="fa-solid fa-trash"></i>
-        </button>
-    </form>
-</td>
-
-
-
+    <td>{$filas["id"]}</td>
+    <td>
+        <img src="/{$filas['imagen']}" height="70" width="100">
+    </td>
+    <td>{$filas["nombre"]}</td>
+    <td>{$filas["descripcion"]}</td>
+    <td>{$precio}</td>
+    <td>{$filas["stock"]}</td>
+    <td>
+        <a href="../productos/productos.php?accion=modificar&id={$filas['id']}" class="btn yellow"><i class="fa-solid fa-pen-to-square"></i></a>
+        <form action="../productos/productos.php?accion=eliminar&id={$filas['id']}" method="post" style="display:inline;">
+            <button name="eliminar" class="btn red" type="submit" onclick="return Pregunta()">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </form>
+    </td>
 </tr>
-</div>
-</div>
 HTML;
     }
-    $html .= <<<HTML
+    echo <<<HTML
     <p>total : {$numero}</p>
     <p>fecha y hora : {$fecha}</p>
     
@@ -485,7 +686,6 @@ HTML;
 </form>
 
 HTML;
-    echo $html;
 }
 
 /*function Modificar_productos(){
@@ -972,7 +1172,7 @@ HTML;
     echo $html;
 }
 
-function Carrito_HTML()
+function Carrito_HTML1()
 {   
     $html = <<<HTML
     <!DOCTYPE html>
@@ -1072,6 +1272,89 @@ HTML;
 HTML;
     echo $html;
 }
+function Carrito_HTML() {
+    $html = <<<HTML
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../../css/cargando.css">
+        <script src="../../js/cargando.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Carrito</title>
+    </head>
+    <body>
+        <div id="loading">Cargando...</div>
+        <div class="container mt-4">
+            <form id="myForm" action="../../Librerias/lib_carrito.php?accion=eliminarT" onsubmit="showLoading()" method="post">
+                <button class="btn btn-outline-secondary mb-4" type="submit">
+                    <i class="fa-solid fa-eraser"></i> Vaciar el carrito
+                </button>
+            </form>
+HTML;
+
+    session_start();
+
+    if (empty($_SESSION['carrito'])) {
+        $html .= '<p class="text-danger">El carrito está vacío.</p>';
+        $html .= '<form id="myForm" action="../../Librerias/lib_carrito.php?accion=index" onsubmit="showLoading()" method="post">';
+        $html .= '<button class="btn btn-outline-secondary" value="inicio"><i class="fa-solid fa-shop"></i> Volver a la tienda</button>';
+        $html .= '</form>';
+        $html .= '</div></body></html>';
+        echo $html;
+        return;
+    }
+
+    $zapatos = $_SESSION['carrito'];
+
+    foreach ($zapatos as $id => $zapatico) {
+        $totalProducto = $zapatico['precio'] * $zapatico['cantidad'];
+
+        $html .= <<<HTML
+        <div class="card mb-4" style="width: 23rem; margin: auto;">
+            <img src="/{$zapatico['foto']}" class="card-img-top" alt="{$zapatico['nombre']}" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">Referencia: {$zapatico['id']}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Nombre: {$zapatico['nombre']}</h6>
+                <p>Precio: \$ {$zapatico['precio']}</p>
+                <p>Disponibles: {$zapatico['stock']}</p>
+                <p>Descripción: {$zapatico['descripcion']}</p>
+                <p>Total: \$ {$totalProducto}</p>
+            </div>
+            <div class="card-footer">
+                <form action="../../Librerias/lib_carrito.php?accion=actualizar" onsubmit="showLoading()" method="post" class="form-inline d-inline">
+                    <input type="hidden" name="id" value="{$id}">
+                    <label for="cantidad" class="mr-2">Cantidad:</label>
+                    <input type="number" name="cantidad" value="{$zapatico['cantidad']}" min="1" max="{$zapatico['stock']}" class="form-control mx-2" style="width: 70px;">
+                    <button type="submit" class="btn btn-outline-primary">Actualizar</button>
+                </form>
+                <form action="../../Librerias/lib_carrito.php?accion=eliminarU" onsubmit="showLoading()" method="post" class="d-inline">
+                    <input type="hidden" name="id" value="{$id}">
+                    <button type="submit" class="btn btn-outline-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+HTML;
+    }
+
+    $html .= <<<HTML
+        <div>
+            <form id="myForm" action="../../Librerias/lib_carrito.php?accion=index" onsubmit="showLoading()" method="post">
+                <button class="btn btn-outline-secondary" value="inicio">
+                    <i class="fa-solid fa-shop"></i> Volver a la tienda
+                </button>
+            </form>
+        </div>
+    </body>
+    </html>
+HTML;
+
+    echo $html;
+}
+
 function Formulario_enviar_correo(){
     echo <<<HTML
     <!DOCTYPE html>

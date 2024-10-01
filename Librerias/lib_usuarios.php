@@ -14,21 +14,21 @@ function Guardar()
             "correo" => $_POST["correo"],
             "contraseña" => $_POST["contraseña"],
             "comfirm_contraseña" => $_POST["comfirm_contraseña"],
-            "id_rol" => $_POST["rol"],
+            //"id_rol" => $_POST["rol"],
 
         ];
 
         include_once "../../conexion.php";
         $conexion = Conexion();
 
-        $dni = pg_escape_string($datos['dni']);
-        $nombre = pg_escape_string($datos['nombre']);
-        $apellido = pg_escape_string($datos['apellido']);
-        $telefono = pg_escape_string($datos['telefono']);
-        $direccion = pg_escape_string($datos['direccion']);
-        $correo = pg_escape_string($datos['correo']);
-        $contraseña = pg_escape_string($datos['contraseña']); // el pg_escape_string es para que la base de datos no tenga problemas con caracteres especiales como comillas y otros caracteres y para evitar que los datos del usuario puedan modificar la estructura de la consulta SQL de manera maliciosa.
-        $comfirm_contraseña = pg_escape_string($datos['comfirm_contraseña']);
+        $dni = $datos['dni'];
+        $nombre = $datos['nombre'];
+        $apellido = $datos['apellido'];
+        $telefono = $datos['telefono'];
+        $direccion = $datos['direccion'];
+        $correo = $datos['correo'];
+        $contraseña = $datos['contraseña'];
+        $comfirm_contraseña = $datos['comfirm_contraseña'];
 
         if ($contraseña !== $comfirm_contraseña) {
             echo "Las contraseñas no coinciden. Por favor, intente de nuevo.";
@@ -39,46 +39,33 @@ function Guardar()
             echo "La contraseña debe tener al menos 6 caracteres.";
             exit;
         }
-        $consultaCorreo = <<<SQL
-        SELECT count(*) FROM usuarios WHERE correo = '$correo'
+        
+    $consultaCorreo = "SELECT count(*) FROM usuarios WHERE correo = $1";
+
+    $resultadoCorreo = pg_query_params($conexion, $consultaCorreo, array($correo));
+    $countCorreo = pg_fetch_result($resultadoCorreo, 0, 0);
+    if ($countCorreo > 0) {
+        echo "El correo '$correo' ya existe";
+        exit;
+    }
+
+    $consultadni = <<<SQL
+            SELECT count(*) FROM usuarios WHERE dni = $1
 SQL;
-        $consultaCorreo = pg_query($conexion, $consultaCorreo);
-        $resultadoCorreo = pg_fetch_result($consultaCorreo, 0, 0);
-        if ($resultadoCorreo) {
-            echo "este correo" . "'$correo'" . "ya existe";
+        $resultadoDni = pg_query_params($conexion, $consultadni, array($dni));
+        //$countDni = pg_fetch_result($resultadoDni, 0, 0);
+        $countDni = pg_fetch_result($resultadoDni, 0, 0);
+        if ($countDni > 0) {
+            echo "El DNI '$dni' ya existe";
             exit;
         }
 
-        $consultadni = <<<SQL
-        SELECT count(*) FROM usuarios WHERE dni = '$dni'
-SQL;
-        $querydni = pg_query($conexion, $consultadni);
-        $resultadoDni = pg_fetch_result($querydni, 0, 0); //Es una función que se usa para recuperar un valor específico de un recurso de consulta obtenido a través de pg_query.
-        if ($resultadoDni > 0) {
-            echo "este dni " . "'$dni'" . " ya existe";
-            exit;
-        }
-
-        $consultaContraseña = <<<SQL
-        SELECT count(*) FROM usuarios WHERE contraseña = '$contraseña'
-SQL;
-        $resultadoContraseña = pg_query($conexion, $consultaContraseña);
-        $countcontraseña = pg_fetch_result($resultadoContraseña, 0, 0);
-        if ($countcontraseña > 0) {
-            echo "la contraseña " . "'$contraseña'" . " ya existe";
-
-            exit;
-        }
-
-        $consulta = <<<SQL
-            INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña) VALUES ('$dni','$nombre','$apellido','$telefono','$direccion','$correo','$contraseña')
-SQL;
-
-        $resultadoc = pg_query($conexion, $consulta);
+        $consulta = "INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña) VALUES ($1, $2, $3, $4, $5, $6, $7)";
+        $resultadoc = pg_query_params($conexion, $consulta, array($dni, $nombre, $apellido, $telefono, $direccion, $correo, $contraseña));
 
         if ($resultadoc) {
-            //header("Location: ./usuarios.php");
-            echo "usuario registrado correctamente";
+            header("Location: ./usuarios.php");
+            //echo "usuario registrado correctamente";
         } else {
             if (!$resultadoc) {
                 echo "error";
@@ -90,30 +77,47 @@ SQL;
 }
 
 function Actualizar_usuarios(){
-    $id = $_GET["id"];
-    // $dni = $_POST["dni"];
-    $nombre = $_POST["nombre"];
-    $apellido = $_POST["apellido"];
-    $telefono = $_POST["telefono"];
-    $direccion = $_POST["direccion"];
-    $correo = $_POST["correo"];
-    $contraseña = $_POST["contraseña"];
+
+
+
+    $datos = [
+        "id" => $_GET["id"],
+        "nombre" => $_POST["nombre"],
+        "apellido" => $_POST["apellido"],
+        "telefono" => $_POST["telefono"],
+        "direccion" => $_POST["direccion"],
+        "correo" => $_POST["correo"],
+        "contraseña" => $_POST["contraseña"],
+    ];
 
     include_once "../../conexion.php";
     $conexion = Conexion();
 
+    // Validar el formato del correo
+    /*if (!filter_var($datos['correo'], FILTER_VALIDATE_EMAIL)) {
+        echo "El correo no es válido.";
+        exit;
+    }*/
+
+    /*if (strlen($datos['contraseña']) < 6) {
+        echo "La contraseña debe tener al menos 6 caracteres.";
+        exit;
+    }*/
+////, contraseña = $6 ,  $datos['contraseña'],
     $consulta = <<<SQL
-    UPDATE usuarios SET nombre = '$nombre', apellido = '$apellido',telefono = '$telefono', direccion = '$direccion' ,correo = '$correo',contraseña = '$contraseña' WHERE id = '$id'
+        UPDATE usuarios SET nombre = $1, apellido = $2, telefono = $3, direccion = $4, correo = $5 WHERE id = $6
 SQL;
 
-$resultado_consulta = pg_query($conexion,$consulta);
+    // Ejecutar la consulta
+    $resultado_consulta = pg_query_params($conexion, $consulta, array($datos['nombre'], $datos['apellido'], $datos['telefono'], $datos['direccion'], $datos['correo'], $datos['id']));
 
-if ($resultado_consulta) {
-    header("Location: ./usuarios.php");
-}
-else {
-    echo "error al realizar la operacion ";
-}
+    if ($resultado_consulta) {
+        header("Location: ./usuarios.php");
+        exit; // Es buena práctica usar exit después de redireccionar
+    } else {
+        echo "Error al realizar la operación.";
+    }
+
 }
 
 function Eliminar()
@@ -123,13 +127,13 @@ function Eliminar()
 
     $id = $_GET["id"];
 
-    $id = pg_escape_string($id); // Asegúrate de escapar el ID para evitar inyecciones SQL
-
     $consulta = <<<SQL
-        DELETE FROM usuarios WHERE id = $id
+        DELETE FROM usuarios WHERE id = $1
 SQL;
-    $resultado = pg_query($conexion, $consulta);
+    $resultado = pg_query_params($conexion, $consulta,array($id));
+
     if ($resultado) {
+        header("Location: usuarios.php");
         echo "el registro de id " . $id . " eliminado correctamente";
         exit;
     } else {
@@ -137,8 +141,7 @@ SQL;
     }
 }
 
-function Login()
-{
+function Login(){
     session_start();
 
     include_once "../../conexion.php";
@@ -153,19 +156,17 @@ function Login()
     $correo = $_POST["correo"];
     $contraseña = $_POST["contraseña"];
 
-    $correo = pg_escape_string($correo);
-    $contraseña = pg_escape_string($contraseña);
+    $consulta = pg_query_params($conexion,"SELECT correo,contraseña FROM usuarios WHERE correo =$1 AND contraseña =$2",array($correo,$contraseña));
 
-    $consulta = <<<SQL
-        SELECT correo,contraseña FROM usuarios WHERE correo = '$correo' AND contraseña = '$contraseña'
-SQL;
+    $resultado_consulta=pg_fetch_assoc($consulta);
 
 
-    $resultado = pg_query($conexion, $consulta);
-    $filas = pg_fetch_array($resultado);
 
-    if ($filas) {
-        $_SESSION["correo"] = $correo;
+    //$resultado = pg_query($conexion, $consulta);
+    //$filas = pg_fetch_array($resultado);
+
+    if ($resultado_consulta) {
+        $_SESSION["correo"] = $resultado_consulta['correo'];
 
         header("Location: ../catalogo/catalogo.php");
     } else {
@@ -180,11 +181,14 @@ function Modificar_usuarios()
     $conexion = Conexion();
     $id = $_GET["id"];
 
-    $consulta = <<<SQL
+    /*$consulta = <<<SQL
         SELECT * FROM usuarios WHERE id = '$id'
 SQL;
-    $resultado = pg_query($conexion, $consulta);
+    $resultado = pg_query($conexion, $consulta);*/
     
+    $consulta = "SELECT * FROM usuarios WHERE id = $1";
+$resultado = pg_query_params($conexion, $consulta, array($id));
+
     $html = <<<HTML
     <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -225,7 +229,7 @@ HTML;
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label" required>correo</label>
-                    <input type="email" disabled class="form-control" name="correo" value="{$filas->correo}">
+                    <input type="email"  class="form-control" name="correo" value="{$filas->correo}">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label" required>contraseña</label>
@@ -242,14 +246,13 @@ HTML;
             <button type="submit" class="btn btn-primary" name="modificar" class="btn btn-outline-secondary">
                 <i class="fa-solid fa-pen"></i>modificar
             </button>
-
-            <button class="btn btn-outline-secondary">
+        </form>
+        <button class="btn btn-outline-secondary">
                 <a href="../usuarios/usuarios.php"><i class="fa-solid fa-backward"></i></a>regresar
             </button><br><br>
             <button class="btn btn-outline-secondary">
                 <a href="../pagina-principal/index.php"><i class="fa-solid fa-house"></i></a>inicio
             </button>
-        </form>
     </div>
 </body>
 </html>
@@ -419,7 +422,6 @@ function Formulario_restablecer_contraseña(){
         </form>
     </div>
 
-    <!-- Incluir Bootstrap JS y dependencias -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -434,23 +436,33 @@ function Restablecer(){
     include_once "../../conexion.php";
 
 if (isset($_POST['token'], $_POST['password'])) {
-    $token = $_POST['token'];
+    $datos= [
+        "token"=>$_POST["token"],
+        "password"=>$_POST["password"],
+        "ComfirmarContraseña"=>$_POST["confirm_password"]
+    ];
+    /*$token = $_POST['token'];
     $password = $_POST['password'];
 
-    $confirmPassword = $_POST['confirm_password'];
+    $ComfirmarContraseña = $_POST['confirm_password'];*/
 
-    if ($password !== $confirmPassword) {
+    if ($datos["password"] !== $datos["ComfirmarContraseña"]) {
         echo "Las contraseñas no coinciden.";
+        exit;
+    }
+
+    if (strlen($datos['password']) < 6) {
+        echo "La contraseña debe tener al menos 6 caracteres.";
         exit;
     }
 
     $conexion = Conexion();
 
-    echo $token;
+    echo $datos["token"];
     //echo $password;
     
     // Verificar el token
-    $result = pg_query_params($conexion, "SELECT correo, expires_at FROM password_reset WHERE token = $1", array($token));
+    $result = pg_query_params($conexion, "SELECT correo, expires_at FROM password_reset WHERE token = $1", array($datos["token"]));
     //echo $result;
     //var_dump($result);
     $reset = pg_fetch_assoc($result);
@@ -461,10 +473,10 @@ if (isset($_POST['token'], $_POST['password'])) {
         //$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         // Actualizar la contraseña del usuario
-        pg_query_params($conexion, "UPDATE usuarios SET contraseña = $1 WHERE correo = $2", array($password, $email));
+        pg_query_params($conexion, "UPDATE usuarios SET contraseña = $1 WHERE correo = $2", array($datos["password"], $email));
 
         // Eliminar el token usado
-        pg_query_params($conexion, "DELETE FROM password_reset WHERE token = $1", array($token));
+        pg_query_params($conexion, "DELETE FROM password_reset WHERE token = $1", array($datos["token"]));
 
         echo "La contraseña ha sido actualizada con éxito.";
         echo '<a href="../usuarios/usuarios.php">ver registros </a>';
@@ -479,11 +491,6 @@ if (isset($_POST['token'], $_POST['password'])) {
 }
 
 }
-
-
-
-
-
 
 
 if ($opciones == "search") {
