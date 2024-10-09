@@ -20,6 +20,8 @@ function Formulario_clientes()
     <body>
 
     <title>Registro</title>
+
+
     
 <div id="loading">Cargando...</div>
     <div class="contenedor">
@@ -269,10 +271,48 @@ HTML;
 SQL;
     $query = pg_query($conexion, $consulta1);
 
+$usuarios = pg_fetch_all($query);
+
+//print_r($usuarios);
+
+if ($usuarios) { // Verifica si hay resultados
+    foreach ($usuarios as $fila) {
+        $id = $fila['id'];
+        $dni = $fila['dni'];
+        $nombre = $fila['nombre'];
+        $apellido = $fila['apellido'];
+        $telefono = $fila['telefono'];
+        $direccion = $fila['direccion'];
+        $correo = $fila['correo'];
+        $contraseña = $fila['contraseña'];
+
+        echo <<<HTML
+            <tbody>
+                <tr>
+                    <td>$id</td>
+                    <td>$dni</td>
+                    <td>$nombre</td>
+                    <td>$apellido</td>
+                    <td>$telefono</td>
+                    <td>$direccion</td>
+                    <td>$correo</td>
+                    <!--<td>$contraseña</td>-->
+                    <td>
+                    <a href="../usuarios/usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
+                    <a href="usuarios.php?accion=eliminar&id=$id" onclick="return pregunta()"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+HTML;
+    }
+} else {
+    echo "<tbody><tr><td colspan='8'>No hay usuarios registrados.</td></tr></tbody>";
+}
+
 
     //$areglo = [];
 
-    while ($fila = pg_fetch_object($query)) {
+    /*while ($fila = pg_fetch_object($query)) {
         // $arreglo[] = [
         //     "dni" => $fila->dni,
         //     "nombre" => $fila->nombre,
@@ -309,7 +349,7 @@ SQL;
                 </tr>
             </tbody>
 HTML;
-    }
+    }*/
     echo <<<HTML
     
         </tbody>
@@ -402,8 +442,45 @@ HTML;
     $conexion = Conexion();
     $consulta1 = "SELECT * FROM usuarios";
     $query = pg_query($conexion, $consulta1);
+    $usuarios = pg_fetch_all($query);
 
-    while ($fila = pg_fetch_object($query)) {
+//print_r($usuarios);
+
+if ($usuarios) { // Verifica si hay resultados
+    foreach ($usuarios as $fila) {
+        $id = $fila['id'];
+        $dni = $fila['dni'];
+        $nombre = $fila['nombre'];
+        $apellido = $fila['apellido'];
+        $telefono = $fila['telefono'];
+        $direccion = $fila['direccion'];
+        $correo = $fila['correo'];
+        $contraseña = $fila['contraseña'];
+
+        echo <<<HTML
+            <tbody>
+                <tr>
+                    <td>$id</td>
+                    <td>$dni</td>
+                    <td>$nombre</td>
+                    <td>$apellido</td>
+                    <td>$telefono</td>
+                    <td>$direccion</td>
+                    <td>$correo</td>
+                    <!--<td>$contraseña</td>-->
+                    <td>
+                    <a href="../usuarios/usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
+                    <a href="usuarios.php?accion=eliminar&id=$id" onclick="return pregunta()"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+HTML;
+    }
+} else {
+    echo "<tbody><tr><td colspan='8'>No hay usuarios registrados.</td></tr></tbody>";
+}
+
+    /*while ($fila = pg_fetch_object($query)) {
         $id = $fila->id;
         $dni = $fila->dni;
         $nombre = $fila->nombre;
@@ -427,7 +504,7 @@ HTML;
                     </td>
                 </tr>
 HTML;
-    }
+    }*/
 
     echo <<<HTML
             </tbody>
@@ -574,8 +651,7 @@ function Formulario_productos()
 HTML;
 
 }
-function Mostrar_productos()
-{
+function Mostrar_productos(){
     
     date_default_timezone_set('America/Bogota');
     $fecha = date('d-m-Y g:i:s A');
@@ -635,21 +711,24 @@ HTML;
     $mostrar = pg_query($conexion, "SELECT * FROM productos");
     $numero = pg_num_rows($mostrar);
 
-    while ($filas = pg_fetch_assoc($mostrar)) {
-        $precio = number_format($filas["precio"]);
+    $mostrar_producto = pg_fetch_all($mostrar);
+
+    if ($mostrar_producto) {
+        foreach ($mostrar_producto as $value) {
+            $precio = number_format($value["precio"]);
         echo <<<HTML
 <tr>
-    <td>{$filas["id"]}</td>
+    <td>{$value["id"]}</td>
     <td>
-        <img src="/{$filas['imagen']}" height="70" width="100">
+        <img src="/{$value['imagen']}" height="70" width="100">
     </td>
-    <td>{$filas["nombre"]}</td>
-    <td>{$filas["descripcion"]}</td>
+    <td>{$value["nombre"]}</td>
+    <td>{$value["descripcion"]}</td>
     <td>{$precio}</td>
-    <td>{$filas["stock"]}</td>
+    <td>{$value["stock"]}</td>
     <td>
-        <a href="../productos/productos.php?accion=modificar&id={$filas['id']}" class="btn yellow"><i class="fa-solid fa-pen-to-square"></i></a>
-        <form action="../productos/productos.php?accion=eliminar&id={$filas['id']}" method="post" style="display:inline;">
+        <a href="../productos/productos.php?accion=modificar&id={$value['id']}" class="btn yellow"><i class="fa-solid fa-pen-to-square"></i></a>
+        <form action="../productos/productos.php?accion=eliminar&id={$value['id']}" method="post" style="display:inline;">
             <button name="eliminar" class="btn red" type="submit" onclick="return Pregunta()">
                 <i class="fa-solid fa-trash"></i>
             </button>
@@ -657,6 +736,10 @@ HTML;
     </td>
 </tr>
 HTML;
+    }
+}
+    else {
+        echo "<tbody><tr><td colspan='8'>No hay usuarios registrados.</td></tr></tbody>";
     }
     echo <<<HTML
     <p>total : {$numero}</p>
@@ -687,6 +770,9 @@ HTML;
 
 HTML;
 }
+
+    
+    
 
 /*function Modificar_productos(){
     include("../../conexion.php");
@@ -938,15 +1024,18 @@ HTML;
     include "../../conexion.php";
     $conexion = Conexion();
     $consulta = pg_query($conexion, "SELECT * FROM productos");
+    $mostrar_productos = pg_fetch_all($consulta);
     $total = pg_num_rows($consulta);
-    
-    while ($filas = pg_fetch_assoc($consulta)) {
-        $imagen = $filas["imagen"];
-        $nombre = $filas["nombre"];
-        $id = $filas["id"];
-        $descripcion = $filas["descripcion"];
-        $precio = $filas["precio"];
-        $disponible = $filas["stock"];
+
+    if ($mostrar_productos) {
+
+    foreach ($mostrar_productos as $registros) {
+        $imagen = $registros["imagen"];
+        $nombre = $registros["nombre"];
+        $id = $registros["id"];
+        $descripcion = $registros["descripcion"];
+        $precio = $registros["precio"];
+        $disponible = $registros["stock"];
         
         $precio_number_format = number_format($precio, 2);
         
@@ -985,6 +1074,10 @@ HTML;
                 </div>
             </div>
 HTML;
+    }
+}
+    else {
+         echo "<tbody><tr><td colspan='8'>No hay usuarios registrados.</td></tr></tbody>";
     }
 
     $html .= <<<HTML
