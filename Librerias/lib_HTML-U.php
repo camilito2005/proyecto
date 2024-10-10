@@ -1,7 +1,13 @@
 <?php
-
+//include_once "../../Librerias/lib_menu.php";
 function Formulario_clientes()
 {
+    
+
+    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
+
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -373,6 +379,9 @@ HTML;
 }
 
 function Mostrar_usuarios() {
+    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -533,6 +542,9 @@ HTML;
 
 function Login_html()
 {
+    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     $html = <<<HTML
 
     
@@ -589,6 +601,9 @@ HTML;
 }
 function Formulario_productos()
 {
+    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     echo <<<HTML
         <!DOCTYPE html>
 <html lang="es">
@@ -652,6 +667,9 @@ HTML;
 
 }
 function Mostrar_productos(){
+    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     
     date_default_timezone_set('America/Bogota');
     $fecha = date('d-m-Y g:i:s A');
@@ -931,6 +949,18 @@ HTML;
 }
 
 function Catalogo() {
+    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
+    //echo $_SESSION['nombre'];
+    /*if (empty($_SESSION['nombre'])) {
+        echo "esta session esta vacia";
+        echo $_SESSION['nombre'];
+    }else {
+        echo "se salto el if";
+        echo $_SESSION['nombre'];
+    }*/
+
     $html = <<<HTML
     <!DOCTYPE html>
 <html lang="es">
@@ -997,6 +1027,8 @@ HTML;
         $html .= <<<HTML
         <div class="container-fluid text-end">
             <span>{$_SESSION["correo"]}</span>
+            <!--<span>nombre:{$_SESSION["nombre"]}</span>
+            <span>contraseña{$_SESSION["contraseña"]}</span>-->
             <form id="myForm" action="../usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="d-inline">
                 <button type="submit" class="btn btn-danger btn-sm" name="cerrar" value="cerrar sesion">
                     <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
@@ -1267,6 +1299,9 @@ HTML;
 
 function Carrito_HTML1()
 {   
+    Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");
     $html = <<<HTML
     <!DOCTYPE html>
     <html lang="en">
@@ -1366,6 +1401,9 @@ HTML;
     echo $html;
 }
 function Carrito_HTML() {
+    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     $html = <<<HTML
     <!DOCTYPE html>
     <html lang="en">
@@ -1449,6 +1487,9 @@ HTML;
 }
 
 function Formulario_enviar_correo(){
+    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     echo <<<HTML
     <!DOCTYPE html>
 <html lang="en">
@@ -1498,6 +1539,11 @@ HTML;
 
 function FormularioFactura(){
 
+    
+    /*Menus($ruta_css="../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
+
     include_once "../conexion.php";
     session_start();
 
@@ -1505,14 +1551,20 @@ function FormularioFactura(){
         $fecha = date('Y-m-d g:i:s');
         echo $fecha;
 
-    $correo = isset($_SESSION["correo"]) ? htmlspecialchars($_SESSION["correo"]) : null;
+        $correo = isset($_SESSION["correo"]) ? htmlspecialchars($_SESSION["correo"]) : null;
+        $nombre_sesion = isset($_SESSION["nombre"]) ? htmlspecialchars($_SESSION["nombre"]) : null;
+        $dni_sesion = isset($_SESSION["dni"]) ? htmlspecialchars($_SESSION["dni"]) : null;
+        $contraseña = isset($_SESSION["contraseña"]) ? htmlspecialchars($_SESSION["contraseña"]) : null;
 
     if ($correo) {
         echo <<<HTML
         <form action="./usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="mb-4">
             <button type="submit" name="cerrar" class="btn btn-danger">Cerrar sesión</button>
         </form>
-        <p class="text-center">Bienvenido, $correo</p>
+        <p class="text-center">Welcome, $nombre_sesion</p>
+        <p class="text-center">correo: $correo</p>
+        <p class="text-center">documento, $dni_sesion</p>
+        <!--<p class="text-center">Bienvenido, $contraseña</p>-->
 HTML;
 
     echo <<<HTML
@@ -1638,7 +1690,7 @@ HTML;
 HTML;
     }
 }
-function FormularioFactura1() {
+function FormularioFactura2() {
     include_once "../conexion.php";
     session_start();
 
@@ -1646,6 +1698,10 @@ function FormularioFactura1() {
     $fecha = date('Y-m-d g:i:s');
 
     $correo = isset($_SESSION["correo"]) ? htmlspecialchars($_SESSION["correo"]) : null;
+    $nombre_sesion = isset($_SESSION["nombre"]) ? htmlspecialchars($_SESSION["nombre"]) : null;
+    $contraseña = isset($_SESSION["contraseña"]) ? htmlspecialchars($_SESSION["contraseña"]) : null;
+
+
 
     echo <<<HTML
     <!DOCTYPE html>
@@ -1679,6 +1735,7 @@ HTML;
                 <li><form action="./usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="mb-0">
                     <button type="submit" name="cerrar" class="btn red">Cerrar sesión</button>
                 </form></li>
+                <li><span class="white-text">Welcome, $nombre_sesion</span></li>
                 <li><span class="white-text">Bienvenido, $correo</span></li>
 HTML;
     } else {
@@ -1782,6 +1839,23 @@ HTML;
         </script>
     </body>
     </html>
+HTML;
+}
+
+function Menu(){
+echo <<<HTML
+    <nav class="blue-grey darken-3">
+    <div class="container">
+        <!--<a href="#" class="brand-logo">Mi Aplicación</a>-->
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="#">Usuarios</a></li>
+            <li><a href="#">Catálogo</a></li>
+            <li><a href="#">Cerrar sesion</a></li>
+            <li><a href="#">Productos</a></li>
+            <li><a href="#">Catálogo</a></li>
+        </ul>
+    </div>
+</nav>
 HTML;
 }
 

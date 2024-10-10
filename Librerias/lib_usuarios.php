@@ -29,6 +29,8 @@ function Guardar()
         $correo = $datos['correo'];
         $contraseña = $datos['contraseña'];
         $comfirm_contraseña = $datos['comfirm_contraseña'];
+        date_default_timezone_set('America/Bogota');
+        $fecha = date('Y-m-d g:i:s');
 
         if ($contraseña !== $comfirm_contraseña) {
             echo "Las contraseñas no coinciden. Por favor, intente de nuevo.";
@@ -60,8 +62,8 @@ SQL;
             exit;
         }
 
-        $consulta = "INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña) VALUES ($1, $2, $3, $4, $5, $6, $7)";
-        $resultadoc = pg_query_params($conexion, $consulta, array($dni, $nombre, $apellido, $telefono, $direccion, $correo, $contraseña));
+        $consulta = "INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña,fecha_ingreso) VALUES ($1, $2, $3, $4, $5, $6, $7,$8)";
+        $resultadoc = pg_query_params($conexion, $consulta, array($dni, $nombre, $apellido, $telefono, $direccion, $correo, $contraseña ,$fecha));
 
         if ($resultadoc) {
             header("Location: ./usuarios.php");
@@ -156,9 +158,13 @@ function Login(){
     $correo = $_POST["correo"];
     $contraseña = $_POST["contraseña"];
 
-    $consulta = pg_query_params($conexion,"SELECT correo,contraseña FROM usuarios WHERE correo =$1 AND contraseña =$2",array($correo,$contraseña));
+    $consulta = pg_query_params($conexion,"SELECT correo,contraseña,nombre,dni FROM usuarios WHERE correo =$1 AND contraseña =$2",array($correo,$contraseña));
 
     $resultado_consulta=pg_fetch_assoc($consulta);
+
+    //var_dump($resultado_consulta);
+
+    //$resultado_consulta=pg_fetch_all($consulta);
 
 
 
@@ -167,6 +173,10 @@ function Login(){
 
     if ($resultado_consulta) {
         $_SESSION["correo"] = $resultado_consulta['correo'];
+        $_SESSION["contraseña"] = $resultado_consulta['contraseña'];
+        $_SESSION["nombre"] = $resultado_consulta['nombre'];
+        $_SESSION["dni"] = $resultado_consulta['dni'];
+
 
         header("Location: ../catalogo/catalogo.php");
     } else {
