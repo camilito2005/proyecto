@@ -16,7 +16,7 @@ $ruta_Verproductos="./vistas/productos/verProductos.php",$ruta_aggproductos="./v
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <title>PAGINA</title>
+    <title>P</title>
 </head>
 
 <body>
@@ -148,7 +148,7 @@ function Menus($ruta_css="./css/estilos7.css")
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <title>PAGINA</title>
+    <title>P</title>
 </head>
 
 <body>
@@ -166,6 +166,9 @@ if (isset($_SESSION["correo"])) {
 $menu .= <<<HTML
             <li>
                 <a href="./vistas/usuarios/perfil1.php">Perfil</a>
+            </li>
+            <li>
+                <a href="./vistas/mapa.php">Mapa</a>
             </li>
             <li>
                 <a href="./vistas/usuarios/usuarios.php">Usuarios</a>

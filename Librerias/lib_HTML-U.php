@@ -540,7 +540,7 @@ HTML;
 }
 
 
-function Login_html()
+function Login_html1()
 {
     /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
     $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
@@ -599,6 +599,100 @@ function Login_html()
 HTML;
     echo $html;
 }
+function Login_html() {
+    $html = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <script src="../../js/cargando.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicia Sesión</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Roboto', sans-serif;
+        }
+        .contenedor {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .formulario_registro {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-control {
+            border-radius: 5px;
+            box-shadow: none;
+            transition: border 0.3s;
+        }
+        .form-control:focus {
+            border-color: #6200ea;
+            box-shadow: 0 0 5px rgba(98, 0, 234, 0.5);
+        }
+        .btn {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .link-recuperar {
+            text-align: center;
+            display: block;
+            margin-top: 1rem;
+            color: #6200ea;
+            text-decoration: none;
+        }
+        .link-recuperar:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loading">Cargando...</div>
+    <div class="mx-auto contenedor">
+        <div class="formulario_registro">
+            <form id="myForm" class="mx-auto" action="../pagina-principal/login.php?accion=login" onsubmit="showLoading()" method="post">
+                <h2 class="text-center text-secondary">Bienvenido</h2>
+                <p class="text-center text-secondary">Inicia sesión</p>
+                <input class="form-control" placeholder="Correo" required type="text" name="correo">
+                <br>
+                <input class="form-control" placeholder="Contraseña" required type="password" name="contraseña">
+                <br>
+                <input class="btn btn-primary" name="inicio" type="submit" value="Entrar">
+                <br>
+                <a class="link-recuperar" href="../usuarios/usuarios.php?accion=recuperar">¿Olvidaste tu contraseña?</a>
+            </form>
+        </div>
+    </div>
+    <form id="myForm" action="../usuarios/formulario_registro.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-user-plus"></i> Agregar usuarios
+        </button>
+    </form>
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-house"></i> Inicio
+        </button>
+    </form>
+</body>
+
+</html>
+HTML;
+    echo $html;
+}
+
 function Formulario_productos()
 {
     /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
@@ -1299,9 +1393,9 @@ HTML;
 
 function Carrito_HTML1()
 {   
-    Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
+   /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
     $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
-    $ruta_Verproductos="#",$ruta_aggproductos="#");
+    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     $html = <<<HTML
     <!DOCTYPE html>
     <html lang="en">
@@ -1486,7 +1580,7 @@ HTML;
     echo $html;
 }
 
-function Formulario_enviar_correo(){
+function Formulario_enviar_correo1(){
     /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
     $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
     $ruta_Verproductos="#",$ruta_aggproductos="#");*/
@@ -1536,6 +1630,92 @@ function Formulario_enviar_correo(){
 
 HTML;
 }
+
+function Formulario_enviar_correo() {
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <script src="../../js/cargando.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Roboto', sans-serif;
+        }
+        .contenedor {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .formulario_registro {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-control {
+            border-radius: 5px;
+            box-shadow: none;
+            transition: border 0.3s;
+        }
+        .form-control:focus {
+            border-color: #6200ea;
+            box-shadow: 0 0 5px rgba(98, 0, 234, 0.5);
+        }
+        .btn {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .label-instrucciones {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loading">Cargando...</div>
+    <div class="mx-auto contenedor">
+        <div class="formulario_registro">
+            <form id="myForm" class="mx-auto" action="../usuarios/usuarios.php?accion=correo_enviado" onsubmit="showLoading()" method="post">
+                <h2 class="text-center text-secondary">Restablecer Contraseña</h2>
+                <label class="label-instrucciones">Introduce tu correo electrónico al cual le llegará un link:</label>
+                <input class="form-control" id="correo" placeholder="Correo" required type="email" name="correo">
+                <br>
+                <input class="btn btn-primary" name="inicio" type="submit" value="Enviar">
+            </form>
+        </div>
+    </div>
+
+    <form id="myForm" action="../usuarios/formulario_registro.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-user-plus"></i> Agregar usuarios
+        </button>
+    </form>
+
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+        <button class="btn btn-outline-secondary" value="inicio">
+            <i class="fa-solid fa-house"></i> Inicio
+        </button>
+    </form>
+</body>
+
+</html>
+HTML;
+}
+
 
 function FormularioFactura(){
 
