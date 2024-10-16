@@ -154,6 +154,7 @@ SQL;
 $consulta = pg_query($conexion,$sql);
 if ($consulta) {
     header("Location: ./verProductos.php");
+    exit;
 }
 else {
     echo "error";

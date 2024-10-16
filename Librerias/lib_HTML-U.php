@@ -1,7 +1,12 @@
 <?php
 //include_once "../../Librerias/lib_menu.php";
-function Formulario_clientes()
+function Formulario_clientes1()
 {
+    session_start();
+
+    /*echo $_SESSION['nombre'];
+    echo $_SESSION['descripcion'];
+    echo $_SESSION['correo'];*/
     
 
     /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
@@ -40,7 +45,12 @@ function Formulario_clientes()
                     <label for="exampleInputEmail1" class="form-label">dni</label>
                     <input class="form-control" required type="text" name="dni" placeholder=" introduzca su dni">
                 </div>
-               <!--  <div class="mb-3">
+HTML;
+
+if ($_SESSION['descripcion']==="Administrador") {
+    echo <<<HTML
+
+                <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">rol</label>
                     <section>
                         <select name="rol" id="">
@@ -48,8 +58,31 @@ function Formulario_clientes()
                             <option value="2">cliente</option>
                         </select>
                     </section>
+HTML;
+}elseif ($_SESSION['descripcion']==="Empleado") {
+    echo <<<HTML
+    <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">rol</label>
+                    <section>
+                        <select name="rol" id="">
+                            <option value="2">cliente</option>
+                        </select>
+                    </section>
+HTML;
+}else {
+    echo <<<HTML
+    <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">rol</label>
+                    <section>
+                        <select name="rol" id="">
+                            <option value="2">cliente</option>
+                        </select>
+                    </section>
+HTML;
+}
+echo <<<HTML
                     <input class="form-control" required type="text" name="rol" placeholder=" introduzca su dni"> 
-                </div>-->
+                </div>
 
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">nombre</label>
@@ -109,60 +142,62 @@ function Formulario_clientes()
 </html>
 HTML;
 }
-function Formulario_clientes1() {
+function Formulario_clientes()
+{
+    session_start();
+
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="stylesheet" href="../../css/formulario_clientes.css">
     <link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
-    <style>
-        body {
-            background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .contenedor {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 400px;
-        }
-        .formulario_registro {
-            padding: 20px;
-        }
-        .form-label {
-            font-weight: bold;
-        }
-        .btn-primary {
-            width: 100%;
-        }
-    </style>
 </head>
 <body>
 
+<div id="loading">Cargando...</div>
 <div class="contenedor">
     <div class="formulario_registro">
-        <form id="myForm" onsubmit="showLoading()" action="usuarios.php?accion=registrar" method="post">
+        <form id="myForm" onsubmit="showLoading()" class="col-12 p-3" action="usuarios.php?accion=registrar" method="post">
             <h3 class="text-center text-secondary">Registro de Clientes</h3>
-            <div id="loading">Cargando...</div>
 
             <div class="mb-3">
                 <label for="dni" class="form-label">DNI</label>
                 <input class="form-control" required type="text" name="dni" placeholder="Introduzca su DNI">
             </div>
+HTML;
 
+if (isset($_SESSION['descripcion']) && $_SESSION['descripcion'] === "Administrador") {
+    echo <<<HTML
+            <div class="mb-3">
+                <label for="rol" class="form-label">Rol</label>
+                <select name="rol" class="form-control" required>
+                    <option value="1">Administrador</option>
+                    <option value="2">Cliente</option>
+                </select>
+            </div>
+HTML;
+} else {
+    // Si la sesión no está iniciada o el usuario no es administrador
+    echo <<<HTML
+            <div class="mb-3">
+                <label for="rol" class="form-label">Rol</label>
+                <select name="rol" class="form-control" required>
+                    <option value="2">Cliente</option>
+                </select>
+            </div>
+HTML;
+}
+
+echo <<<HTML
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input class="form-control" required type="text" name="nombre" placeholder="Introduzca su nombre">
@@ -194,22 +229,21 @@ function Formulario_clientes1() {
             </div>
 
             <div class="mb-3">
-                <label for="confirm_contraseña" class="form-label">Confirmar Contraseña</label>
-                <input class="form-control" required type="password" name="confirm_contraseña" placeholder="Confirmar contraseña">
+                <label for="confirmar_contraseña" class="form-label">Confirmar Contraseña</label>
+                <input class="form-control" required type="password" name="confirmar_contraseña" placeholder="Confirmar contraseña">
             </div>
 
             <input class="btn btn-primary" type="submit" name="registro" value="Registrar"><br><br>
-
         </form>
 
         <form action="../usuarios/usuarios.php" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" type="submit">
+            <button class="btn btn-outline-secondary">
                 <i class="fa-duotone fa-solid fa-users-viewfinder"></i> Usuarios
             </button>
         </form>
 
         <form action="../../index.php" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" type="submit">
+            <button class="btn btn-outline-secondary">
                 <i class="fa-solid fa-house"></i> Inicio
             </button>
         </form>
@@ -220,6 +254,8 @@ function Formulario_clientes1() {
 </html>
 HTML;
 }
+
+
 
 
 function Mostrar_usuarios1(){
@@ -1120,6 +1156,8 @@ HTML;
     if (isset($_SESSION["correo"])) {
         $html .= <<<HTML
         <div class="container-fluid text-end">
+            <span>{$_SESSION["cargo_id"]}</span>
+            <span>{$_SESSION["nombre"]}</span>
             <span>{$_SESSION["correo"]}</span>
             <!--<span>nombre:{$_SESSION["nombre"]}</span>
             <span>contraseña{$_SESSION["contraseña"]}</span>-->

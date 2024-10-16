@@ -13,8 +13,8 @@ function Guardar()
             "direccion" => $_POST["direccion"],
             "correo" => $_POST["correo"],
             "contraseña" => $_POST["contraseña"],
-            "comfirm_contraseña" => $_POST["comfirm_contraseña"],
-            //"id_rol" => $_POST["rol"],
+            "confirmar_contraseña" => $_POST["confirmar_contraseña"],
+            "rol" => $_POST["rol"],
 
         ];
 
@@ -28,7 +28,8 @@ function Guardar()
         $direccion = $datos['direccion'];
         $correo = $datos['correo'];
         $contraseña = $datos['contraseña'];
-        $comfirm_contraseña = $datos['comfirm_contraseña'];
+        $comfirm_contraseña = $datos['confirmar_contraseña'];
+        $rol = $datos['rol'];
         date_default_timezone_set('America/Bogota');
         $fecha = date('Y-m-d g:i:s');
 
@@ -62,11 +63,12 @@ SQL;
             exit;
         }
 
-        $consulta = "INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña,fecha_ingreso) VALUES ($1, $2, $3, $4, $5, $6, $7,$8)";
-        $resultadoc = pg_query_params($conexion, $consulta, array($dni, $nombre, $apellido, $telefono, $direccion, $correo, $contraseña ,$fecha));
+        $consulta = "INSERT INTO usuarios (dni, nombre, apellido, telefono, direccion, correo, contraseña,fecha_ingreso,cargo_id) VALUES ($1, $2, $3, $4, $5, $6, $7,$8 , $9)";
+        $resultadoc = pg_query_params($conexion, $consulta, array($dni, $nombre, $apellido, $telefono, $direccion, $correo, $contraseña ,$fecha, $rol));
 
         if ($resultadoc) {
             header("Location: ./usuarios.php");
+            exit;
             //echo "usuario registrado correctamente";
         } else {
             if (!$resultadoc) {
@@ -143,7 +145,7 @@ SQL;
     }
 }
 
-function Login(){
+function Login1(){
     session_start();
 
     include_once "../../conexion.php";
@@ -158,7 +160,14 @@ function Login(){
     $correo = $_POST["correo"];
     $contraseña = $_POST["contraseña"];
 
-    $consulta = pg_query_params($conexion,"SELECT correo,contraseña,nombre,dni FROM usuarios WHERE correo =$1 AND contraseña =$2",array($correo,$contraseña));
+    //$consulta = pg_query_params($conexion,"SELECT correo,contraseña,nombre,dni,cargo_id FROM usuarios WHERE correo =$1 AND contraseña =$2",array($correo,$contraseña));
+    $consulta = pg_query_params($conexion, "
+    SELECT u.correo, u.contraseña, u.nombre, u.dni, c.descripcion AS cargo_descripcion
+    FROM usuarios u
+    INNER JOIN cargo c ON u.cargo_id = c.id
+    WHERE u.correo = $1 AND u.contraseña = $2", 
+    array($correo, $contraseña)
+);
 
     $resultado_consulta=pg_fetch_assoc($consulta);
 
@@ -176,13 +185,75 @@ function Login(){
         $_SESSION["contraseña"] = $resultado_consulta['contraseña'];
         $_SESSION["nombre"] = $resultado_consulta['nombre'];
         $_SESSION["dni"] = $resultado_consulta['dni'];
+        $_SESSION["descripcion"] = $resultado_consulta['descripcion'];
 
 
-        header("Location: ../catalogo/catalogo.php");
+        
+        // Redirecciona según el rol del usuario
+    if ($resultado_consulta['cargo_id'] == 1) {  // Administrador
+        header("Location: ../usuarios/perfil1.php"); // Cambia la URL según tu estructura
+        exit;
+    } elseif ($resultado_consulta['cargo_id'] == 2) {  // Empleado
+        header("Location: ../catalogo/catalogo.php"); // Cambia la URL según tu estructura
+        exit;
+    } else {
+        echo "Rol no reconocido.";
+    }
     } else {
         echo "contraseña incorrecta ";
     }
 }
+
+function Login(){
+    session_start();
+
+    include_once "../../conexion.php";
+
+    $conexion = Conexion();
+
+    // Obtener las credenciales del formulario
+    $correo = $_POST["correo"];
+    $contraseña = $_POST["contraseña"];
+
+    // Consultar la base de datos para validar el usuario
+    $consulta = pg_query_params($conexion, "
+        SELECT u.correo, u.contraseña, u.nombre, u.dni, u.cargo_id, c.descripcion AS cargo_descripcion
+        FROM usuarios u
+        INNER JOIN cargo c ON u.cargo_id = c.id
+        WHERE u.correo = $1", array($correo)
+    );
+
+    $resultado_consulta = pg_fetch_assoc($consulta);
+
+    // Verifica si se encontró un resultado
+    if ($resultado_consulta) {
+        // Verificar la contraseña
+        if ($resultado_consulta['contraseña'] === $contraseña) { // Asegúrate de comparar correctamente
+            $_SESSION["correo"] = $resultado_consulta['correo'];
+            $_SESSION["nombre"] = $resultado_consulta['nombre'];
+            $_SESSION["dni"] = $resultado_consulta['dni'];
+            $_SESSION["descripcion"] = $resultado_consulta['cargo_descripcion'];
+            $_SESSION["cargo_id"] = $resultado_consulta['cargo_id']; // Guarda el cargo_id para redirigir
+
+            // Redirecciona según el rol del usuario
+            if ($resultado_consulta['cargo_id'] == 1) {  // Administrador
+                header("Location: ../usuarios/perfil1.php"); // Cambia la URL según tu estructura
+                exit;
+            } elseif ($resultado_consulta['cargo_id'] == 2) {  // Empleado
+                header("Location: ../catalogo/catalogo.php"); // Cambia la URL según tu estructura
+                exit;
+            } else {
+                echo "Rol no reconocido.";
+            }
+            exit; // Asegúrate de llamar a exit después de redireccionar
+        } else {
+            echo "Contraseña incorrecta.";
+        }
+    } else {
+        echo "El correo no está registrado.";
+    }
+}
+
 
 function Modificar_usuarios()
 {
@@ -312,6 +383,7 @@ function Cerrar_sesion()
     session_start();
     session_destroy();
     header("Location: ../pagina-principal/login.php");
+    exit;
 }
 
 function restablecer_contraseña(){

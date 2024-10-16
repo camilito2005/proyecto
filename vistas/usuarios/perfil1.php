@@ -27,7 +27,12 @@ echo <<<HTML
 HTML;
 
 Menu();
-
+if ($_SESSION["descripcion"]=== "Administrador") {
+    echo "hola admin";
+}
+elseif ($_SESSION["descripcion"]==="Empleado") {
+    echo "hola empleado";
+}
     echo <<<HTML
 
     <div class="container">
@@ -40,12 +45,14 @@ HTML;
                  if (isset($_SESSION["correo"])){
 
                 echo <<<HTML
+                    <p><strong>Hola  {$_SESSION["descripcion"]}</p>
                     <p><strong>Correo:{$_SESSION["correo"]}</p>
                     <p><strong>Nombre:{$_SESSION["nombre"]}</p>
                     <p><strong>documento:{$_SESSION["dni"]}</p>
                     <div class="card-action">
                         <a href="#" class="btn blue">Editar</a>
-                        <a href="logout.php" class="btn red">Cerrar sesión</a>
+                        <!--<a href="logout.php" class="btn red">Cerrar sesión</a>-->
+                        <a href="../usuarios/usuarios.php?accion=cerrar" class="btn red">Cerrar sesión</a>
                     </div>
 HTML;
                 }
