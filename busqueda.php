@@ -21,4 +21,10 @@ else {
     echo json_encode($error);
 }
 
+// consulta para el login 
+/*SELECT u.id, u.nombre, u.correo, c.descripcion AS rol
+FROM public.usuarios u
+JOIN public.cargo c ON u.cargo_id = c.id
+WHERE u.correo = 'email_del_usuario' AND u."contraseña" = 'password_del_usuario';*/
+
 ?>
