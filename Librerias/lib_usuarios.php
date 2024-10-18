@@ -217,7 +217,7 @@ function Login(){
 
     // Consultar la base de datos para validar el usuario
     $consulta = pg_query_params($conexion, "
-        SELECT u.correo, u.contraseña, u.nombre, u.dni, u.cargo_id, c.descripcion AS cargo_descripcion
+        SELECT u.id, u.correo, u.contraseña, u.nombre, u.dni, u.cargo_id, c.descripcion AS cargo_descripcion
         FROM usuarios u
         INNER JOIN cargo c ON u.cargo_id = c.id
         WHERE u.correo = $1", array($correo)
@@ -229,7 +229,9 @@ function Login(){
     if ($resultado_consulta) {
         // Verificar la contraseña
         if ($resultado_consulta['contraseña'] === $contraseña) { // Asegúrate de comparar correctamente
+            $_SESSION["id"] = $resultado_consulta['id'];
             $_SESSION["correo"] = $resultado_consulta['correo'];
+            $_SESSION["contraseña"] = $resultado_consulta['contraseña'];
             $_SESSION["nombre"] = $resultado_consulta['nombre'];
             $_SESSION["dni"] = $resultado_consulta['dni'];
             $_SESSION["descripcion"] = $resultado_consulta['cargo_descripcion'];
@@ -237,7 +239,7 @@ function Login(){
 
             // Redirecciona según el rol del usuario
             if ($resultado_consulta['cargo_id'] == 1) {  // Administrador
-                header("Location: ../usuarios/perfil1.php"); // Cambia la URL según tu estructura
+                header("Location: ../usuarios/perfil.php"); // Cambia la URL según tu estructura
                 exit;
             } elseif ($resultado_consulta['cargo_id'] == 2) {  // Empleado
                 header("Location: ../catalogo/catalogo.php"); // Cambia la URL según tu estructura

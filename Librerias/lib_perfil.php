@@ -34,6 +34,7 @@ HTML;
     if (isset($_SESSION["correo"])) {
         echo <<<HTML
             <p><strong>Cargo/Rol: {$_SESSION["descripcion"]}</strong></p>
+            <p><strong>Identificador: {$_SESSION["id"]}</strong></p>
             <p><strong>Correo: {$_SESSION["correo"]}</strong></p>
             <p><strong>Nombre: {$_SESSION["nombre"]}</strong></p>
             <p><strong>Documento: {$_SESSION["dni"]}</strong></p>
@@ -58,7 +59,11 @@ HTML;
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h4>Editar Perfil</h4>
-            <form action="editar_perfil.php" method="POST">
+            <form action="./usuarios.php?accion=actualizar" method="POST">
+            <div class="input-field">
+                    <input type="text" name="nombre" value="{$_SESSION['id']}" required>
+                    <label for="nombre">Identificador</label>
+                </div>
                 <div class="input-field">
                     <input type="text" name="nombre" value="{$_SESSION['nombre']}" required>
                     <label for="nombre">Nombre</label>
@@ -66,6 +71,10 @@ HTML;
                 <div class="input-field">
                     <input type="email" name="correo" value="{$_SESSION['correo']}" required>
                     <label for="correo">Correo</label>
+                </div>
+                <div class="input-field">
+                    <input type="password" name="contraseña" value="{$_SESSION['contraseña']}" required>
+                    <label for="dni">Contraseña</label>
                 </div>
                 <div class="input-field">
                     <input type="text" name="dni" value="{$_SESSION['dni']}" required>

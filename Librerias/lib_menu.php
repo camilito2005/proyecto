@@ -31,7 +31,7 @@ HTML;
     if (isset($_SESSION["descripcion"]) && $_SESSION["descripcion"] === "Administrador") {
         echo <<<HTML
             <li>
-                <a href="./vistas/usuarios/perfil.php">Perfil</a>
+                <a href="./vistas/usuarios/perfil.php">Perfill</a>
             </li>
             <li>
                 <a href="./vistas/mapa.php">Mapa</a>
@@ -160,7 +160,7 @@ if (isset($_SESSION["correo"])) {
 
 echo <<<HTML
             <li>
-                <a href="./vistas/usuarios/perfil1.php">Perfil</a>
+                <a href="./vistas/usuarios/perfil.php">Perfil</a>
             </li>
             <li>
                 <a href="./vistas/mapa.php">Mapa</a>
