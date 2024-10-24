@@ -229,8 +229,7 @@ CREATE TABLE public.usuarios (
     correo text NOT NULL,
     "contraseña" text NOT NULL,
     fecha_ingreso date,
-    cargo_id integer,
-    fecha_actualizacion timestamp without time zone DEFAULT now()
+    cargo_id integer
 );
 
 
@@ -338,7 +337,6 @@ SELECT pg_catalog.setval('public.categorias_id_seq', 1, false);
 COPY public.facturas (id, producto_id, stock, precio, total, fecha, cliente_correo) FROM stdin;
 2	24	5	0.00	0.00	2024-09-18 11:12:43.269484	c@gmail.com
 7	46	2	150000.00	300000.00	2024-09-18 11:52:28	camilo@gmail.com
-13	49	5	400000.00	2000000.00	2024-10-24 04:37:38	c@gmail.com
 \.
 
 
@@ -346,7 +344,7 @@ COPY public.facturas (id, producto_id, stock, precio, total, fecha, cliente_corr
 -- Name: facturas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.facturas_id_seq', 13, true);
+SELECT pg_catalog.setval('public.facturas_id_seq', 12, true);
 
 
 --
@@ -384,7 +382,7 @@ SELECT pg_catalog.setval('public.password_resets_id_seq', 5, true);
 --
 
 COPY public.productos (id, nombre, descripcion, precio, categoria, stock, imagen, fecha_creacion, fecha_actualizacion) FROM stdin;
-49	prueba	prueba	400000.00	\N	5	../../../ti/fotos/D_NQ_NP_643213-MCO77950837793_072024-O.webp		\N
+49	prueba	prueba	400000.00	\N	10	../../../ti/fotos/D_NQ_NP_643213-MCO77950837793_072024-O.webp		\N
 24	zapatos	zapatos	100000.00	\N	6	../../ti/fotos/zapatos (1).jpeg	2024-12-08	\N
 46	zapatos blancos	zapatos blancos	150000.00	\N	5	../../../ti/fotos/images.jpeg		\N
 50	zapatoss	zapatos	280000.00	\N	10	../../../ti/fotos/73488892-b1ff-461d-a6ba-b5c61a1b7565 (1).webp		\N
@@ -402,16 +400,16 @@ SELECT pg_catalog.setval('public.productos_id_seq', 42, true);
 -- Data for Name: usuarios; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.usuarios (id, dni, nombre, apellido, telefono, direccion, correo, "contraseña", fecha_ingreso, cargo_id, fecha_actualizacion) FROM stdin;
-33	1043	camilo	Marrugo	10	direccion	c@gmail.com	123456	\N	1	2024-10-18 14:09:23.01578
-39	999	999	999	9999	999	999@gmail.com	camilo2005	2024-10-16	1	2024-10-18 14:09:23.01578
-1	1234	camilo	marrugo	19003	la boquilla	c@gmail.com	12345	\N	\N	2024-10-18 14:09:23.01578
-21	34213432	camilo	marrugo	1900373	la boquilla	12345@gmail.com	camilo2005	\N	\N	2024-10-18 14:09:23.01578
-1	1234	camilo	marrugo	19003	la boquilla	c@gmail.com	12345	\N	1	2024-10-18 14:09:23.01578
-21	34213432	camilo	marrugo	1900373	la boquilla	12345@gmail.com	camilo2005	\N	1	2024-10-18 14:09:23.01578
-34	10	camilo	Marrugo Barrios	99	direccion	marrugo@gmail.com	marrugo	\N	2	2024-10-18 14:09:23.01578
-32	104329	camilo	Marrugo	999	direccion	camilo@gmail.com	camilo	\N	1	2024-10-18 14:09:23.01578
-38	101010	prueba cliente fecha	prueba	777	direccion	prueba@gmail.com	prueba	2024-10-10	2	2024-10-18 14:09:23.01578
+COPY public.usuarios (id, dni, nombre, apellido, telefono, direccion, correo, "contraseña", fecha_ingreso, cargo_id) FROM stdin;
+33	1043	camilo	Marrugo	10	direccion	c@gmail.com	123456	\N	1
+39	999	999	999	9999	999	999@gmail.com	camilo2005	2024-10-16	1
+1	1234	camilo	marrugo	19003	la boquilla	c@gmail.com	12345	\N	\N
+21	34213432	camilo	marrugo	1900373	la boquilla	12345@gmail.com	camilo2005	\N	\N
+1	1234	camilo	marrugo	19003	la boquilla	c@gmail.com	12345	\N	1
+21	34213432	camilo	marrugo	1900373	la boquilla	12345@gmail.com	camilo2005	\N	1
+34	10	camilo	Marrugo Barrios	99	direccion	marrugo@gmail.com	marrugo	\N	2
+32	104329	camilo	Marrugo	999	direccion	camilo@gmail.com	camilo	\N	1
+38	101010	prueba cliente fecha	prueba	777	direccion	prueba@gmail.com	prueba	2024-10-10	2
 \.
 
 

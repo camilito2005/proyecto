@@ -1,88 +1,101 @@
-<?php
-
-function Mapa_html (){
-
-
-echo <<<HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/mapa.css">
+    <title>Estadísticas de Productos Vendidos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        input[type="date"] {
+            padding: 8px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 14px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        table {
+            width: 60%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <h1 class="title">Mapa numero 1 prueba </h1>
-    <div id="map"></div>
-    <form id="myForm" action="../index.php" onsubmit="showLoading()" method="post">
-        <button class="btn">
-            <i class="fa-solid fa-house"></i> Inicio
-        </button>
+    <h2>Estadísticas de Productos Vendidos</h2>
+
+    <!-- Formulario para seleccionar fechas -->
+    <form method="GET">
+        <label for="fecha_inicio">Fecha Inicio:</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?php echo htmlspecialchars($fecha_inicio); ?>" required>
+        
+        <label for="fecha_fin">Fecha Fin:</label>
+        <input type="date" id="fecha_fin" name="fecha_fin" value="<?php echo htmlspecialchars($fecha_fin); ?>" required>
+        
+        <button type="submit">Filtrar</button>
     </form>
-</div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    // Crear el mapa centrado en Cartagena
-    var map = L.map('map').setView([10.3910, -75.4792], 13);
-
-    // Cargar las capas de OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(map);
-
-    // Función para obtener la ubicación actual
-    function obtenerUbicacion() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(mostrarUbicacion, manejarError);
-        } else {
-            alert("La geolocalización no es soportada por este navegador.");
-        }
-    }
-
-    // Mostrar la ubicación en el mapa
-    function mostrarUbicacion(position) {
-        var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
-
-        // Centrar el mapa en la ubicación actual
-        map.setView([lat, lon], 15);
-
-        // Agregar un marcador en la ubicación actual
-        L.marker([lat, lon]).addTo(map)
-            .bindPopup('Tu ubicación actual')
-            .openPopup();
-    }
-
-    // Manejar errores en la obtención de la ubicación
-    function manejarError(error) {
-        switch(error.code) {
-            case error.PERMISSION_DENIED:
-                alert("Se denegó la solicitud de geolocalización.");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                alert("La ubicación no está disponible.");
-                break;
-            case error.TIMEOUT:
-                alert("La solicitud de geolocalización ha caducado.");
-                break;
-            case error.UNKNOWN_ERROR:
-                alert("Se produjo un error desconocido.");
-                break;
-        }
-    }
-
-    // Llamar a la función para obtener la ubicación
-    obtenerUbicacion();
-</script>
+    <!-- Tabla de resultados -->
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad Vendida</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($resultados)) : ?>
+                <?php foreach ($resultados as $fila) : ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($fila['nombre_producto']); ?></td>
+                        <td><?php echo htmlspecialchars($fila['productos_vendidos']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <tr>
+                    <td colspan="2">No se encontraron productos vendidos en este rango de fechas.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
 </body>
 </html>
-HTML;
-}
-?>

@@ -34,6 +34,9 @@ HTML;
                 <a href="./vistas/usuarios/perfil.php">Perfill</a>
             </li>
             <li>
+                <a href="./vistas/productos/estadisticas.php">Estadisticas</a>
+            </li>
+            <li>
                 <a href="./vistas/mapa.php">Mapa</a>
             </li>
             <li>
@@ -45,11 +48,9 @@ HTML;
             <li><a href="./vistas/catalogo/catalogo.php">Catálogo</a></li>
             <li><a href="./vistas/facturas.php">Facturas</a></li>
             <li>
-                <a class="dropdown-trigger" href="#!" data-target="productos-dropdown">Productos</a>
-                <ul id="productos-dropdown" class="dropdown-content">
-                    <li><a href="./vistas/productos/verProductos.php">Mis Productos</a></li>
+                <li><a href="./vistas/productos/verProductos.php">Mis Productos</a></li>
+                    
                     <li><a href="./vistas/productos/Productos.php">Agregar Productos</a></li>
-                </ul>
             </li>
 HTML;
     } elseif (isset($_SESSION["descripcion"]) && $_SESSION["descripcion"] === "Empleado") {
@@ -92,36 +93,6 @@ HTML;
             </ul>
         </div>
     </nav>
-
-    <canvas id="myChart" width="400" height="200"></canvas>
-    <script>
-        // Datos de estadísticas
-        const labels = ["Enero", "Febrero", "Marzo", "Abril", "Mayo"];
-        const data = [10, 20, 30, 40, 50]; // Cambia esto por los datos reales que tengas
-
-        // Crear el gráfico
-        var ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Meses',
-                    data: data,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
 </body>
 </html>
 HTML;
