@@ -31,9 +31,9 @@ date_default_timezone_set('America/Bogota');
     $segundos = date('s');  // Segundos
     
     // Mostrar los valores
-    echo "<br>hora: " . $hora;
+    /*echo "<br>hora: " . $hora;
     echo "<br>minuto: " . $minutos;
-    echo "<br>segundo: " . $segundos;
+    echo "<br>segundo: " . $segundos;*/
 
     // Mostrar el formulario siempre, ya sea antes o después de la consulta
     echo <<<HTML
@@ -43,58 +43,8 @@ date_default_timezone_set('America/Bogota');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estadísticas de Productos Vendidos</title>
+    <link rel="stylesheet" href="../../css/estadisticas.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        label {
-            font-size: 16px;
-            margin-right: 10px;
-        }
-        input[type="date"] {
-            padding: 8px;
-            font-size: 14px;
-            margin-right: 10px;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 14px;
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #4cae4c;
-        }
-        table {
-            width: 60%;
-            margin: 0 auto;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
     </style>
 </head>
 <body>
@@ -192,6 +142,11 @@ HTML;
     }
 
     echo <<<HTML
+    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-house"></i> Inicio
+            </button>
+        </form>
 </body>
 </html>
 HTML;

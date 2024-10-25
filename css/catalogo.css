@@ -1,0 +1,24 @@
+
+body {
+    background-color: #f8f9fa;
+}
+.navbar {
+    margin-bottom: 20px;
+}
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: scale(1.05);
+}
+.card-img-top {
+    height: 300px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Ajusta la imagen sin distorsionarla */
+}
+.agotado {
+    color: red; /* Color para el texto de agotado */
+    font-weight: bold;
+}
+.loading-spinner {
+    display: none; /* Cambia esto a block para mostrar */
+}

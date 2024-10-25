@@ -4,15 +4,6 @@ function Formulario_clientes1()
 {
     session_start();
 
-    /*echo $_SESSION['nombre'];
-    echo $_SESSION['descripcion'];
-    echo $_SESSION['correo'];*/
-    
-
-    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
-    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
-    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
-
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -425,6 +416,7 @@ function Mostrar_usuarios() {
 <head>
     <link rel="shortcut icon" href="../../fotos/mostrar-contraseña.png" type="image/x-icon">
     <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="stylesheet" href="../../css/mostrar_usuarios.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
@@ -433,25 +425,6 @@ function Mostrar_usuarios() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabla de Usuarios</title>
-    <style>
-        body {
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
-        .table-container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        .input-search {
-            margin-bottom: 20px;
-        }
-        .btn-outline-secondary {
-            width: 100%;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 
 <body>
@@ -646,53 +619,11 @@ function Login_html() {
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="stylesheet" href="../../css/login.css">
     <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicia Sesión</title>
-    <style>
-        body {
-            background-color: #f5f5f5;
-            font-family: 'Roboto', sans-serif;
-        }
-        .contenedor {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .formulario_registro {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        .form-control {
-            border-radius: 5px;
-            box-shadow: none;
-            transition: border 0.3s;
-        }
-        .form-control:focus {
-            border-color: #6200ea;
-            box-shadow: 0 0 5px rgba(98, 0, 234, 0.5);
-        }
-        .btn {
-            width: 100%;
-            border-radius: 5px;
-        }
-        .link-recuperar {
-            text-align: center;
-            display: block;
-            margin-top: 1rem;
-            color: #6200ea;
-            text-decoration: none;
-        }
-        .link-recuperar:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 
 <body>
@@ -1101,35 +1032,13 @@ function Catalogo() {
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="stylesheet" href="../../css/catalogo.css">
     <script src="../../js/cargando.js"></script>
     <script src="../../js/cargando2.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo</title>
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            margin-bottom: 20px;
-        }
-        .card {
-            transition: transform 0.2s;
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-        .card-img-top {
-            height: 300px; /* Altura fija para todas las imágenes */
-            object-fit: cover; /* Ajusta la imagen sin distorsionarla */
-        }
-        .agotado {
-            color: red; /* Color para el texto de agotado */
-            font-weight: bold;
-        }
-        .loading-spinner {
-            display: none; /* Cambia esto a block para mostrar */
-        }
     </style>
 </head>
 
@@ -1684,43 +1593,6 @@ function Formulario_enviar_correo() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restablecer Contraseña</title>
-    <style>
-        body {
-            background-color: #f5f5f5;
-            font-family: 'Roboto', sans-serif;
-        }
-        .contenedor {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .formulario_registro {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        .form-control {
-            border-radius: 5px;
-            box-shadow: none;
-            transition: border 0.3s;
-        }
-        .form-control:focus {
-            border-color: #6200ea;
-            box-shadow: 0 0 5px rgba(98, 0, 234, 0.5);
-        }
-        .btn {
-            width: 100%;
-            border-radius: 5px;
-        }
-        .label-instrucciones {
-            margin-bottom: 1rem;
-            color: #666;
-        }
-    </style>
 </head>
 
 <body>
