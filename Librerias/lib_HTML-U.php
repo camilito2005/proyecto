@@ -1389,6 +1389,8 @@ SQL;
 
     foreach ($zapatos as $id => $zapatico):
     $totalProducto = $zapatico['precio'] * $zapatico['cantidad'];
+    $precio = $zapatico['precio'];
+    $precio_format = number_format($precio , 2);
 
         $html .= <<<HTML
             <div class="container">
@@ -1400,7 +1402,7 @@ SQL;
 
                         <h4 class="card-title ">numero de ferencia :{$zapatico['id']}</h4>
                             <h4 class="card-title ">nombre :{$zapatico['nombre']}</h4>
-                            <p class="">precio $ : {$zapatico['precio']}</p> 
+                            <p class="">precio $ : {$precio_format}</p> 
         
                             <p class="">disponibles : {$zapatico['stock']}</p>
                             <p class="">descripcion : {$zapatico['descripcion']}</p> 
@@ -1484,6 +1486,9 @@ HTML;
 
     foreach ($zapatos as $id => $zapatico) {
         $totalProducto = $zapatico['precio'] * $zapatico['cantidad'];
+        $precio = $zapatico['precio'];
+        $precio_format = number_format($precio , 2);
+
 
         $html .= <<<HTML
         <div class="card mb-4" style="width: 23rem; margin: auto;">
@@ -1491,7 +1496,7 @@ HTML;
             <div class="card-body">
                 <h5 class="card-title">Referencia: {$zapatico['id']}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Nombre: {$zapatico['nombre']}</h6>
-                <p>Precio: \$ {$zapatico['precio']}</p>
+                <p>Precio: \$ {$precio_format}</p>
                 <p>Disponibles: {$zapatico['stock']}</p>
                 <p>Descripción: {$zapatico['descripcion']}</p>
                 <p>Total: \$ {$totalProducto}</p>
@@ -1693,16 +1698,20 @@ HTML;
                     <select class="form-control" id="producto" name="producto" onchange="cargarDatos()">
                         <option value="" disabled selected>Seleccionar</option>
 HTML;
+$conexion = Conexion();
+$datos = pg_query($conexion, "SELECT * FROM productos");
+$productos = pg_fetch_all($datos);
 
-    $conexion = Conexion();
-    $datos = pg_query($conexion, "SELECT * FROM productos");
-
-    while ($d = pg_fetch_array($datos)) {
+if ($productos) {
+    foreach ($productos as $d) {
         $nombre = htmlspecialchars($d["nombre"]);
         echo <<<HTML
-                        <option value="$nombre">$nombre</option>
+            <option value="$nombre">$nombre</option>
 HTML;
     }
+}else {
+    echo "no hay registros";
+}
 
     echo <<<HTML
                     </select>
