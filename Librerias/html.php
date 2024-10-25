@@ -1,5 +1,6 @@
 <?php
 function filtro() {
+    session_start();
 
 date_default_timezone_set('America/Bogota');
     include_once "../../conexion.php";
@@ -9,6 +10,13 @@ date_default_timezone_set('America/Bogota');
     $fecha_inicio = '';
     $fecha_final = '';
 
+
+
+    if ($_SESSION["descripcion"] === "Administrador") {
+        echo "hola admin";
+    } elseif ($_SESSION["descripcion"] === "Empleado") {
+        echo "hola empleado";
+    }
     // Solo procesar si se ha enviado el formulario con GET
     if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_final'])) {
         $fecha_inicio = $_GET['fecha_inicio'];

@@ -1065,11 +1065,11 @@ HTML;
     if (isset($_SESSION["correo"])) {
         $html .= <<<HTML
         <div class="container-fluid text-end">
-            <span>{$_SESSION["cargo_id"]}</span>
+            <!--<span>{$_SESSION["cargo_id"]}</span>
             <span>{$_SESSION["nombre"]}</span>
-            <span>{$_SESSION["correo"]}</span>
-            <!--<span>nombre:{$_SESSION["nombre"]}</span>
+            <span>nombre:{$_SESSION["nombre"]}</span>
             <span>contraseña{$_SESSION["contraseña"]}</span>-->
+            <span>{$_SESSION["correo"]}</span>
             <form id="myForm" action="../usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="d-inline">
                 <button type="submit" class="btn btn-danger btn-sm" name="cerrar" value="cerrar sesion">
                     <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión

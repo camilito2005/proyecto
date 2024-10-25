@@ -60,7 +60,7 @@ HTML;
                 <a href="./vistas/mapa.php">Mapa</a>
             </li>
             <li><a href="./vistas/catalogo/catalogo.php">Catálogo</a></li>
-            <li><a href="./vistas/facturas.php">Facturas</a></li>
+            <!--<li><a href="./vistas/facturas.php">Facturas</a></li>-->
 HTML;
     } else {
         // Menú para Usuarios no logueados
