@@ -1,3 +1,42 @@
+<?php
+function filtro() {
+
+date_default_timezone_set('America/Bogota');
+    include_once "../../conexion.php";
+    $conexion = Conexion();
+
+    // Definir variables iniciales
+    $fecha_inicio = '';
+    $fecha_final = '';
+
+    // Solo procesar si se ha enviado el formulario con GET
+    if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_final'])) {
+        $fecha_inicio = $_GET['fecha_inicio'];
+        $fecha_final = $_GET['fecha_final'];
+
+        // Validar que las fechas no estén vacías
+        if (empty($fecha_inicio) || empty($fecha_final)) {
+            echo "Por favor, seleccione un rango de fechas válido.";
+            return;
+        }
+
+        // Formatear las fechas
+        $fecha_inicio = date('Y-m-d', strtotime($fecha_inicio));
+        $fecha_final = date('Y-m-d', strtotime($fecha_final));
+
+    }
+
+    $hora = date('H');  // Hora en formato 24h
+    $minutos = date('i');  // Minutos
+    $segundos = date('s');  // Segundos
+    
+    // Mostrar los valores
+    echo "<br>hora: " . $hora;
+    echo "<br>minuto: " . $minutos;
+    echo "<br>segundo: " . $segundos;
+
+    // Mostrar el formulario siempre, ya sea antes o después de la consulta
+    echo <<<HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -63,39 +102,100 @@
     <h2>Estadísticas de Productos Vendidos</h2>
 
     <!-- Formulario para seleccionar fechas -->
-    <form method="GET">
+    <form action="estadisticas.php" method="GET">
         <label for="fecha_inicio">Fecha Inicio:</label>
-        <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?php echo htmlspecialchars($fecha_inicio); ?>" required>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{$fecha_inicio}" required>
         
-        <label for="fecha_fin">Fecha Fin:</label>
-        <input type="date" id="fecha_fin" name="fecha_fin" value="<?php echo htmlspecialchars($fecha_fin); ?>" required>
+        <label for="fecha_final">Fecha Fin:</label>
+        <input type="date" id="fecha_final" name="fecha_final" value="{$fecha_final}" required>
         
         <button type="submit">Filtrar</button>
     </form>
+HTML;
 
-    <!-- Tabla de resultados -->
-    <table>
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad Vendida</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($resultados)) : ?>
-                <?php foreach ($resultados as $fila) : ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($fila['nombre_producto']); ?></td>
-                        <td><?php echo htmlspecialchars($fila['productos_vendidos']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else : ?>
+    // Solo ejecutar la consulta si se han enviado las fechas
+    if (!empty($fecha_inicio) && !empty($fecha_final)) {
+        // Consulta SQL con las fechas pasadas como variables
+        $consulta = <<<SQL
+            SELECT 
+                f.id AS factura_id,
+                f.producto_id,
+                p.nombre AS nombre_producto,
+                f.stock,
+                f.precio,
+                f.total,
+                f.fecha,
+                f.cliente_correo
+            FROM 
+                facturas f
+            JOIN 
+                productos p
+            ON 
+                f.producto_id = p.id
+            WHERE 
+                f.fecha BETWEEN '$fecha_inicio' AND '$fecha_final';
+SQL;
+//echo $consulta;
+
+        // Ejecutar la consulta
+        $resultado = pg_query($conexion, $consulta);
+
+        // Convertir resultados a un array para usar con foreach
+        $resultados_array = pg_fetch_all($resultado);
+
+        // Mostrar la tabla de resultados
+        echo <<<HTML
+        <table>
+            <thead>
                 <tr>
-                    <td colspan="2">No se encontraron productos vendidos en este rango de fechas.</td>
+                    <th>ID Factura</th>
+                    <th>Producto</th>
+                    <th>Cantidad Vendida</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+HTML;
 
+        // Verificar si hay resultados
+        if ($resultados_array) {
+            // Iterar sobre los resultados con foreach
+            foreach ($resultados_array as $fila) {
+                echo <<<HTML
+                <tr>
+                    <td>{$fila['factura_id']}</td>
+                    <td>{$fila['nombre_producto']}</td>
+                    <td>{$fila['stock']}</td>
+                    <td>{$fila['precio']}</td>
+                    <td>{$fila['total']}</td>
+                    <td>{$fila['fecha']}</td>
+                    <td>{$fila['cliente_correo']}</td>
+                </tr>
+HTML;
+            }
+        } else {
+            // Si no hay resultados
+            echo <<<HTML
+                <tr>
+                    <td colspan="7">No se encontraron productos vendidos en este rango de fechas.</td>
+                </tr>
+HTML;
+        }
+
+        echo <<<HTML
+            </tbody>
+        </table>
+HTML;
+    }
+
+    echo <<<HTML
 </body>
 </html>
+HTML;
+}
+
+//filtro();
+?>
