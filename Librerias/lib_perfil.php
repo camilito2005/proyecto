@@ -71,7 +71,8 @@ HTML;
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h4>Editar Perfil</h4>
-            <form action="perfil.php?accion=actualizar&id={$id}" method="POST">
+            <form action="../../librerias/lib_configuracion.php?accion=actualizar&id={$id}" method="POST">
+            <!--<form action="perfil.php?accion=actualizar&id={$id}" method="POST">-->
                 <div class="input-field">
                     <input disabled type="text" name="id" value="{$id}" required>
                     <label for="identificador">Identificador</label>
