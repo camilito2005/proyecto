@@ -406,9 +406,10 @@ HTML;
 }
 
 function Mostrar_usuarios() {
-    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
-    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
-    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
+    session_start();
+    echo"<br>correo:". $_SESSION["correo"]."<br>";
+    echo "<br> nombre".$_SESSION["nombre"]."<br>";
+
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -450,6 +451,8 @@ function Mostrar_usuarios() {
                     <th scope="col">Teléfono</th>
                     <th scope="col">Dirección</th>
                     <th scope="col">Correo</th>
+                    <th scope="col">contraseña</th>
+                    <th scope="col">Cargo</th>
                     <th scope="col">Modificar/Eliminar</th>
                 </tr>
             </thead>
@@ -458,7 +461,9 @@ HTML;
 
     include_once "../../conexion.php";
     $conexion = Conexion();
-    $consulta1 = "SELECT * FROM usuarios";
+    $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion,  u.correo, u.contraseña, u.cargo_id, c.descripcion AS cargo_descripcion
+        FROM usuarios u
+        INNER JOIN cargo c ON u.cargo_id = c.id";
     $query = pg_query($conexion, $consulta1);
     $usuarios = pg_fetch_all($query);
 
@@ -474,6 +479,8 @@ if ($usuarios) { // Verifica si hay resultados
         $direccion = $fila['direccion'];
         $correo = $fila['correo'];
         $contraseña = $fila['contraseña'];
+        $cargo_descripcion = $fila['cargo_descripcion'];
+        $cargo_id = $fila['cargo_id']; // Guarda el cargo_id para redirigir
 
         echo <<<HTML
             <tbody>
@@ -485,7 +492,8 @@ if ($usuarios) { // Verifica si hay resultados
                     <td>$telefono</td>
                     <td>$direccion</td>
                     <td>$correo</td>
-                    <!--<td>$contraseña</td>-->
+                    <td>$contraseña</td>
+                    <td>$cargo_descripcion</td>
                     <td>
                     <a href="../usuarios/usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
                     <a href="usuarios.php?accion=eliminar&id=$id" onclick="return pregunta()"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
@@ -497,32 +505,6 @@ HTML;
 } else {
     echo "<tbody><tr><td colspan='8'>No hay usuarios registrados.</td></tr></tbody>";
 }
-
-    /*while ($fila = pg_fetch_object($query)) {
-        $id = $fila->id;
-        $dni = $fila->dni;
-        $nombre = $fila->nombre;
-        $apellido = $fila->apellido;
-        $telefono = $fila->telefono;
-        $direccion = $fila->direccion;
-        $correo = $fila->correo;
-
-        echo <<<HTML
-                <tr>
-                    <td>$id</td>
-                    <td>$dni</td>
-                    <td>$nombre</td>
-                    <td>$apellido</td>
-                    <td>$telefono</td>
-                    <td>$direccion</td>
-                    <td>$correo</td>
-                    <td>
-                        <a href="../usuarios/usuarios.php?accion=modificar&id=$id" class="text-primary"><i class="fa-solid fa-pen"></i></a>
-                        <a href="usuarios.php?accion=eliminar&id=$id" class="text-danger" onclick="return pregunta()"><i class="fa-solid fa-trash"></i></a>
-                    </td>
-                </tr>
-HTML;
-    }*/
 
     echo <<<HTML
             </tbody>

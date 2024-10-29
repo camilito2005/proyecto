@@ -30,7 +30,7 @@ if ($accion=="modificar"){
     Modificar_usuarios();
 }
 if ($accion =="actualizar") {
-    Actualizar_usuarios();
+    Actualizar_usuarios($ruta= "./usuarios.php");
 }
 
 if ($accion== "recuperar") {

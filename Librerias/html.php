@@ -1,4 +1,5 @@
 <?php
+
 function filtro() {
     session_start();
 

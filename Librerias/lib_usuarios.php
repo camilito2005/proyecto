@@ -80,7 +80,7 @@ SQL;
     }
 }
 
-function Actualizar_usuarios(){
+function Actualizar_usuarios($ruta){
 
 
 
@@ -92,6 +92,7 @@ function Actualizar_usuarios(){
         "direccion" => $_POST["direccion"],
         "correo" => $_POST["correo"],
         "contraseña" => $_POST["contraseña"],
+        "cargo_id" => $_POST["cargo_id"]
     ];
 
     include_once "../../conexion.php";
@@ -109,14 +110,14 @@ function Actualizar_usuarios(){
     }*/
 ////, contraseña = $6 ,  $datos['contraseña'],
     $consulta = <<<SQL
-        UPDATE usuarios SET nombre = $1, apellido = $2, telefono = $3, direccion = $4, correo = $5 WHERE id = $6
+        UPDATE usuarios SET nombre = $1, apellido = $2, telefono = $3, direccion = $4, correo = $5, contraseña = $6, cargo_id = $7 WHERE id = $8
 SQL;
 
     // Ejecutar la consulta
-    $resultado_consulta = pg_query_params($conexion, $consulta, array($datos['nombre'], $datos['apellido'], $datos['telefono'], $datos['direccion'], $datos['correo'], $datos['id']));
+    $resultado_consulta = pg_query_params($conexion, $consulta, array($datos['nombre'], $datos['apellido'], $datos['telefono'], $datos['direccion'], $datos['correo'],$datos['contraseña'],$datos['cargo_id'], $datos['id']));
 
     if ($resultado_consulta) {
-        header("Location: ./usuarios.php");
+        header("Location: $ruta");
         exit; // Es buena práctica usar exit después de redireccionar
     } else {
         echo "Error al realizar la operación.";
@@ -217,7 +218,7 @@ function Login(){
 
     // Consultar la base de datos para validar el usuario
     $consulta = pg_query_params($conexion, "
-        SELECT u.id, u.correo, u.contraseña, u.nombre, u.dni, u.cargo_id, c.descripcion AS cargo_descripcion
+        SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion,  u.correo, u.contraseña, u.cargo_id, c.descripcion AS cargo_descripcion
         FROM usuarios u
         INNER JOIN cargo c ON u.cargo_id = c.id
         WHERE u.correo = $1", array($correo)
@@ -230,10 +231,13 @@ function Login(){
         // Verificar la contraseña
         if ($resultado_consulta['contraseña'] === $contraseña) { // Asegúrate de comparar correctamente
             $_SESSION["id"] = $resultado_consulta['id'];
+            $_SESSION["dni"] = $resultado_consulta['dni'];
+            $_SESSION["nombre"] = $resultado_consulta['nombre'];
+            $_SESSION["apellido"] = $resultado_consulta['apellido'];
+            $_SESSION["telefono"] = $resultado_consulta['telefono'];
+            $_SESSION["direccion"] = $resultado_consulta['direccion'];
             $_SESSION["correo"] = $resultado_consulta['correo'];
             $_SESSION["contraseña"] = $resultado_consulta['contraseña'];
-            $_SESSION["nombre"] = $resultado_consulta['nombre'];
-            $_SESSION["dni"] = $resultado_consulta['dni'];
             $_SESSION["descripcion"] = $resultado_consulta['cargo_descripcion'];
             $_SESSION["cargo_id"] = $resultado_consulta['cargo_id']; // Guarda el cargo_id para redirigir
 
@@ -259,19 +263,21 @@ function Login(){
 
 function Modificar_usuarios()
 {
-
     include_once "../../conexion.php";
     $conexion = Conexion();
     $id = $_GET["id"];
 
-    /*$consulta = <<<SQL
-        SELECT * FROM usuarios WHERE id = '$id'
-SQL;
-    $resultado = pg_query($conexion, $consulta);*/
-    
-    $consulta = "SELECT * FROM usuarios WHERE id = $1";
-$resultado = pg_query_params($conexion, $consulta, array($id));
+    // Consulta para obtener la información del usuario
+    $consulta_usuario = "SELECT * FROM usuarios WHERE id = $1";
+    $resultado_usuario = pg_query_params($conexion, $consulta_usuario, array($id));
+    $usuario = pg_fetch_object($resultado_usuario);
 
+    // Consulta para obtener todos los cargos disponibles
+    $consulta_cargos = "SELECT id, descripcion FROM cargo";
+    $resultado_cargos = pg_query($conexion, $consulta_cargos);
+    $cargos = pg_fetch_all($resultado_cargos); // Convertimos a array para usar foreach
+
+    // Generamos el HTML del formulario
     $html = <<<HTML
     <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -279,70 +285,74 @@ $resultado = pg_query_params($conexion, $consulta, array($id));
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>modificar registro</title>
+    <title>Modificar Registro</title>
 </head>
 
 <body>
     <div class="contenedor">
         <form class="col-4 p-3 m-auto" action="usuarios.php?accion=actualizar&id=$id" method="post">
-            <h3>modificar registro de usuarios</h3>
+            <h3>Modificar Registro de Usuarios</h3>
                 <input type="hidden" name="id" value="{$id}">
-HTML;
-    while ($filas = pg_fetch_object($resultado)) {
-        $html .= <<<HTML
                 <div class="mb-3" disabled>
-                    <label for="exampleInputEmail1" class="form-label">dni</label>
-                    <input type="text" class="form-control" disabled name="dni" value="{$filas->dni}">
+                    <label class="form-label">Documento</label>
+                    <input type="text" class="form-control" disabled name="dni" value="{$usuario->dni}">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">nombres</label>
-                    <input type="text" class="form-control" name="nombre" value="{$filas->nombre}">
+                    <label class="form-label">Nombres</label>
+                    <input type="text" class="form-control" name="nombre" value="{$usuario->nombre}">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">apellido</label>
-                    <input type="text" class="form-control" name="apellido" value="{$filas->apellido}">
+                    <label class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" name="apellido" value="{$usuario->apellido}">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">telefono</label>
-                    <input type="number" class="form-control" name="telefono" value="{$filas->telefono}">
+                    <label class="form-label">Teléfono</label>
+                    <input type="number" class="form-control" name="telefono" value="{$usuario->telefono}">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label" required>direccion</label>
-                    <input type="text" class="form-control" name="direccion" value="{$filas->direccion}">
+                    <label class="form-label">Dirección</label>
+                    <input type="text" class="form-control" name="direccion" value="{$usuario->direccion}">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label" required>correo</label>
-                    <input type="email"  class="form-control" name="correo" value="{$filas->correo}">
+                    <label class="form-label">Correo</label>
+                    <input type="email" class="form-control" name="correo" value="{$usuario->correo}">
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label" required>contraseña</label>
-                    <input type="password" disabled class="form-control" name="contraseña" value="{$filas->contraseña}">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password"  class="form-control" name="contraseña" value="{$usuario->contraseña}">
                 </div>
-                <!-- <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label" required>rol</label>
-                    <input type="text" class="form-control" name="rol" value="{$filas->id_rol}">
-                </div> -->
-
+                <div class="mb-3">
+                    <label class="form-label">Cargo</label>
+                    <select class="form-control" name="cargo_id">
 HTML;
+
+    // Rellenar el selector de cargos usando foreach
+    foreach ($cargos as $cargo) {
+        $selected = ($cargo['id'] == $usuario->cargo_id) ? "selected" : "";
+        $html .= "<option value=\"{$cargo['id']}\" {$selected}>{$cargo['descripcion']}</option>";
     }
+
     $html .= <<<HTML
-            <button type="submit" class="btn btn-primary" name="modificar" class="btn btn-outline-secondary">
-                <i class="fa-solid fa-pen"></i>modificar
+                    </select>
+                </div>
+            <button type="submit" class="btn btn-primary" name="modificar">
+                <i class="fa-solid fa-pen"></i> Modificar
             </button>
         </form>
         <button class="btn btn-outline-secondary">
-                <a href="../usuarios/usuarios.php"><i class="fa-solid fa-backward"></i></a>regresar
-            </button><br><br>
-            <button class="btn btn-outline-secondary">
-                <a href="../pagina-principal/index.php"><i class="fa-solid fa-house"></i></a>inicio
-            </button>
+            <a href="../usuarios/usuarios.php"><i class="fa-solid fa-backward"></i> Regresar</a>
+        </button><br><br>
+        <button class="btn btn-outline-secondary">
+            <a href="../../index.php"><i class="fa-solid fa-house"></i> Inicio</a>
+        </button>
     </div>
 </body>
 </html>
-
 HTML;
+
     echo $html;
 }
+
 
 function Buscar($search){
     if(!empty($search)){

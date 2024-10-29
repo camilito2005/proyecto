@@ -33,11 +33,29 @@
                     <div class="card-action">
                         <a href="#">Acción</a>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="mb-3">
+        <label class="form-label">Cargo</label>
+        <select class="form-control" name="cargo_id">
+            <option value="1" >ADMINISTRADOR</option>
+            <option value="2" >EMPLEADO</option>
+        </select>
+    </div>
+
+
+
+    <div class="mb-3">
+        <label class="form-label">Cargo/Rol</label>
+        <select class="form-select" name="cargo">
+            <option value="1" {$cargo_id == 1 ? 'selected' : ''}>Administrador</option>
+            <option value="2" {$cargo_id == 2 ? 'selected' : ''}>Empleado</option>
+        </select>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>

@@ -1,6 +1,13 @@
 <?php
-function Perfil(){
+function Perfil() {
     session_start();
+    include_once "../../conexion.php";
+    $conexion = Conexion();
+
+    $consulta_cargos = "SELECT id, descripcion FROM cargo";
+    $resultado_cargos = pg_query($conexion, $consulta_cargos);
+    $cargos = pg_fetch_all($resultado_cargos); // Convertimos a array para usar foreach
+    
 
     echo <<<HTML
     <!DOCTYPE html>
@@ -16,12 +23,6 @@ function Perfil(){
 HTML;
 
     Menu();
-
-    if ($_SESSION["descripcion"] === "Administrador") {
-        echo "hola admin";
-    } elseif ($_SESSION["descripcion"] === "Empleado") {
-        echo "hola empleado";
-    }
 
     echo <<<HTML
     <div class="container">
@@ -50,6 +51,17 @@ HTML;
 HTML;
     }
 
+    // Variables de sesión
+    $id = $_SESSION["id"];
+    $dni = $_SESSION["dni"];
+    $nombre = $_SESSION["nombre"];
+    $apellido = $_SESSION["apellido"];
+    $telefono = $_SESSION["telefono"];
+    $direccion = $_SESSION["direccion"];
+    $correo = $_SESSION["correo"];
+    $contraseña = $_SESSION["contraseña"];
+    $cargo_id = $_SESSION["cargo_id"];
+
     echo <<<HTML
             </div>
         </div>
@@ -59,27 +71,69 @@ HTML;
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h4>Editar Perfil</h4>
-            <form action="./usuarios.php?accion=actualizar" method="POST">
-            <div class="input-field">
-                    <input type="text" name="nombre" value="{$_SESSION['id']}" required>
-                    <label for="nombre">Identificador</label>
+            <form action="perfil.php?accion=actualizar&id={$id}" method="POST">
+                <div class="input-field">
+                    <input disabled type="text" name="id" value="{$id}" required>
+                    <label for="identificador">Identificador</label>
                 </div>
                 <div class="input-field">
-                    <input type="text" name="nombre" value="{$_SESSION['nombre']}" required>
+                    <input type="hidden" name="id" value="{$id}" required>
+                </div>
+                <div class="input-field">
+                    <input type="text" disabled name="dni" value="{$dni}" required>
+                    <label for="dni">Documento</label>
+                </div>
+                <div class="input-field">
+                    <input type="hidden" name="dni" value="{$dni}" required>
+                </div>
+                <div class="input-field">
+                    <input type="text" name="nombre" value="{$nombre}" required>
                     <label for="nombre">Nombre</label>
                 </div>
                 <div class="input-field">
-                    <input type="email" name="correo" value="{$_SESSION['correo']}" required>
+                    <input type="text" name="apellido" value="{$apellido}" required>
+                    <label for="apellido">Apellidos</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" name="telefono" value="{$telefono}" required>
+                    <label for="telefono">Teléfono</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" name="direccion" value="{$direccion}" required>
+                    <label for="direccion">Dirección</label>
+                </div>
+                <div class="input-field">
+                    <input type="email" name="correo" value="{$correo}" required>
                     <label for="correo">Correo</label>
                 </div>
                 <div class="input-field">
-                    <input type="password" name="contraseña" value="{$_SESSION['contraseña']}" required>
-                    <label for="dni">Contraseña</label>
+                    <input type="password" name="contraseña" value="{$contraseña}" required>
+                    <label for="contraseña">Contraseña</label>
                 </div>
+HTML;
+
+    echo '<div class="input-field">
+    <label for="cargo">Cargo</label>
+    <select class="browser-default" name="cargo_id">';
+
+    // Usar foreach para iterar sobre los resultados
+    foreach ($cargos as $cargo) {
+    $id = $cargo['id'];
+    $descripcion = $cargo['descripcion'];
+    echo "<option value=\"$id\">$descripcion</option>"; // Crear opción
+    }
+
+    echo '    </select>
+    </div>';
+echo <<<HTML
+                <!--<label for="cargo">Cargo</label>
                 <div class="input-field">
-                    <input type="text" name="dni" value="{$_SESSION['dni']}" required>
-                    <label for="dni">Documento</label>
-                </div>
+                    
+                    <select class="browser-default" name="cargo_id">
+                        <option value="1">{$resultado_cargos}</option>
+                        <option value="2">{$resultado_cargos}</option>
+                    </select>
+                </div>-->
                 <div class="modal-footer">
                     <button type="submit" class="modal-close btn green">Guardar</button>
                     <a href="#!" class="modal-close btn red">Cancelar</a>
@@ -105,4 +159,6 @@ HTML;
 </html>
 HTML;
 }
+
+//  {$cargo_id == 1 ? 'selected' : ''}   {$cargo_id == 2 ? 'selected' : ''}
 ?>
