@@ -49,5 +49,12 @@ if($accion == "restablecer"){
     Restablecer();
 }
 
+if ($accion == "buscar") {
+    $search = $_POST['search']; // Asegúrate de recibir el término de búsqueda desde el POST
+    Buscar($search);
+}
+
+
 ?>
+
 

@@ -354,42 +354,43 @@ HTML;
 }
 
 
-function Buscar($search){
-    if(!empty($search)){
+function Buscar($search) {
+    if (!empty($search)) {
         include_once "../conexion.php";
         $conexion = Conexion();
-        $consulta = <<<SQL
-        SELECT * FROM usuarios WHERE nombre LIKE '%$search%'
-SQL;
-        $resultado_consulta = pg_query($conexion, $consulta);
-        if (pg_num_rows($resultado_consulta) == 0) {
-            echo "no se encuentran resultados";
+
+        if (!$conexion) {
+            die("Error al conectar con la base de datos");
         }
+
+        $consulta = "SELECT nombre, apellidos, telefono, direccion, correo, contraseña FROM usuarios WHERE nombre ILIKE $1";
+        $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
+
         if (!$resultado_consulta) {
-            die("query failed");
+            die("Error en la consulta");
         }
-    
-        $array=[];
-    
+
+        $array = [];
+
         if (pg_num_rows($resultado_consulta) > 0) {
-            while ($fila = pg_fetch_array($resultado_consulta)) {
-                $array[]=[
-                "nombre"	=> $filas["nombre"],
-                "apellidos"	=> $fila["apellidos"],
-                "telefono"=> $fila["telefono"],
-                "direccion"	=> $fila["direccion"],
-                "correo"	=> $fila["correo"],
-                "contraseña" => $fila["contraseña"]
+            while ($fila = pg_fetch_assoc($resultado_consulta)) {
+                $array[] = [
+                    "nombre"      => $fila["nombre"],
+                    "apellidos"   => $fila["apellidos"],
+                    "telefono"    => $fila["telefono"],
+                    "direccion"   => $fila["direccion"],
+                    "correo"      => $fila["correo"],
+                    "contraseña"  => $fila["contraseña"]
                 ];
-               
             }
-            $jsonstring = json_encode($array);
-            echo $jsonstring;
-    
+            echo json_encode($array);
+        } else {
+            echo json_encode([]); // Retorna un array vacío si no hay resultados
         }
-        
     }
 }
+
+
 function Cerrar_sesion()
 {
     session_start();
