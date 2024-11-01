@@ -110,7 +110,7 @@ SQL;
 SQL;
     }
 
-    function Masventas() {
+    function Masventas_old() {
         include_once "../../conexion.php";
         $conexion = Conexion();
     
@@ -145,7 +145,7 @@ SQL;
             <title>Estadísticas de Productos Más Vendidos</title>
         </head>
         <body>
-            <h2>Top 10 Productos Más Vendidos</h2>
+            <h2>Top 5 Productos Más Vendidos</h2>
             <table border="1">
                 <thead>
                     <tr>
@@ -184,5 +184,88 @@ HTML;
     
         pg_close($conexion);
     }
+
+    function Masventas() {
+        include_once "../../conexion.php";
+        $conexion = Conexion();
+    
+        $query = "
+            SELECT 
+                p.nombre AS nombre_producto,
+                SUM(f.stock) AS total_vendido
+            FROM 
+                facturas f
+            JOIN 
+                productos p ON f.producto_id = p.id
+            GROUP BY 
+                p.nombre
+            ORDER BY 
+                total_vendido DESC
+            LIMIT 10;
+        ";
+    
+        $resultado = pg_query($conexion, $query);
+        if (!$resultado) {
+            die("Error en la consulta: " . pg_last_error($conexion));
+        }
+    
+        $productos_mas_vendidos = pg_fetch_all($resultado);
+        
+        // Preparar datos para Chart.js
+        $productos = [];
+        $totales = [];
+        
+        if ($productos_mas_vendidos) {
+            foreach ($productos_mas_vendidos as $producto) {
+                $productos[] = $producto['nombre_producto'];
+                $totales[] = $producto['total_vendido'];
+            }
+        }
+    
+        // Convertir los datos a JSON
+        $productos_json = json_encode($productos);
+        $totales_json = json_encode($totales);
+    
+        pg_close($conexion);
+    
+        echo <<<HTML
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Estadísticas de Productos Más Vendidos</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        </head>
+        <body>
+            <h2>Top 10 Productos Más Vendidos</h2>
+            <canvas id="chartProductos"></canvas>
+            <script>
+                var ctx = document.getElementById('chartProductos').getContext('2d');
+                var chart = new Chart(ctx, {
+                    type: 'bar', // Puedes cambiar a 'line', 'pie', etc.
+                    data: {
+                        labels: $productos_json,
+                        datasets: [{
+                            label: 'Total Vendido',
+                            data: $totales_json,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+        </body>
+        </html>
+HTML;
+    }
+    
     
 ?>

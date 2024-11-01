@@ -37,6 +37,9 @@ HTML;
                 <a href="./vistas/productos/estadisticas.php">Estadisticas</a>
             </li>
             <li>
+                <a href="./vistas/productos/estadisticas.php?accion=masvendidos">mas vendidos</a>
+            </li>
+            <li>
                 <a href="./vistas/mapa.php">Mapa</a>
             </li>
             <li>
