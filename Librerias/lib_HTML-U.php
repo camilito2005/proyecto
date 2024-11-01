@@ -270,6 +270,42 @@ function Mostrar_usuarios() {
     <div class="input-search text-center">
         <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
     </div>
+HTML;
+
+if (!empty($search)) {
+    include_once "../conexion.php";
+    $conexion = Conexion();
+
+    if (!$conexion) {
+        die("Error al conectar con la base de datos");
+    }
+
+    $consulta = "SELECT nombre, apellidos, telefono, direccion, correo, contraseña FROM usuarios WHERE nombre ILIKE $1";
+    $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
+
+    if (!$resultado_consulta) {
+        die("Error en la consulta");
+    }
+
+    $array = [];
+
+    if (pg_num_rows($resultado_consulta) > 0) {
+        while ($fila = pg_fetch_assoc($resultado_consulta)) {
+            $array[] = [
+                "nombre"      => $fila["nombre"],
+                "apellidos"   => $fila["apellidos"],
+                "telefono"    => $fila["telefono"],
+                "direccion"   => $fila["direccion"],
+                "correo"      => $fila["correo"],
+                "contraseña"  => $fila["contraseña"]
+            ];
+        }
+        echo json_encode($array);
+    } else {
+        echo json_encode([]); // Retorna un array vacío si no hay resultados
+    }
+}
+echo <<<HTML
 
     <div class="table-container mx-auto col-12 col-md-8">
         <table class="table">
@@ -297,8 +333,13 @@ HTML;
     $query = pg_query($conexion, $consulta1);
     $usuarios = pg_fetch_all($query);
 
+
+
+
     if ($usuarios) {
         foreach ($usuarios as $fila) {
+            
+$id_encriptado = base64_encode($fila['id']);
             echo "<tr>";
             echo "<td>{$fila['id']}</td>";
             echo "<td>{$fila['dni']}</td>";
@@ -309,8 +350,8 @@ HTML;
             echo "<td>{$fila['correo']}</td>";
             echo "<td>{$fila['cargo']}</td>";
             echo "<td>
-                    <a href='usuarios.php?accion=modificar&id={$fila['id']}'><i class='fa-solid fa-pen'>m</i></a>
-                    <a href='usuarios.php?accion=eliminar&id={$fila['id']}' onclick='return pregunta()'><i class='fa-solid fa-trash'>e</i></a>
+                    <a href='usuarios.php?accion=modificar&id={$id_encriptado}'><i class='fa-solid fa-pen'>m</i></a>
+                    <a href='usuarios.php?accion=eliminar&id={$id_encriptado}' onclick='return pregunta()'><i class='fa-solid fa-trash'>e</i></a>
                   </td>";
             echo "</tr>";
         }
@@ -323,8 +364,62 @@ HTML;
         </table>
     </div>
 
-    <script src="../../js/buscador.js"></script>
+    <!--<script src="../../js/buscador.js"></script>-->
+    <div class="mx-auto col-12 col-md-8">
+        <form id="myForm" action="./formulario_registro.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
+            </button>
+        </form>
+
+        <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-house"></i> Inicio
+            </button>
+        </form>
+    </div>
 </body>
+    <script>
+        $("#search").keyup(function () {
+        let search = $("#search").val();
+
+        if (search) {
+            $.ajax({
+                url: "./usuarios.php?accion=buscar", // Asegúrate de que la URL incluya la acción "buscar"
+                type: "POST",
+                data: { search },
+                success: function (response) {
+                    if (response) {
+                        try {
+                            let tasks = JSON.parse(response);
+                            
+                            if (tasks.length > 0) {
+                                let template = "";
+                                tasks.forEach((task) => {
+                                    template += `
+                                        <tr> 
+                                            <td>${task.nombre}</td>
+                                            <td>${task.apellidos}</td>
+                                            <td>${task.telefono}</td>
+                                            <td>${task.direccion}</td>
+                                            <td>${task.correo}</td>
+                                            <td>${task.contraseña}</td>
+                                        </tr>
+                                    `;
+                                });
+                                $("#tasks").html(template);
+                            } else {
+                                $("#tasks").html("<tr><td colspan='6'>No se encontraron resultados</td></tr>");
+                            }
+                        } catch (e) {
+                            console.error("Error en el parseo JSON:", e);
+                        }
+                    }
+                }
+            });
+        }
+    });
+    </script>
 </html>
 HTML;
 }
@@ -703,6 +798,7 @@ HTML;
     if ($mostrar_producto) {
         foreach ($mostrar_producto as $value) {
             $precio = number_format($value["precio"]);
+            $id_encriptado = base64_encode($value['id']);
         echo <<<HTML
 <tr>
     <td>{$value["id"]}</td>
@@ -714,7 +810,7 @@ HTML;
     <td>{$precio}</td>
     <td>{$value["stock"]}</td>
     <td>
-        <a href="../productos/productos.php?accion=modificar&id={$value['id']}" class="btn yellow"><i class="fa-solid fa-pen-to-square"></i></a>
+        <a href="../productos/productos.php?accion=modificar&id={$id_encriptado}" class="btn yellow"><i class="fa-solid fa-pen-to-square"></i></a>
         <form action="../productos/productos.php?accion=eliminar&id={$value['id']}" method="post" style="display:inline;">
             <button name="eliminar" class="btn red" type="submit" onclick="return Pregunta()">
                 <i class="fa-solid fa-trash"></i>

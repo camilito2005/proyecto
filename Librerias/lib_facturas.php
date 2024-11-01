@@ -66,6 +66,7 @@ function Factura (){
                 array($productoId, $cantidad, $precioUnitario, $total,$fecha, $correo));
     
                 echo "<div class='alert alert-success'>Factura procesada con éxito. Se han restado $cantidad del producto $producto.</div>";
+                echo "<a href='../index.php'>volver</a>";
     
             } else {
                 echo "<div class='alert alert-danger'>No hay suficiente stock para el producto seleccionado.</div>";

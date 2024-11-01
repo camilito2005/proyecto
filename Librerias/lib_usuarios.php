@@ -130,7 +130,14 @@ function Eliminar()
     include_once "../../conexion.php";
     $conexion = Conexion();
 
-    $id = $_GET["id"];
+    //$id = $_GET["id"];
+
+    if (isset($_GET['id'])) {
+        $id = base64_decode($_GET['id']);
+        // Valida el id descifrado antes de usarlo en la consulta
+    }elseif (!$_GET['id']) {
+        echo "no llego el id: ";die();
+    }
 
     $consulta = <<<SQL
         DELETE FROM usuarios WHERE id = $1
@@ -265,7 +272,13 @@ function Modificar_usuarios()
 {
     include_once "../../conexion.php";
     $conexion = Conexion();
-    $id = $_GET["id"];
+    //$id = $_GET["id"];
+
+    if (isset($_GET['id'])) {
+        $id = base64_decode($_GET['id']);
+        // Valida el id descifrado antes de usarlo en la consulta
+    }
+
 
     // Consulta para obtener la información del usuario
     $consulta_usuario = "SELECT * FROM usuarios WHERE id = $1";
@@ -588,9 +601,9 @@ if (isset($_POST['token'], $_POST['password'])) {
 }
 
 
-if ($opciones == "search") {
+/*if ($opciones == "search") {
     Buscar($search);
-}
+}*/
 
 
 ?>

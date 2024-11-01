@@ -60,7 +60,11 @@ echo $query;
 
     include("../../conexion.php");
     $conexion = Conexion();
-    $id = $_GET["id"];
+    //$id = $_GET["id"];
+    if (isset($_GET['id'])) {
+        $id = base64_decode($_GET['id']);
+        // Valida el id descifrado antes de usarlo en la consulta
+    }
     $sql = <<<SQL
         SELECT * FROM productos WHERE id=$id
 SQL;
@@ -165,7 +169,11 @@ function Eliminar_productos()
 {
     include_once "../../conexion.php";
     $conexion = Conexion();
-    $id = $_GET['id'];
+    //$id = $_GET['id'];
+    if (isset($_GET['id'])) {
+        $id = base64_decode($_GET['id']);
+        // Valida el id descifrado antes de usarlo en la consulta
+    }
     $consulta = <<<SQL
         DELETE FROM productos WHERE id = '$id'
 SQL;
