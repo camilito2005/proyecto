@@ -237,7 +237,7 @@ HTML;
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         </head>
         <body>
-            <h2>Top 10 Productos Más Vendidos</h2>
+            <h2>Top Productos Más Vendidos</h2>
             <canvas id="chartProductos"></canvas>
             <script>
                 var ctx = document.getElementById('chartProductos').getContext('2d');
@@ -266,6 +266,4 @@ HTML;
         </html>
 HTML;
     }
-    
-    
 ?>
