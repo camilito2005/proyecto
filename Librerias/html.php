@@ -56,7 +56,7 @@ date_default_timezone_set('America/Bogota');
     <h2>Estadísticas de Productos Vendidos</h2>
 
     <!-- Formulario para seleccionar fechas -->
-    <form action="estadisticas.php" method="POST">
+    <form action="estadisticas.php?accion=filtro" method="POST">
         <label for="fecha_inicio">Fecha Inicio:</label>
         <input type="date" id="fecha_inicio" name="fecha_inicio" value="{$fecha_inicio}" required>
         

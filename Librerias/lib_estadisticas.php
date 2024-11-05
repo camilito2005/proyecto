@@ -20,7 +20,6 @@
             <div class="nav-wrapper">
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
 HTML;
-
         // Mostrar el correo si el usuario está logueado
         if (isset($_SESSION["correo"])) {
             echo '<li>' . htmlspecialchars($_SESSION["correo"]) . '</li>';
@@ -44,7 +43,6 @@ HTML;
                 </li>
 HTML;
         }
-
         echo <<<HTML
                 </ul>
             </div>
@@ -95,9 +93,7 @@ HTML;
         JOIN factura_detalles fd ON f.id_factura = fd.id_factura
         JOIN productos p ON fd.id_producto = p.id_producto
         WHERE f.id_factura = 1;
-
 SQL;
-
     $filtro= <<<SQL
         SELECT p.nombre_producto, SUM(fd.cantidad) AS productos_vendidos
         FROM facturas f
@@ -106,7 +102,6 @@ SQL;
         WHERE f.fecha_venta BETWEEN '2024-01-01' AND '2024-12-31'  -- Rango de fechas a filtrar
         GROUP BY p.nombre_producto
         ORDER BY productos_vendidos DESC;
-
 SQL;
     }
 
@@ -156,7 +151,6 @@ SQL;
                 </thead>
                 <tbody>
 HTML;
-    
         if ($productos_mas_vendidos) {
             foreach ($productos_mas_vendidos as $producto) {
                 echo <<<HTML
@@ -174,17 +168,14 @@ HTML;
                 </tr>
 HTML;
         }
-    
         echo <<<HTML
                 </tbody>
             </table>
         </body>
         </html>
 HTML;
-    
         pg_close($conexion);
-    }
-
+}
     function Masventas() {
         include_once "../../conexion.php";
         $conexion = Conexion();
@@ -262,8 +253,131 @@ HTML;
                     }
                 });
             </script>
+                    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-house"></i> Inicio
+            </button>
+        </form>
         </body>
         </html>
 HTML;
     }
+function Ventasxmes() {
+        echo<<<HTML
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Productos Vendidos por mes</title>
+            <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="../../css/ventasxmes.css">
+            <style>
+                .card {
+                    margin-bottom: 20px;
+                }
+                .table-responsive {
+                    margin-top: 20px;
+                }
+            </style>
+        </head>
+        
+        <body>
+            <div class="container mt-5">
+                <h2 class="text-center">Ventas por mes </h2>
+                <form method="post" class="mt-4">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fecha_inicio">Fecha de inicio</label>
+                            <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="fecha_fin">Fecha de fin</label>
+                            <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </form>
+    
+HTML;
+                // Procesar los datos del formulario si se han enviado
+                if (isset($_POST['fecha_inicio']) && isset($_POST['fecha_fin'])) {
+                    include_once "../../conexion.php";
+                    $conexion = Conexion();
+        
+                    // Escapar las fechas para evitar inyecciones SQL
+                    $fecha_inicio = pg_escape_string($conexion, $_POST['fecha_inicio']);
+                    $fecha_fin = pg_escape_string($conexion, $_POST['fecha_fin']);
+        
+                    // Consulta para obtener productos vendidos en el rango de fechas
+                    $query = "
+                        SELECT 
+                            p.nombre AS nombre_producto,
+                            SUM(f.stock) AS total_vendido
+                        FROM 
+                            facturas f
+                        JOIN 
+                            productos p ON f.producto_id = p.id
+                        WHERE 
+                            f.fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'
+                        GROUP BY 
+                            p.nombre
+                        ORDER BY 
+                            total_vendido DESC;
+                    ";
+        
+                    $resultado = pg_query($conexion, $query);
+                    if (!$resultado) {
+                        echo "<div class='alert alert-danger'>Error en la consulta: " . pg_last_error($conexion) . "</div>";
+                        exit;
+                    }
+        
+                    $productos_vendidos = pg_fetch_all($resultado);
+                    pg_close($conexion);
+        
+                    // Mostrar los resultados en tarjetas
+                    if ($productos_vendidos) {
+                        echo "<div class='row'>";
+                        foreach ($productos_vendidos as $producto) {
+                            echo <<<HTML
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{$producto['nombre_producto']}</h5>
+                                        <p class="card-text">Total Vendido: <strong>{$producto['total_vendido']}</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+HTML;
+                        }
+                        echo "</div>";
+                    } else {
+                        echo "<div class='alert alert-info'>No se encontraron productos vendidos en el rango de fechas seleccionado.</div>";
+                    }
+                }
+                echo<<<HTML
+
+            <form action="estadisticas.php?accion=pdf" method="post" target="_blank">
+                <input type="hidden" name="fecha_inicio" value="{$fecha_inicio}">
+                <input type="hidden" name="fecha_final" value="{$fecha_final}">
+                <button>pdf</button>
+            </form>
+            <!--<button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-house"></i> pdf
+            </button>-->
+        </form>
+            </div>
+            <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-house"></i> Inicio
+            </button>
+        </form>
+    
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        </body>
+        </html>
+HTML;
+}
 ?>
