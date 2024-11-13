@@ -9,7 +9,7 @@ $accion = $_GET["accion"];
 
 $token = $_REQUEST["token"];
 
-if(!$accion){
+if($accion == "verusuarios"){
     Mostrar_usuarios();
 }
 

@@ -8,8 +8,13 @@ function Perfil() {
     $resultado_cargos = pg_query($conexion, $consulta_cargos);
     $cargos = pg_fetch_all($resultado_cargos); // Convertimos a array para usar foreach
     
-
+    if (isset($_GET['login_success']) && $_GET['login_success'] == 1) {
+        echo "<script>alert('Inicio de sesión exitoso. ¡Bienvenido!');</script>";
+    }
+    
     echo <<<HTML
+
+
     <!DOCTYPE html>
     <html lang="es">
     <head>
@@ -71,7 +76,7 @@ HTML;
     <div id="editModal" class="modal">
         <div class="modal-content">
             <h4>Editar Perfil</h4>
-            <form action="../../librerias/lib_configuracion.php?accion=actualizar&id={$id}" method="POST">
+            <form action="../../librerias/lib_configuracion.php?accion=actualizar&id={$id}&" method="POST">
             <!--<form action="perfil.php?accion=actualizar&id={$id}" method="POST">-->
                 <div class="input-field">
                     <input disabled type="text" name="id" value="{$id}" required>

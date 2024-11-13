@@ -1,5 +1,5 @@
 <?php
-function Menus($ruta_css = "./css/estilos7.css")
+function Menus($ruta_css = "./css/estilos8.css")
 {
     session_start();
     echo <<<HTML
@@ -18,7 +18,7 @@ function Menus($ruta_css = "./css/estilos7.css")
             M.Dropdown.init(elems, { hover: true });
         });
     </script>
-    <title>P</title>
+    <title>Inicio</title>
 </head>
 
 <body>
@@ -30,12 +30,21 @@ HTML;
     // Mostrar el correo si el usuario está logueado
     if (isset($_SESSION["correo"])) {
         echo '<li>' . htmlspecialchars($_SESSION["correo"]) . '</li>';
+
+    }
+    if (!isset($_SESSION["correo"])) {
+        echo <<<HTML
+        <li><a href="./vistas/pagina-principal/login.php?accion=login">login</a></li>
+HTML;
     }
 
     // Menú para Administradores
     //if (isset($_SESSION["descripcion"]) && $_SESSION["descripcion"] === "Administrador") {
         echo <<<HTML
-            <li><a href="./vistas/usuarios/perfil.php">Perfil</a></li>
+
+            
+
+            <li><a href="./vistas/usuarios/perfil.php?accion=perfil">Perfil</a></li>
             <li><a class="dropdown-trigger" href="" data-target="dropdownEstadisticas">Estadísticas<i class="material-icons right"></i></a></li>
             <ul id="dropdownEstadisticas" class="dropdown-content">
                 <li><a href="./vistas/productos/estadisticas.php?accion=masvendidos">Mas Ventas</a></li>
@@ -45,19 +54,19 @@ HTML;
             
             <li><a class="dropdown-trigger" href="#!" data-target="dropdownProductos">Productos<i class="material-icons right"></i></a></li>
             <ul id="dropdownProductos" class="dropdown-content">
-                <li><a href="./vistas/productos/verProductos.php">Mostrar productos</a></li>
-                <li><a href="./vistas/productos/Productos.php">Agregar productos</a></li>
-                <li><a href="./vistas/catalogo/catalogo.php">Catálogo</a></li>
+                <li><a href="./vistas/productos/verProductos.php?accion=verproductos">Mostrar productos</a></li>
+                <li><a href="./vistas/productos/Productos.php?accion=aggproductos">Agregar productos</a></li>
+                <li><a href="./vistas/catalogo/catalogo.php?accion=catalogo">Catálogo</a></li>
             </ul>
 
             <li><a class="dropdown-trigger" href="#!" data-target="dropdownUsuarios">Usuarios<i class="material-icons right"></i></a></li>
             <ul id="dropdownUsuarios" class="dropdown-content">
-                <li><a href="./vistas/usuarios/usuarios.php">Ver usuarios</a></li>
-                <li><a href="./vistas/usuarios/formulario_registro.php">Agregar usuarios</a></li>
+                <li><a href="./vistas/usuarios/usuarios.php?accion=verusuarios">Ver usuarios</a></li>
+                <li><a href="./vistas/usuarios/formulario_registro.php?accion=aggusuarios">Agregar usuarios</a></li>
             </ul>
 
-            <li><a href="./vistas/mapa.php">Mapa</a></li>
-            <li><a href="./vistas/facturas.php">Facturas</a></li>
+            <li><a href="./vistas/mapa.php?accion=mapa">Mapa</a></li>
+            <li><a href="./vistas/facturas.php?accion=verfacturas">Facturas</a></li>
 HTML;
     //}
 

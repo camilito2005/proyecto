@@ -4,7 +4,7 @@ include_once "../Librerias/lib_HTML-U.php";
 
 $accion = $_GET["accion"];
 
-if (!$accion) {
+if ($accion == "verfacturas") {
     FormularioFactura();
 }
 if ($accion == "cargardatos") {

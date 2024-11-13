@@ -4,9 +4,12 @@ include_once "../../Librerias/lib_HTML-U.php";
 include_once "../../Librerias/lib_perfil.php";
 include_once "../../Librerias/lib_configuracion.php";
 
-$accion = $_POST["accion"];
+$accion = $_REQUEST["accion"];
 
+
+if ($accion == "perfil") {
 Perfil();
+}
 
 /*if ($accion == "pop_up") {
     Pop_up();

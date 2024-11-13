@@ -142,7 +142,7 @@ input::placeholder{
     color: #BBBBE2;
 }
 .btn{
-    padding: 18px;
+    /*padding: 18px;*/
     background: linear-gradient(
         90deg,
         rgb(87, 43, 231)25%,

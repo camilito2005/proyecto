@@ -5,7 +5,7 @@ include_once "../../Librerias/lib_productos.php";
 $aciion = $_GET["accion"];
 
 
-if (!$accion) {
+if ($accion == "aggproductos") {
     Formulario_productos();
 }
 if ($accion == "registrar_productos") {

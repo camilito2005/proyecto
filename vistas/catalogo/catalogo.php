@@ -1,4 +1,8 @@
 <?php
 include_once "../../Librerias/lib_HTML-U.php";
-Catalogo();
+$accion = $_REQUEST["accion"];
+
+if ($accion == "catalogo") {
+    Catalogo();
+}
 ?>
