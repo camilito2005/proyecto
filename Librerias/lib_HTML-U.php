@@ -227,7 +227,7 @@ echo <<<HTML
             <input class="btn btn-primary" type="submit" name="registro" value="Registrar"><br><br>
         </form>
 
-        <form action="../usuarios/usuarios.php" onsubmit="showLoading()" method="post">
+        <form action="../usuarios/usuarios.php?accion=verusuarios" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary">
                 <i class="fa-duotone fa-solid fa-users-viewfinder"></i> Usuarios
             </button>
@@ -269,6 +269,12 @@ function Mostrar_usuarios() {
     
     <div class="input-search text-center">
         <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
+    </div>
+
+    <div class="input-search text-center">
+        <form action="../../librerias/lib_buscar.php?accion=buscar" method="post">
+            <input type="search" id="search" name="buscador" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
+        </form>
     </div>
 HTML;
 
@@ -366,7 +372,7 @@ $id_encriptado = base64_encode($fila['id']);
 
     <!--<script src="../../js/buscador.js"></script>-->
     <div class="mx-auto col-12 col-md-8">
-        <form id="myForm" action="./formulario_registro.php" onsubmit="showLoading()" method="post">
+        <form id="myForm" action="./formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary" type="submit">
                 <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
             </button>

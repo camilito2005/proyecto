@@ -4,7 +4,7 @@ $accion = $_GET["accion"];
 
 function Guardar()
 {
-    if (!empty($_POST["dni"]) && !empty($_POST["nombre"]) && !empty($_POST["apellido"]) && !empty($_POST["telefono"]) && !empty($_POST["direccion"]) && !empty($_POST["correo"]) && !empty($_POST["contraseña"])) {
+    if (!empty($_POST["dni"]) && !empty($_POST["nombre"]) && !empty($_POST["apellido"]) && !empty($_POST["telefono"]) && !empty($_POST["direccion"]) && !empty($_POST["correo"]) && !empty($_POST["contraseña"]) && !empty($_POST["rol"])) {
         $datos = [
             "dni" => $_POST['dni'],
             "nombre" => $_POST["nombre"],
@@ -35,11 +35,13 @@ function Guardar()
 
         if ($contraseña !== $comfirm_contraseña) {
             echo "Las contraseñas no coinciden. Por favor, intente de nuevo.";
+            echo '<a href="formulario_registro.php?accion=aggusuarios">volver</a>';
             exit;
         }
 
         if (strlen($contraseña) < 6) {
             echo "La contraseña debe tener al menos 6 caracteres.";
+            echo '<a href="formulario_registro.php?accion=aggusuarios">volver</a>';
             exit;
         }
         
@@ -60,6 +62,7 @@ SQL;
         $countDni = pg_fetch_result($resultadoDni, 0, 0);
         if ($countDni > 0) {
             echo "El DNI '$dni' ya existe";
+            echo '<a href="formulario_registro.php?accion=aggusuarios">volver</a>';
             exit;
         }
 
@@ -67,7 +70,7 @@ SQL;
         $resultadoc = pg_query_params($conexion, $consulta, array($dni, $nombre, $apellido, $telefono, $direccion, $correo, $contraseña ,$fecha, $rol));
 
         if ($resultadoc) {
-            header("Location: ./usuarios.php");
+            header("Location: ./usuarios.php?accion=verusuarios");
             exit;
             //echo "usuario registrado correctamente";
         } else {
@@ -75,8 +78,9 @@ SQL;
                 echo "error";
             }
         }
-    } else {
+    } elseif(empty($_POST["dni"]) && empty($_POST["nombre"]) && empty($_POST["apellido"]) && empty($_POST["telefono"]) && empty($_POST["direccion"]) && empty($_POST["correo"]) && empty($_POST["contraseña"]) && empty($_POST["rol"])) {
         echo "campos vacios, porfavor llene los campos";
+        echo '<a href="formulario_registro.php?accion=aggusuarios">volver</a>';
     }
 }
 
@@ -145,7 +149,7 @@ SQL;
     $resultado = pg_query_params($conexion, $consulta,array($id));
 
     if ($resultado) {
-        header("Location: usuarios.php");
+        header("Location: usuarios.php?accion=verusuarios");
         echo "el registro de id " . $id . " eliminado correctamente";
         exit;
     } else {
@@ -250,10 +254,10 @@ function Login(){
 
             // Redirecciona según el rol del usuario
             if ($resultado_consulta['cargo_id'] == 1) {  // Administrador
-                header("Location: ../usuarios/perfil.php"); // Cambia la URL según tu estructura
+                header("Location: ../usuarios/perfil.php?accion=perfil"); // Cambia la URL según tu estructura
                 exit;
             } elseif ($resultado_consulta['cargo_id'] == 2) {  // Empleado
-                header("Location: ../catalogo/catalogo.php"); // Cambia la URL según tu estructura
+                header("Location: ../catalogo/catalogo.php?accion=catalogo"); // Cambia la URL según tu estructura
                 exit;
             } else {
                 echo "Rol no reconocido.";
@@ -353,7 +357,7 @@ HTML;
             </button>
         </form>
         <button class="btn btn-outline-secondary">
-            <a href="../usuarios/usuarios.php"><i class="fa-solid fa-backward"></i> Regresar</a>
+            <a href="../usuarios/usuarios.php?accion=verusuarios"><i class="fa-solid fa-backward"></i> Regresar</a>
         </button><br><br>
         <button class="btn btn-outline-secondary">
             <a href="../../index.php"><i class="fa-solid fa-house"></i> Inicio</a>
@@ -408,7 +412,7 @@ function Cerrar_sesion()
 {
     session_start();
     session_destroy();
-    header("Location: ../pagina-principal/login.php");
+    header("Location: ../pagina-principal/login.php?accion=login");
     exit;
 }
 
