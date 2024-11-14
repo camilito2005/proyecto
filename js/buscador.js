@@ -18,12 +18,18 @@ $("#search").keyup(function () {
                     tasks.forEach((task) => {
                         template += `
                             <tr> 
+                                <td>${task.id}</td>
+                                <td>${task.dni}</td>
                                 <td>${task.nombre}</td>
                                 <td>${task.apellidos}</td>
                                 <td>${task.telefono}</td>
                                 <td>${task.direccion}</td>
                                 <td>${task.correo}</td>
-                                <td>${task.contraseña}</td>
+                                <td>${task.cargo}</td>
+                                <td>
+                    <a href='usuarios.php?accion=modificar&id={$id_encriptado}'><i class='fa-solid fa-pen'>m</i></a>
+                    <a href='usuarios.php?accion=eliminar&id={$id_encriptado}' onclick='return pregunta()'><i class='fa-solid fa-trash'>e</i></a>
+                  </td>";
                             </tr>
                         `;
                     });
