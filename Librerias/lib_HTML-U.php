@@ -323,189 +323,9 @@ HTML;
     </div>
 
     <script src="../../js/buscador.js">
-        /*$("#search").keyup(function () {
-    let search = $("#search").val();
-    console.log(search);
-
-    if (search) {
-        $.ajax({
-            url: "./usuarios.php?accion=buscar", // Asegúrate de que la URL incluya la acción "buscar"
-            type: "POST",
-            data: { search },
-            success: function (response) {
-                console.log(response);
-                if (response) {
-                    try {
-                        let tasks = JSON.parse(response);
-                        
-                        if (tasks.length > 0) {
-                            let template = "";
-                            tasks.forEach((task) => {
-                                template += `
-                                    <tr> 
-                                        <td>${task.nombre}</td>
-                                        <td>${task.apellidos}</td>
-                                        <td>${task.telefono}</td>
-                                        <td>${task.direccion}</td>
-                                        <td>${task.correo}</td>
-                                        <td>${task.contraseña}</td>
-                                    </tr>
-                                `;
-                            });
-                            $("#tasks").html(template);
-                        } else {
-                            $("#tasks").html("<tr><td colspan='6'>No se encontraron resultados</td></tr>");
-                        }
-                    } catch (e) {
-                        console.error("Error en el parseo JSON:", e);
-                    }
-                }
-            }
-        });
-    }
-});*/
     </script>
-</body>
-</html>
-HTML;
-}
-
-// Código para manejar la acción 'buscar' en usuarios.php
-/*if ($_GET['accion'] === 'buscar') {
-    include_once "../../conexion.php";
-    $conexion = Conexion();
-
-    //$search = $_POST['search'] ?? '';
-    $search = $_REQUEST["search"];
-    //$search = $_REQUEST["buscador"];
-
-    if ($search) {
-        $consulta = "SELECT nombre, apellidos, telefono, direccion, correo, contraseña FROM usuarios WHERE nombre ILIKE '%$search%'";
-        $result = pg_query($conexion, $consulta);
-
-        if ($result) {
-            $tasks = pg_fetch_all($result) ?: [];
-            echo json_encode($tasks); // Convertimos a JSON
-        } else {
-            echo json_encode([]); // En caso de error, también un JSON vacío
-        }
-    } else {
-        echo json_encode([]); // En caso de que no haya término de búsqueda
-    }
-    exit;
-}*/
-
-
-
-
-function Mostrar_usuarios1() {
-    session_start();
-    echo"<br>correo:". $_SESSION["correo"]."<br>";
-    echo "<br> nombre".$_SESSION["nombre"]."<br>";
-
-    echo <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <link rel="shortcut icon" href="../../fotos/mostrar-contraseña.png" type="image/x-icon">
-    <link rel="stylesheet" href="../../css/cargando.css">
-    <link rel="stylesheet" href="../../css/mostrar_usuarios.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <script src="../../js/cargando.js"></script>
-    <script src="../../js/pregunta.js"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabla de Usuarios</title>
-</head>
-
-<body>
-    <div id="loading">Cargando...</div>
-    <h3 class="text-center text-secondary">Usuarios</h3>
-    
-    <div class="input-search text-center">
-        <nav>
-            <form method="post">
-                <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
-            </form>
-        </nav>
-    </div>
-
-    <div class="table-container mx-auto col-12 col-md-8">
-        <table class="table">
-            <thead class="table-light">
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">DNI</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Apellidos</th>
-                    <th scope="col">Teléfono</th>
-                    <th scope="col">Dirección</th>
-                    <th scope="col">Correo</th>
-                    <th scope="col">contraseña</th>
-                    <th scope="col">Cargo</th>
-                    <th scope="col">Modificar/Eliminar</th>
-                </tr>
-            </thead>
-            <tbody>
-HTML;
-
-    include_once "../../conexion.php";
-    $conexion = Conexion();
-    $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion,  u.correo, u.contraseña, u.cargo_id, c.descripcion AS cargo_descripcion
-        FROM usuarios u
-        INNER JOIN cargo c ON u.cargo_id = c.id";
-    $query = pg_query($conexion, $consulta1);
-    $usuarios = pg_fetch_all($query);
-
-//print_r($usuarios);
-
-if ($usuarios) { // Verifica si hay resultados
-    foreach ($usuarios as $fila) {
-        $id = $fila['id'];
-        $dni = $fila['dni'];
-        $nombre = $fila['nombre'];
-        $apellido = $fila['apellido'];
-        $telefono = $fila['telefono'];
-        $direccion = $fila['direccion'];
-        $correo = $fila['correo'];
-        $contraseña = $fila['contraseña'];
-        $cargo_descripcion = $fila['cargo_descripcion'];
-        $cargo_id = $fila['cargo_id']; // Guarda el cargo_id para redirigir
-
-        echo <<<HTML
-            <tbody>
-                <tr>
-                    <td>$id</td>
-                    <td>$dni</td>
-                    <td>$nombre</td>
-                    <td>$apellido</td>
-                    <td>$telefono</td>
-                    <td>$direccion</td>
-                    <td>$correo</td>
-                    <td>$contraseña</td>
-                    <td>$cargo_descripcion</td>
-                    <td>
-                    <a href="../usuarios/usuarios.php?accion=modificar&id=$id"><i class="fa-solid fa-pen"></i></a>
-                    <a href="usuarios.php?accion=eliminar&id=$id" onclick="return pregunta()"><i class="fa-sharp-duotone fa-solid fa-trash"></i></a>
-                    </td>
-                </tr>
-            </tbody>
-HTML;
-    }
-} else {
-    echo "<tbody><tr><td colspan='8'>No hay usuarios registrados.</td></tr></tbody>";
-}
-
-    echo <<<HTML
-            </tbody>
-        </table>
-    </div>
-
     <div class="mx-auto col-12 col-md-8">
-        <form id="myForm" action="./formulario_registro.php" onsubmit="showLoading()" method="post">
+        <form id="myForm" action="./formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary" type="submit">
                 <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
             </button>
@@ -517,7 +337,112 @@ HTML;
             </button>
         </form>
     </div>
+</body>
+</html>
+HTML;
+}
+
+function Mostrar_usuarios123() {
+    session_start();
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="stylesheet" href="../../css/mostrar_usuarios.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Tabla de Usuarios</title>
+</head>
+<body>
+    <h3 class="text-center text-secondary">Usuarios</h3>
     
+    <div class="input-search text-center">
+        <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
+    </div>
+
+    <!--<div class="input-search text-center">
+        <form action="../../librerias/lib_buscar.php?accion=buscar" method="post">
+            <input type="search" id="search" name="buscador" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
+        </form>
+    </div>-->
+HTML;
+
+echo <<<HTML
+
+    <div class="table-container mx-auto col-12 col-md-8">
+        <table class="table">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Correo</th>
+                    <th>Cargo</th>
+                    <th>Modificar/Eliminar</th>
+                </tr>
+            </thead>
+            <tbody id="resultados-usuarios">
+HTML;
+
+    include_once "../../conexion.php";
+    $conexion = Conexion();
+    $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion, u.correo, c.descripcion AS cargo
+                  FROM usuarios u
+                  INNER JOIN cargo c ON u.cargo_id = c.id";
+    $query = pg_query($conexion, $consulta1);
+    $usuarios = pg_fetch_all($query);
+
+
+
+
+    if ($usuarios) {
+        foreach ($usuarios as $fila) {
+            
+$id_encriptado = base64_encode($fila['id']);
+            echo "<tr>";
+            echo "<td>{$fila['id']}</td>";
+            echo "<td>{$fila['dni']}</td>";
+            echo "<td>{$fila['nombre']}</td>";
+            echo "<td>{$fila['apellido']}</td>";
+            echo "<td>{$fila['telefono']}</td>";
+            echo "<td>{$fila['direccion']}</td>";
+            echo "<td>{$fila['correo']}</td>";
+            echo "<td>{$fila['cargo']}</td>";
+            echo "<td>
+                    <a href='usuarios.php?accion=modificar&id={$id_encriptado}'><i class='fa-solid fa-pen'>m</i></a>
+                    <a href='usuarios.php?accion=eliminar&id={$id_encriptado}' onclick='return pregunta()'><i class='fa-solid fa-trash'>e</i></a>
+                  </td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='9'>No hay usuarios registrados.</td></tr>";
+    }
+
+    echo <<<HTML
+            </tbody>
+        </table>
+    </div>
+
+    <!--<script src="../../js/buscador.js"></script>-->
+    <script src="../../js/buscador.js">
+    <div class="mx-auto col-12 col-md-8">
+        <form id="myForm" action="./formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
+            </button>
+        </form>
+
+        <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fa-solid fa-house"></i> Inicio
+            </button>
+        </form>
+    </div>
+
 </body>
 </html>
 HTML;
