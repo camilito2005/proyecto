@@ -251,9 +251,7 @@ HTML;
 
 function Mostrar_usuarios() {
     session_start();
-    //echo "<br>correo: " . $_SESSION["correo"] . "<br>";
-    //echo "<br> nombre " . $_SESSION["nombre"] . "<br>";
-    
+
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -270,48 +268,6 @@ function Mostrar_usuarios() {
     <div class="input-search text-center">
         <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
     </div>
-
-    <div class="input-search text-center">
-        <form action="../../librerias/lib_buscar.php?accion=buscar" method="post">
-            <input type="search" id="search" name="buscador" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
-        </form>
-    </div>
-HTML;
-
-if (!empty($search)) {
-    include_once "../conexion.php";
-    $conexion = Conexion();
-
-    if (!$conexion) {
-        die("Error al conectar con la base de datos");
-    }
-
-    $consulta = "SELECT nombre, apellidos, telefono, direccion, correo, contraseña FROM usuarios WHERE nombre ILIKE $1";
-    $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
-
-    if (!$resultado_consulta) {
-        die("Error en la consulta");
-    }
-
-    $array = [];
-
-    if (pg_num_rows($resultado_consulta) > 0) {
-        while ($fila = pg_fetch_assoc($resultado_consulta)) {
-            $array[] = [
-                "nombre"      => $fila["nombre"],
-                "apellidos"   => $fila["apellidos"],
-                "telefono"    => $fila["telefono"],
-                "direccion"   => $fila["direccion"],
-                "correo"      => $fila["correo"],
-                "contraseña"  => $fila["contraseña"]
-            ];
-        }
-        echo json_encode($array);
-    } else {
-        echo json_encode([]); // Retorna un array vacío si no hay resultados
-    }
-}
-echo <<<HTML
 
     <div class="table-container mx-auto col-12 col-md-8">
         <table class="table">
@@ -339,13 +295,9 @@ HTML;
     $query = pg_query($conexion, $consulta1);
     $usuarios = pg_fetch_all($query);
 
-
-
-
     if ($usuarios) {
         foreach ($usuarios as $fila) {
-            
-$id_encriptado = base64_encode($fila['id']);
+            $id_encriptado = base64_encode($fila['id']);
             echo "<tr>";
             echo "<td>{$fila['id']}</td>";
             echo "<td>{$fila['dni']}</td>";
@@ -370,65 +322,79 @@ $id_encriptado = base64_encode($fila['id']);
         </table>
     </div>
 
-    <!--<script src="../../js/buscador.js"></script>-->
-    <div class="mx-auto col-12 col-md-8">
-        <form id="myForm" action="./formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" type="submit">
-                <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
-            </button>
-        </form>
+    <script src="../../js/buscador.js">
+        /*$("#search").keyup(function () {
+    let search = $("#search").val();
+    console.log(search);
 
-        <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" type="submit">
-                <i class="fa-solid fa-house"></i> Inicio
-            </button>
-        </form>
-    </div>
-</body>
-    <script>
-        $("#search").keyup(function () {
-        let search = $("#search").val();
-
-        if (search) {
-            $.ajax({
-                url: "./usuarios.php?accion=buscar", // Asegúrate de que la URL incluya la acción "buscar"
-                type: "POST",
-                data: { search },
-                success: function (response) {
-                    if (response) {
-                        try {
-                            let tasks = JSON.parse(response);
-                            
-                            if (tasks.length > 0) {
-                                let template = "";
-                                tasks.forEach((task) => {
-                                    template += `
-                                        <tr> 
-                                            <td>${task.nombre}</td>
-                                            <td>${task.apellidos}</td>
-                                            <td>${task.telefono}</td>
-                                            <td>${task.direccion}</td>
-                                            <td>${task.correo}</td>
-                                            <td>${task.contraseña}</td>
-                                        </tr>
-                                    `;
-                                });
-                                $("#tasks").html(template);
-                            } else {
-                                $("#tasks").html("<tr><td colspan='6'>No se encontraron resultados</td></tr>");
-                            }
-                        } catch (e) {
-                            console.error("Error en el parseo JSON:", e);
+    if (search) {
+        $.ajax({
+            url: "./usuarios.php?accion=buscar", // Asegúrate de que la URL incluya la acción "buscar"
+            type: "POST",
+            data: { search },
+            success: function (response) {
+                console.log(response);
+                if (response) {
+                    try {
+                        let tasks = JSON.parse(response);
+                        
+                        if (tasks.length > 0) {
+                            let template = "";
+                            tasks.forEach((task) => {
+                                template += `
+                                    <tr> 
+                                        <td>${task.nombre}</td>
+                                        <td>${task.apellidos}</td>
+                                        <td>${task.telefono}</td>
+                                        <td>${task.direccion}</td>
+                                        <td>${task.correo}</td>
+                                        <td>${task.contraseña}</td>
+                                    </tr>
+                                `;
+                            });
+                            $("#tasks").html(template);
+                        } else {
+                            $("#tasks").html("<tr><td colspan='6'>No se encontraron resultados</td></tr>");
                         }
+                    } catch (e) {
+                        console.error("Error en el parseo JSON:", e);
                     }
                 }
-            });
-        }
-    });
+            }
+        });
+    }
+});*/
     </script>
+</body>
 </html>
 HTML;
 }
+
+// Código para manejar la acción 'buscar' en usuarios.php
+/*if ($_GET['accion'] === 'buscar') {
+    include_once "../../conexion.php";
+    $conexion = Conexion();
+
+    //$search = $_POST['search'] ?? '';
+    $search = $_REQUEST["search"];
+    //$search = $_REQUEST["buscador"];
+
+    if ($search) {
+        $consulta = "SELECT nombre, apellidos, telefono, direccion, correo, contraseña FROM usuarios WHERE nombre ILIKE '%$search%'";
+        $result = pg_query($conexion, $consulta);
+
+        if ($result) {
+            $tasks = pg_fetch_all($result) ?: [];
+            echo json_encode($tasks); // Convertimos a JSON
+        } else {
+            echo json_encode([]); // En caso de error, también un JSON vacío
+        }
+    } else {
+        echo json_encode([]); // En caso de que no haya término de búsqueda
+    }
+    exit;
+}*/
+
 
 
 

@@ -373,14 +373,14 @@ HTML;
 
 function Buscar($search) {
     if (!empty($search)) {
-        include_once "../conexion.php";
+        include_once "../../conexion.php";
         $conexion = Conexion();
 
         if (!$conexion) {
             die("Error al conectar con la base de datos");
         }
 
-        $consulta = "SELECT nombre, apellidos, telefono, direccion, correo, contraseña FROM usuarios WHERE nombre ILIKE $1";
+        $consulta = "SELECT nombre, apellido, telefono, direccion, correo, contraseña FROM usuarios WHERE nombre ILIKE $1";
         $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
 
         if (!$resultado_consulta) {
@@ -393,7 +393,7 @@ function Buscar($search) {
             while ($fila = pg_fetch_assoc($resultado_consulta)) {
                 $array[] = [
                     "nombre"      => $fila["nombre"],
-                    "apellidos"   => $fila["apellidos"],
+                    "apellidos"   => $fila["apellido"],
                     "telefono"    => $fila["telefono"],
                     "direccion"   => $fila["direccion"],
                     "correo"      => $fila["correo"],

@@ -1,6 +1,6 @@
 <?php
 $accion = $_REQUEST["accion"];
-function Buscar(){
+function Buscar($search){
 
     $search = $_REQUEST["buscador"];
     echo $search;
@@ -15,7 +15,7 @@ function Buscar(){
     
         $consulta = "SELECT dni, nombre, apellido, telefono, direccion, correo, contraseña, fecha_ingreso FROM usuarios WHERE nombre ILIKE $1";
         $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
-        var_dump($consulta);
+        //var_dump($consulta);
     
         if (!$resultado_consulta) {
             die("Error en la consulta");
@@ -45,7 +45,7 @@ function Buscar(){
     }
 }
 
-if ($accion == "buscar") {
+if ($accion == "search") {
     Buscar();
 }
 
