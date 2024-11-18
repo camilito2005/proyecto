@@ -170,7 +170,8 @@ HTML;
 </html>
 HTML;
 }
-function Pdf(){
+
+function Pdf1(){
 ob_start();
     require_once("../../fpdf17/fpdf.php");
 

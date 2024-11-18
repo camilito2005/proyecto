@@ -630,9 +630,6 @@ HTML;
 
 }
 function Mostrar_productos(){
-    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
-    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
-    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     
     date_default_timezone_set('America/Bogota');
     $fecha = date('d-m-Y g:i:s A');
