@@ -280,6 +280,7 @@ function Mostrar_usuarios() {
                     <th>Teléfono</th>
                     <th>Dirección</th>
                     <th>Correo</th>
+                    <th>Contraseña</th>
                     <th>Cargo</th>
                     <th>Modificar/Eliminar</th>
                 </tr>
@@ -289,7 +290,7 @@ HTML;
 
     include_once "../../conexion.php";
     $conexion = Conexion();
-    $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion, u.correo, c.descripcion AS cargo
+    $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion, u.correo,u.contraseña, c.descripcion AS cargo
                   FROM usuarios u
                   INNER JOIN cargo c ON u.cargo_id = c.id";
     $query = pg_query($conexion, $consulta1);
@@ -306,6 +307,7 @@ HTML;
             echo "<td>{$fila['telefono']}</td>";
             echo "<td>{$fila['direccion']}</td>";
             echo "<td>{$fila['correo']}</td>";
+            echo "<td>{$fila['contraseña']}</td>";
             echo "<td>{$fila['cargo']}</td>";
             echo "<td>
                     <a href='usuarios.php?accion=modificar&id={$id_encriptado}'><i class='fa-solid fa-pen'>m</i></a>
@@ -609,7 +611,7 @@ function Formulario_productos()
         <input class="btn btn-primary" name="enviar" type="submit" value="Agregar">
     </form>
 
-    <form id="myForm" action="../catalogo/catalogo.php" onsubmit="showLoading()" method="post">
+    <form id="myForm" action="../catalogo/catalogo.php?accion=catalogo" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary" >
             <i class="fa-solid fa-eye"></i>ver catalogo
             </button>
@@ -708,7 +710,7 @@ HTML;
     <td>{$value["stock"]}</td>
     <td>
         <a href="../productos/productos.php?accion=modificar&id={$id_encriptado}" class="btn yellow"><i class="fa-solid fa-pen-to-square"></i></a>
-        <form action="../productos/productos.php?accion=eliminar&id={$value['id']}" method="post" style="display:inline;">
+        <form action="../productos/productos.php?accion=eliminar&id={$id_encriptado}" method="post" style="display:inline;">
             <button name="eliminar" class="btn red" type="submit" onclick="return Pregunta()">
                 <i class="fa-solid fa-trash"></i>
             </button>
@@ -729,13 +731,13 @@ HTML;
 </table>
 </div>
 
-<form id="myForm" action="../catalogo/catalogo.php" onsubmit="showLoading()" method="post">
+<form id="myForm" action="../catalogo/catalogo.php?accion=catalogo" onsubmit="showLoading()" method="post">
     <button class="btn btn-outline-secondary"  value="catalogo">
         <i class="fa-solid fa-shop"></i>ver catalogo
     </button>
 </form>
 
-<form id="myForm" action="../productos/productos.php" onsubmit="showLoading()" method="post">
+<form id="myForm" action="../productos/productos.php?accion=aggproductos" onsubmit="showLoading()" method="post">
     <button class="btn btn-outline-secondary"  value="agregar productos">
         <i class="fa-sharp fa-solid fa-plus"></i>agregar productos
     </button>

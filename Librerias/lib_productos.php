@@ -41,7 +41,7 @@ SQL;
 echo $query;
                     $resultado = pg_query($conexion, $consulta);
                     if ($resultado) {
-                        header("Location: ../catalogo/catalogo.php");
+                        header("Location: ../catalogo/catalogo.php?accion=catalogo");
                         exit;
                     } else {
                         if (!$resultado)
@@ -126,14 +126,13 @@ HTML;
                     <i class="fa-solid fa-pen"></i>modificar
                 </button>
 
-                <button class="btn btn-outline-secondary">
-                    <a href="../productos/verProductos.php"><i class="fa-solid fa-backward"></i></a>regresar
-                </button>
-
                 <!-- <button class="btn btn-outline-secondary">
                     <a href="../index.php"><i class="fa-solid fa-house"></i></a>inicio
                 </button> -->
             </form>
+            <button class="btn btn-outline-secondary">
+                    <a href="../productos/verProductos.php?accion=verproductos"><i class="fa-solid fa-backward"></i></a>regresar
+                </button>
         </div>
     </body>
     
@@ -157,7 +156,7 @@ function Actualizar_productos(){
 SQL;
 $consulta = pg_query($conexion,$sql);
 if ($consulta) {
-    header("Location: ./verProductos.php");
+    header("Location: ./verProductos.php?accion=verproductos");
     exit;
 }
 else {
@@ -169,7 +168,7 @@ function Eliminar_productos()
 {
     include_once "../../conexion.php";
     $conexion = Conexion();
-    //$id = $_GET['id'];
+    $id = $_GET['id'];
     if (isset($_GET['id'])) {
         $id = base64_decode($_GET['id']);
         // Valida el id descifrado antes de usarlo en la consulta
@@ -180,7 +179,7 @@ SQL;
 
     $resultado = pg_query($conexion, $consulta);
     if ($resultado) {
-        header("Location: ../productos/verProductos.php");
+        header("Location: ../productos/verProductos.php?accion=verproductos");
         exit;
     } else {
         echo "error";

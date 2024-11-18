@@ -276,7 +276,8 @@ function Modificar_usuarios()
 {
     include_once "../../conexion.php";
     $conexion = Conexion();
-    //$id = $_GET["id"];
+    $id = $_GET["id"];
+    //echo $id;
 
     if (isset($_GET['id'])) {
         $id = base64_decode($_GET['id']);
@@ -336,7 +337,7 @@ function Modificar_usuarios()
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Contraseña</label>
-                    <input type="password"  class="form-control" name="contraseña" value="{$usuario->contraseña}">
+                    <input type="text"  class="form-control" name="contraseña" value="{$usuario->contraseña}">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Cargo</label>
@@ -380,8 +381,27 @@ function Buscar($search) {
             die("Error al conectar con la base de datos");
         }
 
-        $consulta = "SELECT nombre, apellido, telefono, direccion, correo, contraseña FROM usuarios WHERE nombre ILIKE $1";
-        $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
+        $consulta = <<<SQL
+    SELECT 
+        usuarios.id, 
+        usuarios.dni, 
+        usuarios.nombre, 
+        usuarios.apellido, 
+        usuarios.telefono, 
+        usuarios.direccion, 
+        usuarios.correo, 
+        usuarios.contraseña AS contraseña, 
+        cargo.descripcion AS cargo 
+    FROM 
+        usuarios
+    JOIN 
+        cargo 
+    ON 
+        usuarios.cargo_id = cargo.id
+    WHERE 
+        usuarios.nombre ILIKE $1
+SQL;
+$resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
 
         if (!$resultado_consulta) {
             die("Error en la consulta");
@@ -392,12 +412,15 @@ function Buscar($search) {
         if (pg_num_rows($resultado_consulta) > 0) {
             while ($fila = pg_fetch_assoc($resultado_consulta)) {
                 $array[] = [
+                    "id"      => $fila["id"],
+                    "dni"      => $fila["dni"],
                     "nombre"      => $fila["nombre"],
                     "apellidos"   => $fila["apellido"],
                     "telefono"    => $fila["telefono"],
                     "direccion"   => $fila["direccion"],
                     "correo"      => $fila["correo"],
-                    "contraseña"  => $fila["contraseña"]
+                    "contraseña"  => $fila["contraseña"],
+                    "cargo"  => $fila["cargo"]
                 ];
             }
             echo json_encode($array);

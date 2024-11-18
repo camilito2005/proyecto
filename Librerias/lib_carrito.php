@@ -7,18 +7,18 @@ session_start();
 $accion = $_GET["accion"];
 
 if ($accion == "index") {
-    header("Location: ../vistas/catalogo/catalogo.php");
+    header("Location: ../vistas/catalogo/catalogo.php?accion=catalogo");
     exit;
 }
 if ($accion == "ver") {
     if (empty($_SESSION['carrito'])) {
-        echo 'no hay nada en el carrito <br> <a href="../vistas/catalogo/catalogo.php">volver a la tienda </a>';
+        echo 'no hay nada en el carrito <br> <a href="../vistas/catalogo/catalogo.php?accion=catalogo">volver a la tienda </a>';
         //echo '<a href="../vistas/catalogo/catalogo.php">agregar al carrito</a>';
         exit;
         
         
         } else if(!empty($_SESSION['carrito'])) {
-            header('Location: ../vistas/catalogo/carrito.php');
+            header('Location: ../vistas/catalogo/carrito.php?accion=catalogo');
             return  $_SESSION['carrito'];
 
         }
@@ -58,7 +58,7 @@ if ($accion == "agregar") {
             );
         }
         //$carrito->aggCarrito($id,$nombre,$descripcion,$precio,$stock,$foto);
-        header('Location: ../vistas/catalogo/carrito.php');
+        header('Location: ../vistas/catalogo/carrito.php?accion=catalogo');
         exit;
 
     }
@@ -83,7 +83,7 @@ if ($accion == "actualizar") {
             }
         }
 
-        header('Location: ../vistas/catalogo/carrito.php');
+        header('Location: ../vistas/catalogo/carrito.php?accion=catalogo');
         exit;
     }
 }
