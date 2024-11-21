@@ -74,7 +74,8 @@ CREATE TABLE public.categorias (
     id integer NOT NULL,
     categoria_producto character varying(100) NOT NULL,
     fecha_creacion timestamp without time zone NOT NULL,
-    fecha_actualizacion timestamp without time zone NOT NULL
+    fecha_actualizacion timestamp without time zone NOT NULL,
+    parent_id integer
 );
 
 
@@ -140,6 +141,77 @@ ALTER SEQUENCE public.facturas_id_seq OWNED BY public.facturas.id;
 
 
 --
+-- Name: menu; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.menu (
+    id integer NOT NULL,
+    nombre character varying(255) NOT NULL,
+    enlace character varying(255) NOT NULL,
+    orden integer DEFAULT 0
+);
+
+
+ALTER TABLE public.menu OWNER TO postgres;
+
+--
+-- Name: menu_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.menu_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.menu_id_seq OWNER TO postgres;
+
+--
+-- Name: menu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.menu_id_seq OWNED BY public.menu.id;
+
+
+--
+-- Name: notificaciones; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.notificaciones (
+    id integer NOT NULL,
+    usuario_id integer NOT NULL,
+    mensaje text NOT NULL,
+    leido boolean DEFAULT false,
+    fecha timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.notificaciones OWNER TO postgres;
+
+--
+-- Name: notificaciones_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.notificaciones_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.notificaciones_id_seq OWNER TO postgres;
+
+--
+-- Name: notificaciones_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.notificaciones_id_seq OWNED BY public.notificaciones.id;
+
+
+--
 -- Name: password_reset; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -187,8 +259,9 @@ CREATE TABLE public.productos (
     categoria character varying(100),
     stock integer NOT NULL,
     imagen character varying(255) NOT NULL,
-    fecha_creacion text NOT NULL,
-    fecha_actualizacion timestamp without time zone
+    fecha_actualizacion timestamp without time zone,
+    categoria_id integer,
+    fecha_creacion timestamp without time zone
 );
 
 
@@ -282,6 +355,20 @@ ALTER TABLE ONLY public.facturas ALTER COLUMN id SET DEFAULT nextval('public.fac
 -- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
+ALTER TABLE ONLY public.menu ALTER COLUMN id SET DEFAULT nextval('public.menu_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notificaciones ALTER COLUMN id SET DEFAULT nextval('public.notificaciones_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
 ALTER TABLE ONLY public.password_reset ALTER COLUMN id SET DEFAULT nextval('public.password_resets_id_seq'::regclass);
 
 
@@ -320,7 +407,10 @@ SELECT pg_catalog.setval('public.cargo_id_seq', 3, true);
 -- Data for Name: categorias; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.categorias (id, categoria_producto, fecha_creacion, fecha_actualizacion) FROM stdin;
+COPY public.categorias (id, categoria_producto, fecha_creacion, fecha_actualizacion, parent_id) FROM stdin;
+1	Ropa	2024-10-25 13:31:21.803186	2024-10-25 13:31:21.803186	\N
+2	Camisetas	2024-10-25 13:31:21.915543	2024-10-25 13:31:21.915543	1
+3	Pantalones	2024-10-25 13:31:21.915543	2024-10-25 13:31:21.915543	1
 \.
 
 
@@ -339,6 +429,12 @@ COPY public.facturas (id, producto_id, stock, precio, total, fecha, cliente_corr
 2	24	5	0.00	0.00	2024-09-18 11:12:43.269484	c@gmail.com
 7	46	2	150000.00	300000.00	2024-09-18 11:52:28	camilo@gmail.com
 13	49	5	400000.00	2000000.00	2024-10-24 04:37:38	c@gmail.com
+14	44	5	300000.00	1500000.00	2024-11-01 03:20:37	c@gmail.com
+15	24	2	100000.00	200000.00	2024-11-01 04:55:21	c@gmail.com
+16	24	1	100000.00	100000.00	2024-11-01 04:57:49	c@gmail.com
+17	44	1	300000.00	300000.00	2024-11-01 04:58:19	c@gmail.com
+18	45	20	250000.00	5000000.00	2024-11-15 02:17:19	c@gmail.com
+19	44	4	300000.00	1200000.00	2024-11-15 02:18:53	c@gmail.com
 \.
 
 
@@ -346,7 +442,48 @@ COPY public.facturas (id, producto_id, stock, precio, total, fecha, cliente_corr
 -- Name: facturas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.facturas_id_seq', 13, true);
+SELECT pg_catalog.setval('public.facturas_id_seq', 17, true);
+
+
+--
+-- Data for Name: menu; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.menu (id, nombre, enlace, orden) FROM stdin;
+1	Perfil	./vistas/usuarios/perfil.php	1
+2	Estadísticas	./vistas/productos/estadisticas.php	2
+3	Mapa	./vistas/mapa.php	3
+4	Usuarios	./vistas/usuarios/usuarios.php	4
+5	Registrar Usuario	./vistas/usuarios/formulario_registro.php	5
+6	Catálogo	./vistas/catalogo/catalogo.php	6
+7	Facturas	./vistas/facturas.php	7
+8	Mis Productos	./vistas/productos/verProductos.php	8
+9	Agregar Productos	./vistas/productos/Productos.php	9
+10	Iniciar Sesión	./vistas/pagina-principal/login.php	10
+11	Regístrate	./vistas/usuarios/formulario_registro.php	11
+\.
+
+
+--
+-- Name: menu_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.menu_id_seq', 11, true);
+
+
+--
+-- Data for Name: notificaciones; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.notificaciones (id, usuario_id, mensaje, leido, fecha) FROM stdin;
+\.
+
+
+--
+-- Name: notificaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.notificaciones_id_seq', 1, false);
 
 
 --
@@ -383,11 +520,14 @@ SELECT pg_catalog.setval('public.password_resets_id_seq', 5, true);
 -- Data for Name: productos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.productos (id, nombre, descripcion, precio, categoria, stock, imagen, fecha_creacion, fecha_actualizacion) FROM stdin;
-49	prueba	prueba	400000.00	\N	5	../../../ti/fotos/D_NQ_NP_643213-MCO77950837793_072024-O.webp		\N
-24	zapatos	zapatos	100000.00	\N	6	../../ti/fotos/zapatos (1).jpeg	2024-12-08	\N
-46	zapatos blancos	zapatos blancos	150000.00	\N	5	../../../ti/fotos/images.jpeg		\N
-50	zapatoss	zapatos	280000.00	\N	10	../../../ti/fotos/73488892-b1ff-461d-a6ba-b5c61a1b7565 (1).webp		\N
+COPY public.productos (id, nombre, descripcion, precio, categoria, stock, imagen, fecha_actualizacion, categoria_id, fecha_creacion) FROM stdin;
+50	zapatos	zapatos	280000.00	\N	100	../../../ti/fotos/73488892-b1ff-461d-a6ba-b5c61a1b7565 (1).webp	2024-11-21 16:54:00	\N	\N
+45	zapatos tabluos	zapatos deportivos grandes blancos 	250000.00	\N	100	../../../ti/fotos/zapatos deprt.jpeg	2024-11-21 16:54:00	\N	\N
+44	zapatos premiun	zapatos premiun	300000.00	\N	100	../../../ti/fotos/reporte (4).webp	2024-11-21 16:55:00	\N	\N
+24	zapatos	zapatos	100000.00	\N	100	../../ti/fotos/zapatos (1).jpeg	2024-11-21 16:55:00	\N	\N
+46	zapatos blancos	zapatos blancos	150000.00	\N	100	../../../ti/fotos/images.jpeg	2024-11-21 16:55:00	\N	\N
+43	zapatos deportivos	zapatos deportivos	230000.00	\N	100	../../../ti/fotos/zapatosdeportivos.webp	2024-11-21 16:55:00	\N	\N
+49	zapatos negros 	zapatos	400000.00	\N	100	../../../ti/fotos/D_NQ_NP_643213-MCO77950837793_072024-O.webp	2024-11-21 16:55:00	\N	\N
 \.
 
 
@@ -395,7 +535,7 @@ COPY public.productos (id, nombre, descripcion, precio, categoria, stock, imagen
 -- Name: productos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.productos_id_seq', 42, true);
+SELECT pg_catalog.setval('public.productos_id_seq', 44, true);
 
 
 --
@@ -403,15 +543,11 @@ SELECT pg_catalog.setval('public.productos_id_seq', 42, true);
 --
 
 COPY public.usuarios (id, dni, nombre, apellido, telefono, direccion, correo, "contraseña", fecha_ingreso, cargo_id, fecha_actualizacion) FROM stdin;
-33	1043	camilo	Marrugo	10	direccion	c@gmail.com	123456	\N	1	2024-10-18 14:09:23.01578
-39	999	999	999	9999	999	999@gmail.com	camilo2005	2024-10-16	1	2024-10-18 14:09:23.01578
-1	1234	camilo	marrugo	19003	la boquilla	c@gmail.com	12345	\N	\N	2024-10-18 14:09:23.01578
-21	34213432	camilo	marrugo	1900373	la boquilla	12345@gmail.com	camilo2005	\N	\N	2024-10-18 14:09:23.01578
-1	1234	camilo	marrugo	19003	la boquilla	c@gmail.com	12345	\N	1	2024-10-18 14:09:23.01578
-21	34213432	camilo	marrugo	1900373	la boquilla	12345@gmail.com	camilo2005	\N	1	2024-10-18 14:09:23.01578
-34	10	camilo	Marrugo Barrios	99	direccion	marrugo@gmail.com	marrugo	\N	2	2024-10-18 14:09:23.01578
-32	104329	camilo	Marrugo	999	direccion	camilo@gmail.com	camilo	\N	1	2024-10-18 14:09:23.01578
-38	101010	prueba cliente fecha	prueba	777	direccion	prueba@gmail.com	prueba	2024-10-10	2	2024-10-18 14:09:23.01578
+24	222222	empleado	No Registrado	300000	direccion	empleado@gmail.com	empleado	2024-11-14	2	2024-11-14 08:57:19.708523
+28	55555	cliente	no registrado	999999	su casa	cliente@gmail.com	cliente	2024-11-15	2	2024-11-15 11:52:14.303038
+23	104329	Camilo 	Marrugo Barrios	3000	la boquilla	c@gmail.com	123456	2024-10-29	1	2024-10-29 11:22:37.489824
+22	999999999	CLIENTE NO REGISTRADO	CLIENTE NO REGISTRADO	999	CLIENTE NO REGISTRADO	cliente@gmail.com	cliente	2024-10-29	2	2024-10-29 11:21:45.484568
+23	104329	Camilo 	marrugo barrios	3000	la boquilla	c@gmail.com	123456	2024-10-29	1	2024-10-29 11:22:37.489824
 \.
 
 
@@ -419,7 +555,7 @@ COPY public.usuarios (id, dni, nombre, apellido, telefono, direccion, correo, "c
 -- Name: usuarios_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.usuarios_id_seq', 21, true);
+SELECT pg_catalog.setval('public.usuarios_id_seq', 23, true);
 
 
 --
@@ -444,6 +580,22 @@ ALTER TABLE ONLY public.categorias
 
 ALTER TABLE ONLY public.facturas
     ADD CONSTRAINT facturas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: menu_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.menu
+    ADD CONSTRAINT menu_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notificaciones_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notificaciones
+    ADD CONSTRAINT notificaciones_pkey PRIMARY KEY (id);
 
 
 --
@@ -476,6 +628,22 @@ ALTER TABLE ONLY public.facturas
 
 ALTER TABLE ONLY public.usuarios
     ADD CONSTRAINT fk_cargo FOREIGN KEY (cargo_id) REFERENCES public.cargo(id);
+
+
+--
+-- Name: fk_categoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.productos
+    ADD CONSTRAINT fk_categoria FOREIGN KEY (categoria_id) REFERENCES public.categorias(id);
+
+
+--
+-- Name: fk_categoria_padre; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categorias
+    ADD CONSTRAINT fk_categoria_padre FOREIGN KEY (parent_id) REFERENCES public.categorias(id) ON DELETE SET NULL;
 
 
 --

@@ -259,9 +259,9 @@ CREATE TABLE public.productos (
     categoria character varying(100),
     stock integer NOT NULL,
     imagen character varying(255) NOT NULL,
-    fecha_creacion text NOT NULL,
     fecha_actualizacion timestamp without time zone,
-    categoria_id integer
+    categoria_id integer,
+    fecha_creacion timestamp without time zone
 );
 
 
@@ -433,6 +433,8 @@ COPY public.facturas (id, producto_id, stock, precio, total, fecha, cliente_corr
 15	24	2	100000.00	200000.00	2024-11-01 04:55:21	c@gmail.com
 16	24	1	100000.00	100000.00	2024-11-01 04:57:49	c@gmail.com
 17	44	1	300000.00	300000.00	2024-11-01 04:58:19	c@gmail.com
+18	45	20	250000.00	5000000.00	2024-11-15 02:17:19	c@gmail.com
+19	44	4	300000.00	1200000.00	2024-11-15 02:18:53	c@gmail.com
 \.
 
 
@@ -518,13 +520,14 @@ SELECT pg_catalog.setval('public.password_resets_id_seq', 5, true);
 -- Data for Name: productos; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.productos (id, nombre, descripcion, precio, categoria, stock, imagen, fecha_creacion, fecha_actualizacion, categoria_id) FROM stdin;
-43	zapatos deportivos	zapatos deportivos	230000.00	\N	100	../../../ti/fotos/zapatosdeportivos.webp		\N	\N
-49	prueba	prueba	400000.00	\N	10	../../../ti/fotos/D_NQ_NP_643213-MCO77950837793_072024-O.webp		\N	\N
-46	zapatos blancos	zapatos blancos	150000.00	\N	10	../../../ti/fotos/images.jpeg		\N	\N
-24	zapatos	zapatos	100000.00	\N	7	../../ti/fotos/zapatos (1).jpeg	2024-12-08	\N	\N
-44	zapatos premiun	zapatos premiun	300000.00	\N	94	../../../ti/fotos/reporte (4).webp		\N	\N
-50	zapatoss	zapatos	280000.00	\N	10	../../../ti/fotos/73488892-b1ff-461d-a6ba-b5c61a1b7565 (1).webp		\N	\N
+COPY public.productos (id, nombre, descripcion, precio, categoria, stock, imagen, fecha_actualizacion, categoria_id, fecha_creacion) FROM stdin;
+50	zapatos	zapatos	280000.00	\N	100	../../../ti/fotos/73488892-b1ff-461d-a6ba-b5c61a1b7565 (1).webp	2024-11-21 16:54:00	\N	\N
+45	zapatos tabluos	zapatos deportivos grandes blancos 	250000.00	\N	100	../../../ti/fotos/zapatos deprt.jpeg	2024-11-21 16:54:00	\N	\N
+44	zapatos premiun	zapatos premiun	300000.00	\N	100	../../../ti/fotos/reporte (4).webp	2024-11-21 16:55:00	\N	\N
+24	zapatos	zapatos	100000.00	\N	100	../../ti/fotos/zapatos (1).jpeg	2024-11-21 16:55:00	\N	\N
+46	zapatos blancos	zapatos blancos	150000.00	\N	100	../../../ti/fotos/images.jpeg	2024-11-21 16:55:00	\N	\N
+43	zapatos deportivos	zapatos deportivos	230000.00	\N	100	../../../ti/fotos/zapatosdeportivos.webp	2024-11-21 16:55:00	\N	\N
+49	zapatos negros 	zapatos	400000.00	\N	100	../../../ti/fotos/D_NQ_NP_643213-MCO77950837793_072024-O.webp	2024-11-21 16:55:00	\N	\N
 \.
 
 
@@ -540,6 +543,9 @@ SELECT pg_catalog.setval('public.productos_id_seq', 44, true);
 --
 
 COPY public.usuarios (id, dni, nombre, apellido, telefono, direccion, correo, "contraseña", fecha_ingreso, cargo_id, fecha_actualizacion) FROM stdin;
+24	222222	empleado	No Registrado	300000	direccion	empleado@gmail.com	empleado	2024-11-14	2	2024-11-14 08:57:19.708523
+28	55555	cliente	no registrado	999999	su casa	cliente@gmail.com	cliente	2024-11-15	2	2024-11-15 11:52:14.303038
+23	104329	Camilo 	Marrugo Barrios	3000	la boquilla	c@gmail.com	123456	2024-10-29	1	2024-10-29 11:22:37.489824
 22	999999999	CLIENTE NO REGISTRADO	CLIENTE NO REGISTRADO	999	CLIENTE NO REGISTRADO	cliente@gmail.com	cliente	2024-10-29	2	2024-10-29 11:21:45.484568
 23	104329	Camilo 	marrugo barrios	3000	la boquilla	c@gmail.com	123456	2024-10-29	1	2024-10-29 11:22:37.489824
 \.

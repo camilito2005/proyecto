@@ -909,18 +909,7 @@ HTML;
 HTML;
 }
 
-function Catalogo() {
-    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
-    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
-    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
-    //echo $_SESSION['nombre'];
-    /*if (empty($_SESSION['nombre'])) {
-        echo "esta session esta vacia";
-        echo $_SESSION['nombre'];
-    }else {
-        echo "se salto el if";
-        echo $_SESSION['nombre'];
-    }*/
+function Catalogo1() {
 
     $html = <<<HTML
     <!DOCTYPE html>
@@ -1073,170 +1062,206 @@ HTML;
 }
 
 
-function Catalogo1()
-{
-    $html = <<<HTML
-    <!DOCTYPE html>
-<html lang="en">
+function Catalogo() {
+
+$html = <<<HTML
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
-<link rel="shortcut icon" href="../fotos/imagen-del-producto.png" type="image/x-icon">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="shortcut icon" href="../fotos/imagen-del-producto.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="stylesheet" href="../../css/catalogo.css">
     <script src="../../js/cargando.js"></script>
     <script src="../../js/cargando2.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>catalogo</title>
+    <title>Catálogo</title>
+    <style>
+        .navbar {
+            margin-bottom: 20px;
+        }
+
+        .navbar .navbar-brand {
+            font-size: 1.5em;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+            font-size: 1.1em;
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .agotado {
+            color: red;
+            font-weight: bold;
+        }
+
+        .navbar .nav-item {
+            margin-right: 10px;
+        }
+
+        .navbar .nav-item a {
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        .navbar .nav-item a:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
 
 <body>
-    
-<div id="loading">Cargando...</div>
-    <div class="row">
-        
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+    <div id="loading">Cargando...</div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Catálogo</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul>
-                    <li>
-                        <a href=""></a>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Carrito</a>
                     </li>
                 </ul>
             </div>
-            <div class="container-fluid">
-                <input name="busqueda" type="search" id="buscador">
-            </div>
+        </div>
+    </nav>
 
-        </nav>
-        <h4 class="text-center text-secondary">
-            productos
-        </h4>
-HTML;
-    session_start();
-    if (isset($_SESSION["correo"])) {
-        $html .= <<<HTML
+    <div class="input-search text-center">
+        <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
+    </div>
 
-            <form id="myForm" action="../usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post">
-                <button type="submit"  name="cerrar"value="cerrar sesion">
-                    <i class="fa-solid fa-right-from-bracket"></i>cerrar sesion 
-                </button>
-            </form> 
-            <div class="container-fluid">{$_SESSION["correo"]}
+    <!-- <h4 class="text-center text-secondary">Productos</h4> -->
 
-            </div>
 HTML;
-    } else {
-        $html .= <<<HTML
-            <form id="myForm" action="../pagina-principal/login.php" onsubmit="showLoading()" method="post">
-                <button type="submit"  name="cerrar"value="iniciar">
-                    <i class="fa-solid fa-right-from-bracket"></i>iniciar sesion
-                </button>
-            </form> 
-HTML;
-    }
+
+session_start();
+if (isset($_SESSION["correo"])) {
     $html .= <<<HTML
- </div>
+    <div class="container-fluid text-end">
+        <span>{$_SESSION["correo"]}</span>
+        <form id="myForm" action="../usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="d-inline">
+            <button type="submit" class="btn btn-danger btn-sm" name="cerrar" value="cerrar sesion">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+            </button>
+        </form>
+    </div>
+HTML;
+} else {
+    $html .= <<<HTML
+    <div class="container-fluid text-end">
+        <form id="myForm" action="../pagina-principal/login.php" onsubmit="showLoading()" method="post" class="d-inline">
+            <button type="submit" class="btn btn-primary btn-sm" name="cerrar" value="iniciar">
+                <i class="fa-solid fa-right-from-bracket"></i> Iniciar sesión
+            </button>
+        </form>
+    </div>
+HTML;
+}
 
+$html .= <<<HTML
 <div class="container">
     <div class="row">
-
 HTML;
-    include "../../conexion.php";
-    $conexion = Conexion();
-    $consulta = pg_query($conexion, "SELECT * FROM productos");
-    $total = pg_num_rows($consulta);
-    while ($filas = pg_fetch_assoc($consulta)) {
-        $imagen = $filas["imagen"];
-        $nombre = $filas["nombre"];
-        $id = $filas["id"];
-        $descripcion = $filas["descripcion"];
-        $precio = $filas["precio"];
-        $disponible = $filas["stock"];
 
-        $precio_number_format =number_format($precio);
+include "../../conexion.php";
+$conexion = Conexion();
+$consulta = pg_query($conexion, "SELECT * FROM productos");
+$mostrar_productos = pg_fetch_all($consulta);
+$total = pg_num_rows($consulta);
 
-        //echo $disponible;
+if ($mostrar_productos) {
 
-        /*if ($disponible<5) {
-            $mensaje = "quedan pocos "." $disponible";
-        }
-        if ($disponible <= 0) {
-            $mensaje_0 = "agotado";
-        }*/
+foreach ($mostrar_productos as $registros) {
+    $imagen = $registros["imagen"];
+    $nombre = $registros["nombre"];
+    $id = $registros["id"];
+    $descripcion = $registros["descripcion"];
+    $precio = $registros["precio"];
+    $disponible = $registros["stock"];
+    
+    $precio_number_format = number_format($precio, 2);
+    
+    $mensaje_agotado = $disponible <= 0 ? '<p class="agotado">Agotado</p>' : '';
 
-        $html .= <<<HTML
-                <div class="card mx-4 mt-4 mx-auto" style="width: 21rem;">
-                <!--<p>{$mensaje}</p>
-                <p>{$mensaje_0}</p>-->
-
-                <!--<td>{$id}</td>-->
-
-                    <img src="/{$imagen}" height="100%" width="100%" class="card-img-top" alt=""><br>
-
-                    <div class="card-title">
-                        {$nombre}
-                    </div>
-                    <div class="card-body">
-                        <p>
-                            {$descripcion}
-                        </p>
-
-                        <p>precio: $
-                            {$precio_number_format}
-                        </p>
-                        <p>
-                            disponibles:
-                            {$disponible}
-                        </p>
-
-                    </div>
-                    <div class="card-footer">
-                        <form id="myForm" action="../../Librerias/lib_carrito.php?accion=comprar" onsubmit="showLoading()" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="{$id}">
-                            <input name="nombre" type="hidden" value="{$nombre}">
-                            <input name="descripcion" type="hidden" value="{$descripcion}">
-                            <input name="precio" type="hidden" value="{$precio}">
-                            <input name="stock" type="hidden" value="{$disponible}">
-                            <input name="foto" type="hidden" value="{$imagen}">
-                            <input name="carrito" type="submit" class="btn-buy button1" value="COMPRALOS YA!">
-                        </form>
-
-                        <!--<button class="">COMPRALO YA¡</button>-->
-                        <form id="myForm" action="../../Librerias/lib_carrito.php?accion=agregar" onsubmit="showLoading()" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="{$id}">
-                            <input name="nombre" type="hidden" value="{$nombre}">
-                            <input name="descripcion" type="hidden" value="{$descripcion}">
-                            <input name="precio" type="hidden" value="{$precio}">
-                            <input name="stock" type="hidden" value="{$disponible}">
-                            <input name="foto" type="hidden" value="{$imagen}">
-                            <input name="carrito" type="submit" class="btn btn-primary" value="agregar al carrito">
-                        </form>
-                        
-                    </div>
-
-                </div>
-HTML;
-    }
     $html .= <<<HTML
-    <div>
-                <form action="../../Librerias/lib_carrito.php?accion=ver" onsubmit="showLoading()" id="myForm"  method="post">
-                    <button><i class="fa-solid fa-cart-shopping"></i>ver carrito</button>
-                </form>
+        <div class="col-md-4">
+            <div class="card mx-4 mt-4">
+                <img src="/{$imagen}" class="card-img-top" alt="{$nombre}">
+                <div class="card-body">
+                    <h5 class="card-title">{$nombre}</h5>
+                    <p class="card-text">{$descripcion}</p>
+                    <p class="card-text"><strong>Precio: $ {$precio_number_format}</strong></p>
+                    <p class="card-text">Disponibles: {$disponible} {$mensaje_agotado}</p>
+                </div>
+                <div class="card-footer">
+                    <form id="myForm" action="../../Librerias/lib_carrito.php?accion=comprar" onsubmit="showLoading()" method="post" enctype="multipart/form-data" class="d-inline">
+                        <input type="hidden" name="id" value="{$id}">
+                        <input name="nombre" type="hidden" value="{$nombre}">
+                        <input name="descripcion" type="hidden" value="{$descripcion}">
+                        <input name="precio" type="hidden" value="{$precio}">
+                        <input name="stock" type="hidden" value="{$disponible}">
+                        <input name="foto" type="hidden" value="{$imagen}">
+                        <input name="carrito" type="submit" class="btn btn-success" value="Comprar"{$disponible}>
+                    </form>
+                    <form id="myForm" action="../../Librerias/lib_carrito.php?accion=agregar" onsubmit="showLoading()" method="post" enctype="multipart/form-data" class="d-inline">
+                        <input type="hidden" name="id" value="{$id}">
+                        <input name="nombre" type="hidden" value="{$nombre}">
+                        <input name="descripcion" type="hidden" value="{$descripcion}">
+                        <input name="precio" type="hidden" value="{$precio}">
+                        <input name="stock" type="hidden" value="{$disponible}">
+                        <input name="foto" type="hidden" value="{$imagen}">
+                        <input name="carrito" type="submit" class="btn btn-primary" value="Agregar al carrito" {$disponible}>
+                    </form>
+                </div>
             </div>
-        <div id="loadingSpinner" class="loading-spinner" style="display: none;">Cargando...</div>
         </div>
-        <p> total : {$total}</p>
-    </div>
-    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" value="inicio">
-            <i class="fa-solid fa-house"></i>inicio
-            </button>
-    </form>
 HTML;
-    echo $html;
 }
+}
+else {
+     echo "<tbody><tr><td colspan='8'>No hay productos registrados.</td></tr></tbody>";
+}
+
+$html .= <<<HTML
+    </div>
+    <div class="text-center">
+        <form action="../../Librerias/lib_carrito.php?accion=ver" onsubmit="showLoading()" method="post" class="mt-4">
+            <button class="btn btn-info"><i class="fa-solid fa-cart-shopping"></i> Ver carrito</button>
+        </form>
+    </div>
+    <p class="text-center">Total de productos: {$total}</p>
+</div>
+<form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post" class="text-center mt-4">
+    <button class="btn btn-outline-secondary">
+        <i class="fa-solid fa-house"></i> Inicio
+    </button>
+</form>
+HTML;
+
+echo $html;
+}
+
 
 function Carrito_HTML1()
 {   
@@ -1385,9 +1410,9 @@ HTML;
     $zapatos = $_SESSION['carrito'];
 
     foreach ($zapatos as $id => $zapatico) {
-        $totalProducto = $zapatico['precio'] * $zapatico['cantidad'];
         $precio = $zapatico['precio'];
         $precio_format = number_format($precio , 2);
+        $totalProducto = $zapatico['precio'] * $zapatico['cantidad'];
 
 
         $html .= <<<HTML

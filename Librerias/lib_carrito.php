@@ -6,11 +6,12 @@ session_start();
 
 $accion = $_GET["accion"];
 
-if ($accion == "index") {
+
+function Index(){
     header("Location: ../vistas/catalogo/catalogo.php?accion=catalogo");
     exit;
 }
-if ($accion == "ver") {
+function Ver(){
     if (empty($_SESSION['carrito'])) {
         echo 'no hay nada en el carrito <br> <a href="../vistas/catalogo/catalogo.php?accion=catalogo">volver a la tienda </a>';
         //echo '<a href="../vistas/catalogo/catalogo.php">agregar al carrito</a>';
@@ -25,8 +26,7 @@ if ($accion == "ver") {
     //header('Location: ../vistas/catalogo/carrito.php');
 }
 
-
-if ($accion == "agregar") {
+function Ingresar(){
     if ($_SERVER['REQUEST_METHOD'] === 'POST')  {
 
         $id = $_POST['id'];
@@ -63,12 +63,11 @@ if ($accion == "agregar") {
 
     }
     else {
-        
     $_SESSION['correo']['id']['stock'] += $stock;
 }
 }
 
-if ($accion == "actualizar") {
+/*if ($accion == "actualizar") {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = $_POST['id'];
         $cantidad = $_POST['cantidad'];
@@ -83,18 +82,39 @@ if ($accion == "actualizar") {
             }
         }
 
-        header('Location: ../vistas/catalogo/carrito.php?accion=catalogo');
+        header('Location: ../vistas/catalogo/carrito.php');
         exit;
     }
+}*/
+function Actualizar(){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $cantidad = $_POST['cantidad'];
+    
+            if (isset($_SESSION['carrito'][$id])) {
+                $precioUnitario = $_SESSION['carrito'][$id]['precio'];  // Tomamos el precio unitario directamente
+                $stock = $_SESSION['carrito'][$id]['stock'];
+    
+                // Verificamos que la cantidad sea válida
+                if ($cantidad > 0 && $cantidad <= $stock) {
+                    $_SESSION['carrito'][$id]['cantidad'] = $cantidad;
+                    $_SESSION['carrito'][$id]['precio'] = $precioUnitario * $cantidad;  // Actualizamos el precio total
+                }
+            }
+    
+            header('Location: ../vistas/catalogo/carrito.php'); // Redirigimos de vuelta al carrito
+            exit;
+        }
 }
-if ($accion == "eliminarU") {
+
+function EliminarU(){
     $id = $_POST['id'];
 
     if (isset($_SESSION['carrito'][$id])) {
         unset($_SESSION['carrito'][$id]);
 
         if (empty($_SESSION['carrito'])) {
-            header('Location: ../vistas/catalogo/catalogo.php');
+            header('Location: ../vistas/catalogo/catalogo.php?accion=catalogo');
             exit;
         } else {
             header('Location: ../vistas/catalogo/carrito.php');
@@ -106,10 +126,11 @@ if ($accion == "eliminarU") {
         echo '<a href="../vistas/catalogo/carrito.php">Volver al carrito</a>';
     }
 }  
-if ($accion == "eliminarT") {
+function EliminarT(){
+
     //$carrito->eliminarTodo();
         unset($_SESSION['carrito']);
-        header('Location: ../vistas/catalogo/catalogo.php');
+        header('Location: ../vistas/catalogo/catalogo.php?accion=catalogo');
         exit;
 } 
 
@@ -129,15 +150,43 @@ if ($accion == "comprar") {
         $disponible = $_POST["stock"];
         //$imagen = $_POST["foto"];
 
-        echo "<br>$id<br>";
-        echo "<br>$nombre<br>";
-        echo "<br>$descripcion<br>";
-        echo "<br>$precio<br>";
-        echo "<br>$disponible<br>";
-        //echo "<img src='/$imagen' height='100%' width='100%' class='card-img-top' alt=''><br>";
+        $productos = [];
+
+        $productos = [
+            "id" => $id,
+            "nombre" => $nombre,
+            "descripcion" => $descripcion,
+            "precio" => $precio,
+            "disponible" => $disponible,
+        ];
+
+        $productos_json = json_encode($productos);
+
+        echo $productos_json;
 
     }
 
 }
+
+if ($accion == "actualizar") {
+    Actualizar();
+}
+if ($accion == "eliminarT") {
+    EliminarT();
+}
+if ($accion == "eliminarU") {
+    EliminarU();
+}
+if ($accion == "agregar") {
+    Ingresar();
+}
+
+if ($accion == "ver") {
+    Ver();
+}
+if ($accion == "index") {
+    Index();
+}
+
 ?>
 
