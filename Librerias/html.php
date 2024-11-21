@@ -1,6 +1,6 @@
 <?php
 ob_start();
-function filtro() {
+function filtro($nombre_titulo = "Estadísticas de Productos Vendidos",$ruta_css="../../css/estadisticas.css", $titulo="Estadísticas de Productos Vendidos") {
     session_start();
 
 date_default_timezone_set('America/Bogota');
@@ -46,14 +46,14 @@ date_default_timezone_set('America/Bogota');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadísticas de Productos Vendidos</title>
-    <link rel="stylesheet" href="../../css/estadisticas.css">
+    <title>$nombre_titulo</title>
+    <link rel="stylesheet" href="$ruta_css">
     <style>
     </style>
 </head>
 <body>
 
-    <h2>Estadísticas de Productos Vendidos</h2>
+    <h2>$titulo</h2>
 
     <!-- Formulario para seleccionar fechas -->
     <form action="estadisticas.php?accion=filtro" method="POST">
