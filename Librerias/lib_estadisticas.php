@@ -194,6 +194,7 @@ HTML;
                 total_vendido DESC
             LIMIT 10;
         ";
+        //echo $query;
     
         $resultado = pg_query($conexion, $query);
         if (!$resultado) {
@@ -263,6 +264,17 @@ HTML;
 HTML;
     }
 function Ventasxmes() {
+
+    $horas = [];
+for ($i = 0; $i < 24; $i++) {
+    $horas[] = str_pad($i, 2, "0", STR_PAD_LEFT); // el propósito de "STR_PAD_LEFT" es especificar que el relleno (caracteres adicionales) debe agregarse al inicio (lado izquierdo) de una cadena, de modo que alcance una longitud específica.
+}
+
+
+$minutos = [];
+for ($i = 0; $i < 60; $i++) {
+    $minutos[] = str_pad($i, 2, "0", STR_PAD_LEFT); // el propósito de "STR_PAD_LEFT" es especificar que el relleno (caracteres adicionales) debe agregarse al inicio (lado izquierdo) de una cadena, de modo que alcance una longitud específica.
+}
         echo<<<HTML
         <!DOCTYPE html>
         <html lang="es">
@@ -271,7 +283,7 @@ function Ventasxmes() {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Productos Vendidos por mes</title>
             <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="../../css/ventasxmes.css">
+            <link rel="stylesheet" href="../../css/ventasxmes1.css">
             <style>
                 .card {
                     margin-bottom: 20px;
@@ -290,13 +302,62 @@ function Ventasxmes() {
                         <div class="form-group col-md-6">
                             <label for="fecha_inicio">Fecha de inicio</label>
                             <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" required>
+
+                            <label for="">horas iniciales:</label><br>
+                            <!-- Crear el select y las opciones -->
+                            <select name="horas_iniciales" id="horas-select">
+HTML;
+                                 foreach ($horas as $hora){
+echo <<<HTML
+                                    <option value="{$hora}">$hora</option>
+HTML;
+                                }
+echo <<<HTML
+                            </select>
+                            
+                            
+                            <label for="">minutos iniciales:</label><br>
+                            <!-- Crear el select y las opciones -->
+                            <select name="minutos_iniciales" id="minutos-select">
+HTML;
+                                 foreach ($minutos as $minuto){
+echo <<<HTML
+                                    <option value="{$minuto}">$minuto</option>
+HTML;
+                                }
+echo <<<HTML
+                            </select>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="fecha_fin">Fecha de fin</label>
                             <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" required>
+                            <label for="">horas finales:</label><br>
+                            <!-- Crear el select y las opciones -->
+                            <select name="horas_finales" id="horas-select">
+HTML;
+                                 foreach ($horas as $hora){
+echo <<<HTML
+                                    <option value="{$hora}">$hora</option>
+HTML;
+                                }
+echo <<<HTML
+                            </select>
+                            
+                            
+                            <label for="">minutos finales:</label><br>
+                            <!-- Crear el select y las opciones -->
+                            <select name="minutos_finales" id="minutos-select">
+HTML;
+                                 foreach ($minutos as $minuto){
+echo <<<HTML
+                                    <option value="{$minuto}">$minuto</option>
+HTML;
+                                }
+echo <<<HTML
+                            </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                    <button type="submit" class="btn btn-primary">Filtrar</button><br>
                 </form>
     
 HTML;
@@ -325,6 +386,7 @@ HTML;
                         ORDER BY 
                             total_vendido DESC;
                     ";
+                    //echo $query;
         
                     $resultado = pg_query($conexion, $query);
                     if (!$resultado) {
