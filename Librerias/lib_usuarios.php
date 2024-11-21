@@ -1,5 +1,7 @@
 <?php
 
+include_once "../../librerias/lib_db.php";
+
 $accion = $_GET["accion"];
 
 function Guardar()
@@ -410,17 +412,18 @@ $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
         $array = [];
 
         if (pg_num_rows($resultado_consulta) > 0) {
-            while ($fila = pg_fetch_assoc($resultado_consulta)) {
+            $fila = pg_fetch_all($resultado_consulta);
+            foreach ($fila as $filas) {
                 $array[] = [
-                    "id"      => $fila["id"],
-                    "dni"      => $fila["dni"],
-                    "nombre"      => $fila["nombre"],
-                    "apellidos"   => $fila["apellido"],
-                    "telefono"    => $fila["telefono"],
-                    "direccion"   => $fila["direccion"],
-                    "correo"      => $fila["correo"],
-                    "contraseña"  => $fila["contraseña"],
-                    "cargo"  => $fila["cargo"]
+                    "id"      => $filas["id"],
+                    "dni"      => $filas["dni"],
+                    "nombre"      => $filas["nombre"],
+                    "apellidos"   => $filas["apellido"],
+                    "telefono"    => $filas["telefono"],
+                    "direccion"   => $filas["direccion"],
+                    "correo"      => $filas["correo"],
+                    "contraseña"  => $filas["contraseña"],
+                    "cargo"  => $filas["cargo"]
                 ];
             }
             echo json_encode($array);

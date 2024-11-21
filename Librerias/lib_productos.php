@@ -16,7 +16,7 @@ function Insertar_productos()
         $descripcion = pg_escape_string($datos["descripcion"]);
         $precio = pg_escape_string($datos["precio"]);
         $cantidad = pg_escape_string($datos["cantidad"]);
-        $fecha_Actual = date('Y-d-m H:i:s');
+        $fecha_Actual = date('Y-m-d H:i');
 
 
         if (isset($_FILES["foto"])) {
@@ -36,7 +36,7 @@ function Insertar_productos()
                     $conexion = Conexion();
 
                     $consulta = <<<SQL
-                    INSERT INTO productos (nombre,descripcion,precio,stock,imagen,fecha_creacion)VALUES('$nombre','$descripcion','$precio','$cantidad','$foto','$fecha_actual')
+                    INSERT INTO productos (nombre,descripcion,precio,stock,imagen,fecha_creacion)VALUES('$nombre','$descripcion','$precio','$cantidad','$foto','$fecha_Actual')
 SQL;
 echo $query;
                     $resultado = pg_query($conexion, $consulta);
@@ -150,18 +150,19 @@ function Actualizar_productos(){
     $descripcion = $_POST["descripcion"];
     $precio = $_POST["precio"];
     $cantidad = $_POST["cantidad"];
+    $fecha_Actual = date('Y-m-d H:i');
 
     $sql=<<<SQL
-    UPDATE productos SET nombre = '$nombre_producto', descripcion = '$descripcion', precio = '$precio', stock = '$cantidad' WHERE id = '$id'
+    UPDATE productos SET nombre = '$nombre_producto', descripcion = '$descripcion', precio = '$precio', stock = '$cantidad',fecha_actualizacion ='$fecha_Actual' WHERE id = '$id'
 SQL;
-$consulta = pg_query($conexion,$sql);
-if ($consulta) {
-    header("Location: ./verProductos.php?accion=verproductos");
-    exit;
-}
-else {
-    echo "error";
-}
+    $consulta = pg_query($conexion,$sql);
+    if ($consulta) {
+        header("Location: ./verProductos.php?accion=verproductos");
+        exit;
+    }
+    else {
+        echo "error";
+    }
 }
 
 function Eliminar_productos()
@@ -183,6 +184,61 @@ SQL;
         exit;
     } else {
         echo "error";
+    }
+}
+
+
+function Buscar($search) {
+    if (!empty($search)) {
+        include_once "../../conexion.php";
+        $conexion = Conexion();
+
+        if (!$conexion) {
+            die("Error al conectar con la base de datos");
+        }
+
+        $consulta = <<<SQL
+    SELECT 
+        productos.id, 
+        productos.nombre, 
+        productos.descripcion, 
+        productos.precio, 
+        productos.direccion, 
+        productos.correo, 
+        productos.contraseña AS contraseña, 
+        cargo.descripcion AS cargo 
+    FROM 
+        productos
+    WHERE 
+        productos.nombre ILIKE $1
+SQL;
+$resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
+
+        if (!$resultado_consulta) {
+            die("Error en la consulta");
+        }
+
+        $array = [];
+
+        if (pg_num_rows($resultado_consulta) > 0) {
+            $fila = pg_fetch_all($resultado_consulta);
+            foreach ($fila as $filas) {
+                $array[] = [
+                    "id"      => $filas["id"],
+                    "dni"      => $filas["dni"],
+                    "nombre"      => $filas["nombre"],
+                    "apellidos"   => $filas["apellido"],
+                    "telefono"    => $filas["telefono"],
+                    "direccion"   => $filas["direccion"],
+                    "correo"      => $filas["correo"],
+                    "contraseña"  => $filas["contraseña"],
+                    "cargo"  => $filas["cargo"]
+                ];
+            }
+            echo json_encode($array);
+        } else {
+            echo json_encode([]); // Retorna un array vacío si no hay resultados
+        }
     }
 }
 function Excel (){
