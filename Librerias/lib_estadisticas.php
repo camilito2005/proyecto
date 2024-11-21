@@ -369,7 +369,21 @@ HTML;
                     // Escapar las fechas para evitar inyecciones SQL
                     $fecha_inicio = pg_escape_string($conexion, $_POST['fecha_inicio']);
                     $fecha_fin = pg_escape_string($conexion, $_POST['fecha_fin']);
-        
+                    $hora_inicio = pg_escape_string($conexion, $_POST['horas_iniciales']);
+                    $hora_fin = pg_escape_string($conexion, $_POST['horas_finales']);
+                    $minutos_iniciales = pg_escape_string($conexion, $_POST['minutos_iniciales']);
+                    $minutos_finales = pg_escape_string($conexion, $_POST['minutos_finales']);
+
+                    echo "<br><br> hora inicio : ".$hora_inicio."</br></br>";
+                    echo "<br><br> hora fin : ".$hora_fin."</br></br>";
+                    echo "<br><br> minutos iniciales : ".$minutos_iniciales."</br></br>";
+                    echo "<br><br> minutos finales : ".$minutos_finales."</br></br>";
+
+                    $fecha_inicio+":"+$hora_inicio+":"+$minutos_iniciales;
+                    $fecha_fin+":"+$hora_fin+":"+$minutos_finales;
+
+                    echo "<br><br> fecha inicio : ".$fecha_inicio."</br></br>";
+                    echo "<br><br> fecha fin :".$fecha_fin."</br></br>";
                     // Consulta para obtener productos vendidos en el rango de fechas
                     $query = "
                         SELECT 
