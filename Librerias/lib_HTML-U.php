@@ -651,6 +651,7 @@ HTML;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -662,10 +663,13 @@ HTML;
 <div id="loading">Cargando...</div>
 <div class="container">
         <h3 class="text-center">Productos</h3>
-        <div class="input-field">
+        <!--<div class="input-field">
             <input type="search" id="search" placeholder="Buscar">
             <label for="search">Buscar</label>
-        </div>
+        </div>-->
+    <div class="input-search text-center">
+        <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
+    </div>
         <a href="../productos/productos.php?accion=excel" class="btn btn-warning"><i class="fa-solid fa-file-excel"></i></a>
         <a href="../productos/productos.php?accion=pdf" target="_blank" class="btn btn-success"><i class="fa-solid fa-file-pdf"></i></a>
 
@@ -681,9 +685,8 @@ HTML;
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="resultados-usuarios">
 HTML;
-
     include "../../conexion.php";
     $conexion = Conexion();
     $mostrar = pg_query($conexion, "SELECT * FROM productos");
@@ -691,6 +694,9 @@ HTML;
 
     $mostrar_producto = pg_fetch_all($mostrar);
 
+    //$productos_json = json_encode($mostrar_producto);
+
+//echo "<br><br><br><br>".$productos_json."</br></br></br></br>";
     if ($mostrar_producto) {
         foreach ($mostrar_producto as $value) {
             $precio = number_format($value["precio"]);
@@ -727,6 +733,9 @@ HTML;
 </tbody>
 </table>
 </div>
+
+<script src="../../js/busqueda.js">
+    </script>
 
 <form id="myForm" action="../catalogo/catalogo.php?accion=catalogo" onsubmit="showLoading()" method="post">
     <button class="btn btn-outline-secondary"  value="catalogo">

@@ -203,14 +203,12 @@ function Buscar($search) {
         productos.nombre, 
         productos.descripcion, 
         productos.precio, 
-        productos.direccion, 
-        productos.correo, 
-        productos.contraseña AS contraseña, 
-        cargo.descripcion AS cargo 
+        productos.stock
     FROM 
         productos
     WHERE 
-        productos.nombre ILIKE $1
+        productos.nombre
+         ILIKE $1
 SQL;
 $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
 
@@ -225,14 +223,10 @@ $resultado_consulta = pg_query_params($conexion, $consulta, ["%$search%"]);
             foreach ($fila as $filas) {
                 $array[] = [
                     "id"      => $filas["id"],
-                    "dni"      => $filas["dni"],
                     "nombre"      => $filas["nombre"],
-                    "apellidos"   => $filas["apellido"],
-                    "telefono"    => $filas["telefono"],
-                    "direccion"   => $filas["direccion"],
-                    "correo"      => $filas["correo"],
-                    "contraseña"  => $filas["contraseña"],
-                    "cargo"  => $filas["cargo"]
+                    "descripcion"   => $filas["descripcion"],
+                    "precio"    => $filas["precio"],
+                    "stock"   => $filas["stock"]
                 ];
             }
             echo json_encode($array);
