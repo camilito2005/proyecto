@@ -41,8 +41,12 @@ HTML;
         echo <<<HTML
             <p><strong>Cargo/Rol: {$_SESSION["descripcion"]}</strong></p>
             <p><strong>Identificador: {$_SESSION["id"]}</strong></p>
-            <p><strong>Correo: {$_SESSION["correo"]}</strong></p>
+            <p><strong>Cedula: {$_SESSION["dni"]}</strong></p>
             <p><strong>Nombre: {$_SESSION["nombre"]}</strong></p>
+            <p><strong>Apellido: {$_SESSION["apellido"]}</strong></p>
+            <p><strong>Telefono: {$_SESSION["telefono"]}</strong></p>
+            <p><strong>Direccion: {$_SESSION["direccion"]}</strong></p>
+            <p><strong>Correo: {$_SESSION["correo"]}</strong></p>
             <p><strong>Documento: {$_SESSION["dni"]}</strong></p>
             <div class="card-action">
                 <a class="btn blue modal-trigger" href="#editModal">Editar</a>

@@ -374,18 +374,20 @@ HTML;
                     $minutos_iniciales = pg_escape_string($conexion, $_POST['minutos_iniciales']);
                     $minutos_finales = pg_escape_string($conexion, $_POST['minutos_finales']);
 
-                    echo "<br><br> hora inicio : ".$hora_inicio."</br></br>";
+                    /*echo "<br><br> hora inicio : ".$hora_inicio."</br></br>";
                     echo "<br><br> hora fin : ".$hora_fin."</br></br>";
                     echo "<br><br> minutos iniciales : ".$minutos_iniciales."</br></br>";
-                    echo "<br><br> minutos finales : ".$minutos_finales."</br></br>";
+                    echo "<br><br> minutos finales : ".$minutos_finales."</br></br>";*/
 
-                    $fecha_inicio+":"+$hora_inicio+":"+$minutos_iniciales;
-                    $fecha_fin+":"+$hora_fin+":"+$minutos_finales;
+                    $fecha_inicio= $fecha_inicio ." ".$hora_inicio.":".$minutos_iniciales.":00.000";
+                    $fecha_fin = $fecha_fin." ".$hora_fin.":".$minutos_finales.":00.000";
 
-                    echo "<br><br> fecha inicio : ".$fecha_inicio."</br></br>";
-                    echo "<br><br> fecha fin :".$fecha_fin."</br></br>";
+                    /*echo "<br><br> fecha inicio : ".$fecha_inicio."</br></br>";
+                    echo "<br><br> fecha fin : ".$fecha_fin."</br></br>"; */
+
+
                     // Consulta para obtener productos vendidos en el rango de fechas
-                    $query = "
+                    $query = /*"
                         SELECT 
                             p.nombre AS nombre_producto,
                             SUM(f.stock) AS total_vendido
@@ -399,8 +401,26 @@ HTML;
                             p.nombre
                         ORDER BY 
                             total_vendido DESC;
-                    ";
-                    //echo $query;
+                    ";*/
+
+
+                    "SELECT 
+    p.nombre AS nombre_producto, 
+    SUM(f.stock) AS total_vendido 
+FROM 
+    facturas f 
+JOIN 
+    productos p 
+ON 
+    f.producto_id = p.id 
+WHERE 
+    f.fecha >= '$fecha_inicio' 
+    AND f.fecha < '$fecha_fin' 
+GROUP BY 
+    p.nombre 
+ORDER BY 
+    total_vendido DESC";
+                    echo $query;
         
                     $resultado = pg_query($conexion, $query);
                     if (!$resultado) {
