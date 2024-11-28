@@ -9,108 +9,119 @@
 </head>
 <body>
     <div>
-        <h2 class="text-center primary-color">
-            Atención al Usuario</h2>
+        <h2 class="text-center primary-color">Atención al Usuario</h2>
+    
         <div class="container">
             <nav class="py-5">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a aria-controls="nav-profile" aria-selected="true" class="nav-item nav-link active" data-toggle="tab" href="#nav-profile" id="nav-profile-tab" role="tab"> Política de Participación Social </a>
-                    <a aria-controls="nav-home" aria-selected="false" class="nav-item nav-link" data-toggle="tab" href="#nav-home" id="nav-home-tab" role="tab"> Alianza de Usuarios </a>
+                    <!-- Política de Participación Social primero -->
+                    <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">
+                        Política de Participación Social
+                    </a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-perfil" role="tab" aria-controls="nav-profile" aria-selected="false">
+                    <!--<a class="nav-item nav-link" aria-controls="nav-home" href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank" role="tab" aria-selected="false">-->
+                        Alianza de Usuarios
+                    </a>
                 </div>
-            </nav > <!-- Contenido de las pestaÃ±as -->
-            <div class="tab-content" id="nav-tabContent" >
-                <!-- Contenido compartido: PolÃ­tica de ParticipaciÃ³n Social y Alianza de Usuarios -->			
-                <div aria-labelledby="nav-profile-tab" class="tab-pane fade show active" id="nav-profile" role="tabpanel">
-   			        <div class="tab">
+            </nav>
+    
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content" id="nav-tabContent">
+                 <!-- Contenido de Política de Participación Social (activo por defecto) -->
+                <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="tab">
                         <input id="chck2023" type="checkbox" />
-                            <label class="tab-label" for="chck2023">2023:
-
-                            </label>
+                        <label class="tab-label" for="chck2023">2023:</label>
                         <div class="tab-content">
+                            <ul>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Programación 2023</li></a><br/>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Seguimiento 2023</li></a>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <input id="chck2022" type="checkbox" />
+                        <label class="tab-label" for="chck2022">2022:</label>
+                        <div class="tab-content">
+                            <ul>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Programación 2022</li></a><br />
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Seguimiento 2022</li></a>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <input id="chck2021" type="checkbox" />
+                        <label class="tab-label" for="chck2021">2021:</label>
+                        <div class="tab-content">
+                            <ul>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Programación 2021</li></a><br />
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Seguimiento 2021</li></a>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <input id="chck2020" type="checkbox" />
+                        <label class="tab-label" for="chck2020">2020:</label>
+                        <div class="tab-content">
+                            <ul>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Programación 2020</li></a><br />
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Seguimiento 2020</li></a>
+                            </ul>
                         </div>
                     </div>
                 </div>
+    
+                <div class="tab-pane fade show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="tab">
+                        <input id="chck2023" type="checkbox" />
+                        <label class="tab-label" for="chck2023">2023:</label>
+                        <div class="tab-content">
+                            <ul>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Programación 2023</li></a><br/>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Seguimiento 2023</li></a>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <input id="chck2022" type="checkbox" />
+                        <label class="tab-label" for="chck2022">2022:</label>
+                        <div class="tab-content">
+                            <ul>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Programación 2022</li></a><br />
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Seguimiento 2022</li></a>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <input id="chck2021" type="checkbox" />
+                        <label class="tab-label" for="chck2021">2021:</label>
+                        <div class="tab-content">
+                            <ul>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Programación 2021</li></a><br />
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Seguimiento 2021</li></a>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab">
+                        <input id="chck2020" type="checkbox" />
+                        <label class="tab-label" for="chck2020">2020:</label>
+                        <div class="tab-content">
+                            <ul>
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Programación 2020</li></a><br />
+                                <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank"><li>Seguimiento 2020</li></a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+    
+    
+                <!-- Contenido para Alianza de Usuarios -->
+                <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <a href="https://drive.google.com/file/d/1d0WZ_MokvnYWzQ8cd7LToDZtTl-tM-m_/edit" target="_blank">Acceder al drive</a>
+                </div>
             </div>
         </div>
     </div>
-    <ul>
-        <li>
-            <br />
-            Seguimiento 2023</li>
-    </ul>
-    <div class="tab">
-        <input id="chck2022" type="checkbox" /> <label class="tab-label" for="chck2022">2022:</label>
-        <div class="tab-content">
-        </div>
-    </div>
-    <ul>
-        <li>
-            <br />
-            Seguimiento 2022</li>
-    </ul>
-    <div class="tab">
-        <input id="chck2021" type="checkbox" /> <label class="tab-label" for="chck2021">2021:</label>
-        <div class="tab-content">
-        </div>
-    </div>
-    <ul>
-        <li>
-            <br />
-            Seguimiento 2021</li>
-    </ul>
-    <div class="tab">
-        <input id="chck2020" type="checkbox" /> <label class="tab-label" for="chck2020">2020:</label>
-        <div class="tab-content">
-        </div>
-    </div>
-    <ul>
-        <li>
-            <br />
-            Seguimiento 2020</li>
-    </ul>
-    <!-- ReutilizaciÃ³n del contenido para Alianza de Usuarios -->
-     <div aria-labelledby="nav-home-tab" class="tab-pane fade" id="nav-home" role="tabpanel">
-    <div class="tab">
-            <input id="chck2023-alt" type="checkbox" /> <label class="tab-label" for="chck2023-alt">2023:</label>
-            <div class="tab-content">
-            </div>
-        </div>
-    </div>
-    <ul>
-        <li>
-            <br />
-            Seguimiento 2023</li>
-    </ul>
-    <div class="tab">
-        <input id="chck2022-alt" type="checkbox" /> <label class="tab-label" for="chck2022-alt">2022:</label>
-        <div class="tab-content">
-        </div>
-    </div>
-    <ul>
-        <li>
-            <br />
-            Seguimiento 2022</li>
-    </ul>
-    <div class="tab">
-        <input id="chck2021-alt" type="checkbox" /> <label class="tab-label" for="chck2021-alt">2021:</label>
-        <div class="tab-content">
-        </div>
-    </div>
-    <ul>
-        <li>
-            <br />
-            Seguimiento 2021</li>
-    </ul>
-    <div class="tab">
-        <input id="chck2020-alt" type="checkbox" /> <label class="tab-label" for="chck2020-alt">2020:</label>
-        <div class="tab-content">
-        </div>
-    </div>
-    <ul>
-        <li>
-            <br />
-            Seguimiento 2020</li>
-    </ul>
     
 </body>
 </html>
