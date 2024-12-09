@@ -263,7 +263,7 @@ HTML;
 
 
 
-function Mostrar_usuarios() {
+function Mostrar_usuarios122() {
 
     session_start();
     echo <<<HTML
@@ -376,111 +376,139 @@ echo <<<HTML
 HTML;
 }
 
-function Mostrar_usuarios123() {
+function Mostrar_usuarios()
+{
     session_start();
     echo <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="../../css/cargando.css">
-    <link rel="stylesheet" href="../../css/mostrar_usuarios.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <title>Tabla de Usuarios</title>
-</head>
-<body>
-    <h3 class="text-center text-secondary">Usuarios</h3>
-    
-    <div class="input-search text-center">
-        <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
-    </div>
-
-    <!--<div class="input-search text-center">
-        <form action="../../librerias/lib_buscar.php?accion=buscar" method="post">
-            <input type="search" id="search" name="buscador" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
-        </form>
-    </div>-->
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        <title>Tabla de Usuarios</title>
+    </head>
 HTML;
 
-echo <<<HTML
+    if (isset($_SESSION["correo"])) {
+        echo <<<HTML
+        <body>
+            <div class="container mt-4">
+                <h3 class="text-center text-secondary">Usuarios</h3>
 
-    <div class="table-container mx-auto col-12 col-md-8">
-        <table class="table">
-            <thead class="table-light">
+                <!-- Barra de búsqueda -->
+                <div class="input-group my-4 justify-content-center">
+                    <input type="search" id="search" class="form-control w-50" placeholder="Buscar...">
+                </div>
+
+                <!-- Tabla de usuarios -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>DNI</th>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Teléfono</th>
+                                <th>Dirección</th>
+                                <th>Correo</th>
+                                <th>Contraseña</th>
+                                <th>Cargo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultados-usuarios">
+HTML;
+
+        include_once "../../conexion.php";
+        $conexion = Conexion();
+        $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion, u.correo, u.contraseña, c.descripcion AS cargo
+                      FROM usuarios u
+                      INNER JOIN cargo c ON u.cargo_id = c.id";
+        $query = pg_query($conexion, $consulta1);
+        $usuarios = pg_fetch_all($query);
+
+        if ($usuarios) {
+            foreach ($usuarios as $fila) {
+                $id_encriptado = base64_encode($fila['id']);
+                echo <<<HTML
                 <tr>
-                    <th>ID</th>
-                    <th>DNI</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Teléfono</th>
-                    <th>Dirección</th>
-                    <th>Correo</th>
-                    <th>Cargo</th>
-                    <th>Modificar/Eliminar</th>
+                    <td>{$fila['id']}</td>
+                    <td>{$fila['dni']}</td>
+                    <td>{$fila['nombre']}</td>
+                    <td>{$fila['apellido']}</td>
+                    <td>{$fila['telefono']}</td>
+                    <td>{$fila['direccion']}</td>
+                    <td>{$fila['correo']}</td>
+                    <td>{$fila['contraseña']}</td>
+                    <td>{$fila['cargo']}</td>
+                    <td>
+                        <a href="usuarios.php?accion=modificar&id={$id_encriptado}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                        <a href="usuarios.php?accion=eliminar&id={$id_encriptado}" onclick="return pregunta()" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody id="resultados-usuarios">
 HTML;
-
-    include_once "../../conexion.php";
-    $conexion = Conexion();
-    $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion, u.correo, c.descripcion AS cargo
-                  FROM usuarios u
-                  INNER JOIN cargo c ON u.cargo_id = c.id";
-    $query = pg_query($conexion, $consulta1);
-    $usuarios = pg_fetch_all($query);
-
-
-
-
-    if ($usuarios) {
-        foreach ($usuarios as $fila) {
-            
-$id_encriptado = base64_encode($fila['id']);
-            echo "<tr>";
-            echo "<td>{$fila['id']}</td>";
-            echo "<td>{$fila['dni']}</td>";
-            echo "<td>{$fila['nombre']}</td>";
-            echo "<td>{$fila['apellido']}</td>";
-            echo "<td>{$fila['telefono']}</td>";
-            echo "<td>{$fila['direccion']}</td>";
-            echo "<td>{$fila['correo']}</td>";
-            echo "<td>{$fila['cargo']}</td>";
-            echo "<td>
-                    <a href='usuarios.php?accion=modificar&id={$id_encriptado}'><i class='fa-solid fa-pen'>m</i></a>
-                    <a href='usuarios.php?accion=eliminar&id={$id_encriptado}' onclick='return pregunta()'><i class='fa-solid fa-trash'>e</i></a>
-                  </td>";
-            echo "</tr>";
+            }
+        } else {
+            echo <<<HTML
+            <tr>
+                <td colspan="10" class="text-center">No hay usuarios registrados.</td>
+            </tr>
+HTML;
         }
+
+        echo <<<HTML
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Botón para agregar usuarios -->
+                <div class="text-center my-4">
+                    <form action="./formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-user-plus"></i> Agregar Usuarios
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Botón para volver al inicio -->
+                <div class="text-center">
+                    <form action="../../index.php" onsubmit="showLoading()" method="post">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-house"></i> Inicio
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Scripts -->
+            <script src="../../js/buscador.js"></script>
+            <script src="../../js/pregunta.js"></script>
+        </body>
+HTML;
     } else {
-        echo "<tr><td colspan='9'>No hay usuarios registrados.</td></tr>";
+        echo <<<HTML
+        <body>
+            <div class="container mt-5 text-center">
+                <p>Para continuar, inicia sesión.</p>
+                <a href="../pagina-principal/login.php?accion=login" class="btn btn-primary">Iniciar sesión</a>
+            </div>
+        </body>
+HTML;
     }
 
     echo <<<HTML
-            </tbody>
-        </table>
-    </div>
-
-    <!--<script src="../../js/buscador.js"></script>-->
-    <script src="../../js/buscador.js">
-    <div class="mx-auto col-12 col-md-8">
-        <form id="myForm" action="./formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" type="submit">
-                <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
-            </button>
-        </form>
-
-        <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" type="submit">
-                <i class="fa-solid fa-house"></i> Inicio
-            </button>
-        </form>
-    </div>
-
-</body>
-</html>
+    </html>
 HTML;
 }
+
 
 
 function Login_html1()
