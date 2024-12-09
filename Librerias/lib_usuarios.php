@@ -225,10 +225,17 @@ function Login(){
 
     $conexion = Conexion();
 
-    // Obtener las credenciales del formulario
-    $correo = $_POST["correo"];
-    $contraseña = $_POST["contraseña"];
+   
+     // Validar que se envíen los datos del formulario
+     if (!isset($_POST['correo'], $_POST['contraseña']) || empty(trim($_POST['correo'])) || empty(trim($_POST['contraseña']))) {
+        echo "Por favor, completa todos los campos.";
+        return;
+    }
 
+     // Obtener las credenciales del formulario
+     $correo = $_POST["correo"];
+     $contraseña = $_POST["contraseña"];
+ 
     // Consultar la base de datos para validar el usuario
     $consulta = pg_query_params($conexion, "
         SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion,  u.correo, u.contraseña, u.cargo_id, c.descripcion AS cargo_descripcion

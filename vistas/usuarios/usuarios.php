@@ -54,6 +54,10 @@ if ($accion == "buscar") {
     Buscar($search);
 }
 
+if($accion == "perfil"){
+    Mostrar_usuarios();
+}
+
 
 ?>
 

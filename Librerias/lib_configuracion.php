@@ -36,7 +36,7 @@ SQL;
     }
 }
 if ($accion == "actualizar") {
-    Actualizar_usuarios_perfil($ruta = "../vistas/usuarios/usuarios.php?accion=verusuarios?accion=perfil");
+    Actualizar_usuarios_perfil($ruta = "../vistas/usuarios/usuarios.php?accion=verusuarios");
 }
 
 ?>

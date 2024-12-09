@@ -205,11 +205,10 @@ function Menu(){
         <div class="container">
             <!--<a href="#" class="brand-logo">Mi Aplicación</a>-->
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="#">Usuarios</a></li>
-                <li><a href="#">Catálogo</a></li>
+                <li><a href="./usuarios.php?accion=verusuarios">Usuarios</a></li>
+                <li><a href="../catalogo/catalogo.php?accion=catalogo">Catálogo</a></li>
                 <li><a href="#">Cerrar sesion</a></li>
-                <li><a href="#">Productos</a></li>
-                <li><a href="#">Catálogo</a></li>
+                <li><a href="../productos.php?accion=verproductos">Productos</a></li>
             </ul>
         </div>
     </nav>

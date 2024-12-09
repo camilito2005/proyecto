@@ -135,8 +135,8 @@ HTML;
 }
 function Formulario_clientes()
 {
-    session_start();
 
+    session_start();
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
@@ -153,6 +153,9 @@ function Formulario_clientes()
     <title>Registro</title>
 </head>
 <body>
+HTML;
+    if (isset($_SESSION["nombre"])) {
+        echo <<<HTML
 
 <div id="loading">Cargando...</div>
 <div class="contenedor">
@@ -232,17 +235,28 @@ echo <<<HTML
                 <i class="fa-duotone fa-solid fa-users-viewfinder"></i> Usuarios
             </button>
         </form>
-
-        <form action="../../index.php" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary">
-                <i class="fa-solid fa-house"></i> Inicio
-            </button>
-        </form>
     </div>
 </div>
 
 </body>
 </html>
+HTML;
+    }
+    /*elseif ((isset($_SESSION["cargo_id"]) && $_SESSION["cargo_id"] == 2)) {
+        echo $_SESSION["nombre"].":  empleado";
+    }*/
+    elseif ((!isset($_SESSION["cargo_id"])) ) {
+        echo <<<HTML
+        <p>Para continuar, inicia sesión.</p>
+        <a href="../pagina-principal/login.php?accion=login" class="btn blue btn-login">Iniciar sesión</a>
+HTML;
+    }
+    echo <<<HTML
+    <form action="../../index.php" onsubmit="showLoading()" method="post">
+            <button class="btn btn-outline-secondary">
+                <i class="fa-solid fa-house"></i> Inicio
+            </button>
+        </form>
 HTML;
 }
 
@@ -250,88 +264,106 @@ HTML;
 
 
 function Mostrar_usuarios() {
+
     session_start();
-
     echo <<<HTML
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="../../css/cargando.css">
-    <link rel="stylesheet" href="../../css/mostrar_usuarios.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <title>Tabla de Usuarios</title>
-</head>
-<body>
-    <h3 class="text-center text-secondary">Usuarios</h3>
-    
-    <div class="input-search text-center">
-        <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
-    </div>
-
-    <div class="table-container mx-auto col-12 col-md-8">
-        <table class="table">
-            <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>DNI</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Teléfono</th>
-                    <th>Dirección</th>
-                    <th>Correo</th>
-                    <th>Contraseña</th>
-                    <th>Cargo</th>
-                    <th>Modificar/Eliminar</th>
-                </tr>
-            </thead>
-            <tbody id="resultados-usuarios">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <link rel="stylesheet" href="../../css/cargando.css">
+        <link rel="stylesheet" href="../../css/mostrar_usuarios.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <title>Tabla de Usuarios</title>
+    </head>
 HTML;
 
-    include_once "../../conexion.php";
-    $conexion = Conexion();
-    $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion, u.correo,u.contraseña, c.descripcion AS cargo
-                  FROM usuarios u
-                  INNER JOIN cargo c ON u.cargo_id = c.id";
-    $query = pg_query($conexion, $consulta1);
-    $usuarios = pg_fetch_all($query);
-
-    if ($usuarios) {
-        foreach ($usuarios as $fila) {
-            $id_encriptado = base64_encode($fila['id']);
-            echo "<tr>";
-            echo "<td>{$fila['id']}</td>";
-            echo "<td>{$fila['dni']}</td>";
-            echo "<td>{$fila['nombre']}</td>";
-            echo "<td>{$fila['apellido']}</td>";
-            echo "<td>{$fila['telefono']}</td>";
-            echo "<td>{$fila['direccion']}</td>";
-            echo "<td>{$fila['correo']}</td>";
-            echo "<td>{$fila['contraseña']}</td>";
-            echo "<td>{$fila['cargo']}</td>";
-            echo "<td>
-                    <a href='usuarios.php?accion=modificar&id={$id_encriptado}'><i class='fa-solid fa-pen'>m</i></a>
-                    <a href='usuarios.php?accion=eliminar&id={$id_encriptado}' onclick='return pregunta()'><i class='fa-solid fa-trash'>e</i></a>
-                  </td>";
-            echo "</tr>";
-        }
-    } else {
-        echo "<tr><td colspan='9'>No hay usuarios registrados.</td></tr>";
+    if (isset($_SESSION["correo"])) {
+echo <<<HTML
+        <body>
+            <h3 class="text-center text-secondary">Usuarios</h3>
+            
+            <div class="input-search text-center">
+                <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
+            </div>
+        
+            <div class="table-container mx-auto col-12 col-md-8">
+                <table class="table">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>DNI</th>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Teléfono</th>
+                            <th>Dirección</th>
+                            <th>Correo</th>
+                            <th>Contraseña</th>
+                            <th>Cargo</th>
+                            <th>Modificar/Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultados-usuarios">
+HTML;
+        
+            include_once "../../conexion.php";
+            $conexion = Conexion();
+            $consulta1 = "SELECT u.id, u.dni, u.nombre, u.apellido, u.telefono, u.direccion, u.correo,u.contraseña, c.descripcion AS cargo
+                          FROM usuarios u
+                          INNER JOIN cargo c ON u.cargo_id = c.id";
+            $query = pg_query($conexion, $consulta1);
+            $usuarios = pg_fetch_all($query);
+        
+            if ($usuarios) {
+                foreach ($usuarios as $fila) {
+                    $id_encriptado = base64_encode($fila['id']);
+                    echo "<tr>";
+                    echo "<td>{$fila['id']}</td>";
+                    echo "<td>{$fila['dni']}</td>";
+                    echo "<td>{$fila['nombre']}</td>";
+                    echo "<td>{$fila['apellido']}</td>";
+                    echo "<td>{$fila['telefono']}</td>";
+                    echo "<td>{$fila['direccion']}</td>";
+                    echo "<td>{$fila['correo']}</td>";
+                    echo "<td>{$fila['contraseña']}</td>";
+                    echo "<td>{$fila['cargo']}</td>";
+                    echo "<td>
+                            <a href='usuarios.php?accion=modificar&id={$id_encriptado}'><i class='fa-solid fa-pen'>m</i></a>
+                            <a href='usuarios.php?accion=eliminar&id={$id_encriptado}' onclick='return pregunta()'><i class='fa-solid fa-trash'>e</i></a>
+                          </td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='9'>No hay usuarios registrados.</td></tr>";
+            }
+        
+            echo <<<HTML
+                    </tbody>
+                </table>
+            </div>
+            <div class="mx-auto col-12 col-md-8">
+                <form id="myForm" action="./formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
+                    </button>
+                </form>
+            </div>
+HTML;
+    }
+    else{
+        echo <<<HTML
+        <p>Para continuar, inicia sesión.</p>
+        <a href="../pagina-principal/login.php?accion=login" class="btn blue btn-login">Iniciar sesión</a>
+HTML;
     }
 
-    echo <<<HTML
-            </tbody>
-        </table>
-    </div>
 
+echo <<<HTML
     <script src="../../js/buscador.js">
     </script>
+    <script src="../../js/pregunta.js">
+    </script>
     <div class="mx-auto col-12 col-md-8">
-        <form id="myForm" action="./formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
-            <button class="btn btn-outline-secondary" type="submit">
-                <i class="fa-solid fa-user-plus"></i> Agregar Usuarios
-            </button>
-        </form>
 
         <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
             <button class="btn btn-outline-secondary" type="submit">
@@ -545,7 +577,7 @@ function Login_html() {
             </form>
         </div>
     </div>
-    <form id="myForm" action="../usuarios/formulario_registro.php" onsubmit="showLoading()" method="post">
+    <form id="myForm" action="../usuarios/formulario_registro.php?accion=aggusuarios" onsubmit="showLoading()" method="post">
         <button class="btn btn-outline-secondary" value="inicio">
             <i class="fa-solid fa-user-plus"></i> Agregar usuarios
         </button>
@@ -735,6 +767,8 @@ HTML;
 </div>
 
 <script src="../../js/busqueda.js">
+    </script>
+    <script src="../../js/pregunta.js">
     </script>
 
 <form id="myForm" action="../catalogo/catalogo.php?accion=catalogo" onsubmit="showLoading()" method="post">
@@ -1881,11 +1915,18 @@ echo <<<HTML
     <div class="container">
         <!--<a href="#" class="brand-logo">Mi Aplicación</a>-->
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="#">Usuarios</a></li>
-            <li><a href="#">Catálogo</a></li>
-            <li><a href="#">Cerrar sesion</a></li>
-            <li><a href="#">Productos</a></li>
-            <li><a href="#">Catálogo</a></li>
+            <li>
+                <a href="./usuarios.php?accion=verusuarios">Usuarios</a>
+            </li>
+            <li>
+                <a href="../catalogo/catalogo.php?accion=catalogo">Catálogo</a>
+            </li>
+            <li>    
+                <a href="#">Cerrar sesion</a>
+            </li>
+            <li>
+                <a href="../productos.php?accion=verproductos">Productos</a>
+                </li>
         </ul>
     </div>
 </nav>
