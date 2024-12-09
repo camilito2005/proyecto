@@ -1,5 +1,5 @@
 <?php
-function Menus_noresponsive($ruta_css = "./css/estilos8.css")
+function Menus($ruta_css = "./css/estilos8.css")
 {
     session_start();
     echo <<<HTML
@@ -91,7 +91,7 @@ HTML;
 }
 
 
-function Menus($ruta_css = "./css/estilos8.css")
+function Menus_responsive($ruta_css = "./css/estilos8.css")
 {
     session_start();
     echo <<<HTML

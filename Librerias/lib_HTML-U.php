@@ -1,139 +1,155 @@
 <?php
 //include_once "../../Librerias/lib_menu.php";
-function Formulario_clientes1()
+function Formulario_clientes()
 {
     session_start();
-
     echo <<<HTML
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-<link rel="stylesheet" href="../../css/cargando.css">
-<!--<link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">-->
-<link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/d6ecbc133f.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <!-- <link rel="stylesheet" href="../../css/registro.css"> -->
-    <script src="../../js/cargando.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <body>
-
-    <title>Registro</title>
-
-
-    
-<div id="loading">Cargando...</div>
-    <div class="contenedor">
-        <div class="formulario_registro">
-            <form id="myForm" onsubmit="showLoading()"  class="col-4 p-3 m-auto" action="usuarios.php?accion=registrar" method="post">
-                <h3 class="text-center text-secondary">registro de clientes</h3>
-                <div id="loading">Cargando...</div>
-
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">dni</label>
-                    <input class="form-control" required type="text" name="dni" placeholder=" introduzca su dni">
-                </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="../../css/cargando.css">
+    <link rel="shortcut icon" href="../../fotos/agregar-usuario.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="../../js/cargando.js"></script>
+    <title>Registro de Clientes</title>
+</head>
+<body>
 HTML;
 
-if ($_SESSION['descripcion']==="Administrador") {
-    echo <<<HTML
-
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">rol</label>
-                    <section>
-                        <select name="rol" id="">
-                            <option value="1">admin</option>
-                            <option value="2">cliente</option>
-                        </select>
-                    </section>
+    if (isset($_SESSION["nombre"])) {
+        echo <<<HTML
+<div id="loading" style="display: none;">Cargando...</div>
+<div class="container">
+    <div class="row">
+        <div class="col s12 m8 offset-m2 l6 offset-l3">
+            <div class="card">
+                <div class="card-content">
+                    <h4 class="center-align grey-text">Registro de Clientes</h4>
+                    <form id="myForm" onsubmit="showLoading()" action="usuarios.php?accion=registrar" method="post">
+                        
+                        <div class="input-field">
+                            <input id="dni" type="text" name="dni" required>
+                            <label for="dni">DNI</label>
+                        </div>
 HTML;
-}elseif ($_SESSION['descripcion']==="Empleado") {
-    echo <<<HTML
-    <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">rol</label>
-                    <section>
-                        <select name="rol" id="">
-                            <option value="2">cliente</option>
-                        </select>
-                    </section>
+
+        if (isset($_SESSION['descripcion']) && $_SESSION['descripcion'] === "Administrador") {
+            echo <<<HTML
+                        <div class="input-field">
+                            <select name="rol" required>
+                                <option value="1">Administrador</option>
+                                <option value="2">Cliente</option>
+                            </select>
+                            <label for="rol">Rol</label>
+                        </div>
 HTML;
-}else {
-    echo <<<HTML
-    <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">rol</label>
-                    <section>
-                        <select name="rol" id="">
-                            <option value="2">cliente</option>
-                        </select>
-                    </section>
+        } else {
+            echo <<<HTML
+                        <div class="input-field">
+                            <select name="rol" required>
+                                <option value="2">Cliente</option>
+                            </select>
+                            <label for="rol">Rol</label>
+                        </div>
 HTML;
-}
-echo <<<HTML
-                    <input class="form-control" required type="text" name="rol" placeholder=" introduzca su dni"> 
+        }
+
+        echo <<<HTML
+                        <div class="input-field">
+                            <input id="nombre" type="text" name="nombre" required>
+                            <label for="nombre">Nombre</label>
+                        </div>
+
+                        <div class="input-field">
+                            <input id="apellido" type="text" name="apellido" required>
+                            <label for="apellido">Apellidos</label>
+                        </div>
+
+                        <div class="input-field">
+                            <input id="telefono" type="tel" name="telefono" required>
+                            <label for="telefono">Número Telefónico</label>
+                        </div>
+
+                        <div class="input-field">
+                            <input id="direccion" type="text" name="direccion" required>
+                            <label for="direccion">Dirección</label>
+                        </div>
+
+                        <div class="input-field">
+                            <input id="correo" type="email" name="correo" required>
+                            <label for="correo">Correo Electrónico</label>
+                        </div>
+
+                        <div class="input-field">
+                            <input id="contraseña" type="password" name="contraseña" required>
+                            <label for="contraseña">Contraseña</label>
+                        </div>
+
+                        <div class="input-field">
+                            <input id="confirmar_contraseña" type="password" name="confirmar_contraseña" required>
+                            <label for="confirmar_contraseña">Confirmar Contraseña</label>
+                        </div>
+
+                        <div class="center-align">
+                            <button class="btn waves-effect waves-light" type="submit" name="registro">
+                                Registrar
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">nombre</label>
-                    <input class="form-control" required type="text" name="nombre" placeholder=" introduzca su nombre">
+                <div class="card-action center-align">
+                    <form action="../usuarios/usuarios.php?accion=verusuarios" onsubmit="showLoading()" method="post">
+                        <button class="btn-flat waves-effect">
+                            <i class="material-icons left">Usuarios</i> 
+                        </button>
+                    </form>
                 </div>
-
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">apellidos</label>
-                    <input class="form-control" required type="text" name="apellido" placeholder=" introduzca su apellidos">
-                </div>
-
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">numero telefonico</label>
-                    <input class="form-control" required type="phone" value="" name="telefono" placeholder="introduzca su numero telefonico">
-                </div>
-
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">direccion</label>
-                    <input class="form-control" required type="text" name="direccion" placeholder="direccion">
-                </div>
-
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">correo electronico</label>
-                    <input class="form-control" required type="email" name="correo" placeholder="introduzca su correo electronico">
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">contraseña</label>
-                    <input class="form-control" required type="password" name="contraseña" placeholder="contraseña">
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">comfirmar contraseña</label>
-                    <input class="form-control" required type="password" name="comfirm_contraseña" placeholder="contraseña">
-                </div>
-
-                <input class="btn btn-primary" type="submit" name="registro" value="registrar"><br><br>
-                
-            </form>
-
-            <script src="../js/cargando.js"></script>
-
-            <form id="myForm" action="../usuarios/usuarios.php" onsubmit="showLoading()" method="post">
-                <button class="btn btn-outline-secondary" value="inicio">
-                <i class="fa-duotone fa-solid fa-users-viewfinder"></i>usuarios
-                </button>
-            </form>
-
-            <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
-                <button class="btn btn-outline-secondary" value="inicio">
-                    <i class="fa-solid fa-house"></i>inicio
-                </button>
-            </form>
+            </div>
         </div>
     </div>
-        
-    </body>
-    </head>
+</div>
+HTML;
+    } elseif ((!isset($_SESSION["cargo_id"]))) {
+        echo <<<HTML
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <p class="center-align">Para continuar, inicia sesión.</p>
+            <div class="center-align">
+                <a href="../pagina-principal/login.php?accion=login" class="btn waves-effect waves-light">
+                    Iniciar sesión
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+HTML;
+    }
+
+    echo <<<HTML
+<div class="container center-align">
+    <form action="../../index.php" onsubmit="showLoading()" method="post">
+        <button class="btn-flat waves-effect">
+            <i class="material-icons left">Inicio</i> 
+        </button>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+    });
+</script>
+</body>
 </html>
 HTML;
 }
-function Formulario_clientes()
+
+
+function Formulario_clientes12()
 {
 
     session_start();
@@ -622,11 +638,8 @@ HTML;
     echo $html;
 }
 
-function Formulario_productos()
+function Formulario_productos000()
 {
-    /*Menus($ruta_css="../../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
-    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
-    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
     echo <<<HTML
         <!DOCTYPE html>
 <html lang="es">
@@ -689,6 +702,99 @@ function Formulario_productos()
 HTML;
 
 }
+
+
+function Formulario_productos()
+{
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="shortcut icon" href="../../fotos/comercio-electronico.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="../../js/cargando.js"></script>
+    <title>Agregar Productos</title>
+</head>
+
+<body>
+<div id="loading" style="display: none;">Cargando...</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col s12 m8 offset-m2 l6 offset-l3">
+            <div class="card">
+                <div class="card-content">
+                    <h4 class="center-align grey-text">Agregar Productos</h4>
+                    <form id="myForm" action="../productos/productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+                        
+                        <div class="input-field">
+                            <input id="nombre" type="text" name="nombre" required>
+                            <label for="nombre">Nombre del producto</label>
+                        </div>
+
+                        <div class="input-field">
+                            <textarea id="descripcion" name="descripcion" class="materialize-textarea" required></textarea>
+                            <label for="descripcion">Descripción</label>
+                        </div>
+
+                        <div class="input-field">
+                            <input id="precio" type="number" name="precio" required>
+                            <label for="precio">Precio</label>
+                        </div>
+
+                        <div class="input-field">
+                            <input id="cantidad" type="number" name="cantidad" required>
+                            <label for="cantidad">Cantidad</label>
+                        </div>
+
+                        <div class="file-field input-field">
+                            <div class="btn">
+                                <span>Foto</span>
+                                <input type="file" name="foto" accept="image/*" required>
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Seleccione la foto">
+                            </div>
+                        </div>
+
+                        <div class="center-align">
+                            <button class="btn waves-effect waves-light" type="submit" name="enviar">
+                                Agregar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-action center-align">
+                    <form id="myForm" action="../catalogo/catalogo.php?accion=catalogo" onsubmit="showLoading()" method="post">
+                        <button class="btn-flat waves-effect">
+                            <i class="material-icons left">Ver catálogo</i> 
+                        </button>
+                    </form>
+                    <form id="myForm" action="../../index.php" onsubmit="showLoading()" method="post">
+                        <button class="btn-flat waves-effect">
+                            <i class="material-icons left">Inicio</i> 
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        M.AutoInit();
+    });
+</script>
+</body>
+</html>
+HTML;
+}
+
 function Mostrar_productos(){
     
     date_default_timezone_set('America/Bogota');
