@@ -5,4 +5,8 @@ $accion = $_REQUEST["accion"];
 if ($accion == "catalogo") {
     Catalogo();
 }
+if($accion == "detalles"){
+    ProductoDetalles();
+}
+
 ?>

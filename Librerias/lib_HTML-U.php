@@ -1119,48 +1119,13 @@ $html = <<<HTML
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link rel="stylesheet" href="../../css/cargando.css">
-    <link rel="stylesheet" href="../../css/catalogo.css">
+    <link rel="stylesheet" href="../../css/catalogo2.css">
     <script src="../../js/cargando.js"></script>
     <script src="../../js/cargando2.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo</title>
-    <style>
-        .navbar {
-            margin-bottom: 20px;
-        }
-
-        .navbar .navbar-brand {
-            font-size: 1.5em;
-        }
-
-        .navbar-nav .nav-item .nav-link {
-            font-size: 1.1em;
-        }
-
-        .card-img-top {
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .agotado {
-            color: red;
-            font-weight: bold;
-        }
-
-        .navbar .nav-item {
-            margin-right: 10px;
-        }
-
-        .navbar .nav-item a {
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
-
-        .navbar .nav-item a:hover {
-            background-color: #f8f9fa;
-        }
-    </style>
+    
 </head>
 
 <body>
@@ -1183,7 +1148,7 @@ $html = <<<HTML
                         <a class="nav-link" href="#">Categorías</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Carrito</a>
+                        <a class="nav-link" href="#carrito">Carrito</a>
                     </li>
                 </ul>
             </div>
@@ -1194,7 +1159,7 @@ $html = <<<HTML
         <input type="search" id="search" class="form-control" placeholder="Buscar" style="width: 300px; display: inline-block;">
     </div>
 
-    <!-- <h4 class="text-center text-secondary">Productos</h4> -->
+    <h4 class="text-center text-secondary">Productos</h4> 
 
 HTML;
 
@@ -1248,14 +1213,15 @@ foreach ($mostrar_productos as $registros) {
     $mensaje_agotado = $disponible <= 0 ? '<p class="agotado">Agotado</p>' : '';
 
     $html .= <<<HTML
-        <div class="col-md-4">
+        <div class="col-md-3">
+        <a href="catalogo.php?accion=detalles&id={$id}">
             <div class="card mx-4 mt-4">
                 <img src="/{$imagen}" class="card-img-top" alt="{$nombre}">
                 <div class="card-body">
                     <h5 class="card-title">{$nombre}</h5>
-                    <p class="card-text">{$descripcion}</p>
+                    <!--<p class="card-text">{$descripcion}</p>-->
                     <p class="card-text"><strong>Precio: $ {$precio_number_format}</strong></p>
-                    <p class="card-text">Disponibles: {$disponible} {$mensaje_agotado}</p>
+                    <!--<p class="card-text">Disponibles: {$disponible} {$mensaje_agotado}</p>-->
                 </div>
                 <div class="card-footer">
                     <form id="myForm" action="../../Librerias/lib_carrito.php?accion=comprar" onsubmit="showLoading()" method="post" enctype="multipart/form-data" class="d-inline">
@@ -1278,6 +1244,7 @@ foreach ($mostrar_productos as $registros) {
                     </form>
                 </div>
             </div>
+            </a>
         </div>
 HTML;
 }
@@ -1290,7 +1257,7 @@ $html .= <<<HTML
     </div>
     <div class="text-center">
         <form action="../../Librerias/lib_carrito.php?accion=ver" onsubmit="showLoading()" method="post" class="mt-4">
-            <button class="btn btn-info"><i class="fa-solid fa-cart-shopping"></i> Ver carrito</button>
+            <button id="carrito" class="btn btn-info"><i class="fa-solid fa-cart-shopping"></i> Ver carrito</button>
         </form>
     </div>
     <p class="text-center">Total de productos: {$total}</p>
@@ -1304,6 +1271,107 @@ HTML;
 
 echo $html;
 }
+
+
+function ProductoDetalles()
+{
+    $html = <<<HTML
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Detalles del Producto</title>
+        <!-- Materialize CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+        <!-- Materialize JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <style>
+            .product-details {
+                margin: 50px auto;
+                max-width: 900px;
+            }
+            .product-image {
+                width: 100%;
+                height: auto;
+                border-radius: 10px;
+            }
+            .details-content {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+            .details-info {
+                flex: 1;
+            }
+            .details-info h4 {
+                margin-bottom: 20px;
+            }
+            .details-info p {
+                margin: 10px 0;
+            }
+            .btn-back {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+HTML;
+
+    include "../../conexion.php";
+    $conexion = Conexion();
+
+    if (isset($_GET['id'])) {
+        $id = (int)$_GET['id'];
+        $consulta = pg_query($conexion, "SELECT * FROM productos WHERE id = $id");
+        $producto = pg_fetch_assoc($consulta);
+
+        if ($producto) {
+            $nombre = $producto["nombre"];
+            $imagen = $producto["imagen"];
+            $descripcion = $producto["descripcion"];
+            $precio = number_format($producto["precio"], 2);
+            $stock = $producto["stock"];
+            
+            $html .= <<<HTML
+            <div class="card product-details">
+                <div class="card-content">
+                    <div class="details-content">
+                        <div class="details-image">
+                            <img src="/{$imagen}" alt="{$nombre}" class="product-image">
+                        </div>
+                        <div class="details-info">
+                            <h4>{$nombre}</h4>
+                            <p><strong>Descripción:</strong> {$descripcion}</p>
+                            <p><strong>Precio:</strong> $ {$precio}</p>
+                            <p><strong>Disponibles:</strong> {$stock}</p>
+                            <a href="catalogo.php" class="btn waves-effect waves-light blue btn-back">
+                                <i class="material-icons left">arrow_back</i> Volver al catálogo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+HTML;
+        } else {
+            $html .= "<p class='red-text center-align'>Producto no encontrado.</p>";
+        }
+    } else {
+        $html .= "<p class='red-text center-align'>No se especificó un producto.</p>";
+    }
+
+    $html .= <<<HTML
+        </div>
+    </body>
+    </html>
+HTML;
+
+    echo $html;
+}
+
+
+
 
 
 function Carrito_HTML1()
