@@ -1242,7 +1242,7 @@ HTML;
 function Catalogo() {
 
     session_start();
-$html = <<<HTML
+echo <<<HTML
 <!DOCTYPE html>
 <html lang="es">
 
@@ -1299,7 +1299,7 @@ $html = <<<HTML
 HTML;
 
 if (isset($_SESSION["correo"])) {
-    $html .= <<<HTML
+    echo <<<HTML
     <div class="container-fluid text-end">
         <span>{$_SESSION["correo"]}</span>
         <form id="myForm" action="../usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="d-inline">
@@ -1310,7 +1310,7 @@ if (isset($_SESSION["correo"])) {
     </div>
 HTML;
 } else {
-    $html .= <<<HTML
+    echo <<<HTML
     <div class="container-fluid text-end">
         <form id="myForm" action="../pagina-principal/login.php?accion=login" onsubmit="showLoading()" method="post" class="d-inline">
             <button type="submit" class="btn btn-primary btn-sm" name="cerrar" value="iniciar">
@@ -1321,7 +1321,7 @@ HTML;
 HTML;
 }
 
-$html .= <<<HTML
+echo <<<HTML
 <div class="container">
     <div class="row">
 HTML;
@@ -1344,9 +1344,14 @@ foreach ($mostrar_productos as $registros) {
     
     $precio_number_format = number_format($precio, 2);
     
-    $mensaje_agotado = $disponible <= 0 ? '<p class="agotado">Agotado</p>' : '';
+    //$mensaje_agotado = $disponible <= 0 ? '<p class="agotado">Agotado</p>' : '';
+    if ($disponible <= 0) {
+        $mensaje_agotado = '<p class="agotado">Agotado</p>';
+    } else {
+        $mensaje_agotado = '';
+    }
 
-    $html .= <<<HTML
+    echo <<<HTML
         <div class="col-md-3">
         <a href="catalogo.php?accion=detalles&id={$id}">
             <div class="card mx-4 mt-4">
@@ -1355,7 +1360,7 @@ foreach ($mostrar_productos as $registros) {
                     <h5 class="card-title">{$nombre}</h5>
                     <!--<p class="card-text">{$descripcion}</p>-->
                     <p class="card-text"><strong>Precio: $ {$precio_number_format}</strong></p>
-                    <!--<p class="card-text">Disponibles: {$disponible} {$mensaje_agotado}</p>-->
+                    <p class="card-text"> {$mensaje_agotado}</p>
                 </div>
                 <div class="card-footer">
                     <form id="myForm" action="../../Librerias/lib_carrito.php?accion=comprar" onsubmit="showLoading()" method="post" enctype="multipart/form-data" class="d-inline">
@@ -1365,7 +1370,15 @@ foreach ($mostrar_productos as $registros) {
                         <input name="precio" type="hidden" value="{$precio}">
                         <input name="stock" type="hidden" value="{$disponible}">
                         <input name="foto" type="hidden" value="{$imagen}">
-                        <input name="carrito" type="submit" class="btn btn-success" value="Comprar"{$disponible}>
+HTML;
+if ($disponible <= 0) {
+    echo "<input name='carrito' type='submit' disabled class='btn btn-success' value='Comprar'{$disponible}>";
+}
+else {
+    echo "<input name='carrito' type='submit' class='btn btn-success' value='Comprar'{$disponible}>";
+}
+                        
+                        echo <<<HTML
                     </form>
                     <form id="myForm" action="../../Librerias/lib_carrito.php?accion=agregar" onsubmit="showLoading()" method="post" enctype="multipart/form-data" class="d-inline">
                         <input type="hidden" name="id" value="{$id}">
@@ -1374,7 +1387,15 @@ foreach ($mostrar_productos as $registros) {
                         <input name="precio" type="hidden" value="{$precio}">
                         <input name="stock" type="hidden" value="{$disponible}">
                         <input name="foto" type="hidden" value="{$imagen}">
-                        <input name="carrito" type="submit" class="btn btn-primary" value="Agregar al carrito" {$disponible}>
+HTML;
+if ($disponible <= 0) {
+    echo "<input name='carrito' type='submit' disabled class='btn btn-primary' value='Agregar al carrito' {$disponible}>";
+}
+else {
+    echo "<input name='carrito' type='submit' class='btn btn-primary' value='Agregar al carrito' {$disponible}>";
+}
+                        
+                    echo <<<HTML
                     </form>
                 </div>
             </div>
@@ -1387,7 +1408,7 @@ else {
      echo "<tbody><tr><td colspan='8'>No hay productos registrados.</td></tr></tbody>";
 }
 
-$html .= <<<HTML
+echo <<<HTML
     </div>
     <div class="text-center">
         <form action="../../Librerias/lib_carrito.php?accion=ver" onsubmit="showLoading()" method="post" class="mt-4">
@@ -1403,13 +1424,12 @@ $html .= <<<HTML
 </form>
 HTML;
 
-echo $html;
 }
 
 
 function ProductoDetalles()
 {
-    $html = <<<HTML
+    echo <<<HTML
     <!DOCTYPE html>
     <html lang="es">
     <head>
@@ -1423,6 +1443,10 @@ function ProductoDetalles()
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </head>
     <style>
+        .agotado {
+            color: red;
+            font-weight: bold;
+        }
         .product-details {
             margin: 45px auto;
             max-width: 10000px;
@@ -1499,8 +1523,15 @@ HTML;
             $descripcion = $producto["descripcion"];
             $precio = number_format($producto["precio"], 2);
             $stock = $producto["stock"];
+
+            if ($stock <= 0) {
+                $mensaje_agotado = '<p class="agotado">Agotado</p>';
+            } else {
+                $mensaje_agotado = '';
+            }
             
-            $html .= <<<HTML
+            
+            echo <<<HTML
             <div class="card product-details">
                 <div class="card-content">
                     <div class="details-content">
@@ -1512,13 +1543,23 @@ HTML;
                             <p><strong>Descripción:</strong> {$descripcion}</p>
                             <p><strong>Cop:</strong> $ {$precio}</p>
                             <p><strong>Disponibles:</strong> {$stock}</p>
+                            <p><strong>{$mensaje_agotado}</strong></p>
                             <form action="carrito.php?accion=catalogo" method="post" class="quantity-input">
                                 <input type="hidden" name="id_producto" value="{$id}">
                                 <label for="cantidad">Cantidad:</label>
                                 <input type="number" name="cantidad" id="cantidad" value="1" min="1" max="{$stock}" required>
-                                <button type="submit" class="btn waves-effect waves-light blue">
+HTML;
+                                if ($stock <= 0) {
+                                echo '<button type="submit" disabled class="btn waves-effect waves-light blue">
                                     <i class="material-icons left">Agregar al carrito</i> 
-                                </button>
+                                </button>';
+
+                                } elseif ($stock >= 1) {
+                                echo '<button type="submit" class="btn waves-effect waves-light blue">
+                                    <i class="material-icons left">Agregar al carrito</i> 
+                                </button>';
+                                }
+echo <<<HTML
                             </form>
                             <p><strong>Referencia:</strong> {$descripcion}</p>
                             <p><strong>Categoria:</strong>N/A</p>
@@ -1533,13 +1574,13 @@ HTML;
             </div>
 HTML;
         } else {
-            $html .= "<p class='red-text center-align'>Producto no encontrado.</p>";
+            echo "<p class='red-text center-align'>Producto no encontrado.</p>";
         }
     } else {
-        $html .= "<p class='red-text center-align'>No se especificó un producto.</p>";
+        echo "<p class='red-text center-align'>No se especificó un producto.</p>";
     }
 
-    $html .= <<<HTML
+    echo <<<HTML
     <a href="catalogo.php?accion=catalogo" class="btn waves-effect waves-light blue btn-back">
         <i class="material-icons left">Volver al catálogo</i> 
     </a>
@@ -1548,7 +1589,6 @@ HTML;
     </html>
 HTML;
 
-    echo $html;
 }
 
 
@@ -1919,10 +1959,13 @@ $productos = pg_fetch_all($datos);
 if ($productos) {
     foreach ($productos as $d) {
         $nombre = htmlspecialchars($d["nombre"]);
+        $stock = $d["stock"];
+        echo "stock: ".$stock;
         echo <<<HTML
             <option value="$nombre">$nombre</option>
 HTML;
     }
+     echo "stock: ".$stock;
 }else {
     echo "no hay registros";
 }
@@ -1938,7 +1981,7 @@ HTML;
                     <input class="form-control" type="text" id="descripcion" required name="descripcion" readonly>
 
                     <label for="cantidad">Cantidad:</label>
-                    <input class="form-control" type="number" id="cantidad" required name="cantidad" min="1" onchange="calcularTotal()">
+                    <input class="form-control" type="number" id="cantidad" required name="cantidad" min="1" max="{$stock}" onchange="calcularTotal()">
 
                     <label for="precio">Precio:</label>
                     <input class="form-control" type="text" id="precio" required name="precio" readonly>
