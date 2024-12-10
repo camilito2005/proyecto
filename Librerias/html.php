@@ -1,5 +1,7 @@
 <?php
 ob_start();
+
+require_once("../../fpdf17/fpdf.php");
 function filtro($nombre_titulo = "Estadísticas de Productos Vendidos",$ruta_css="../../css/estadisticas.css", $titulo="Estadísticas de Productos Vendidos") {
     session_start();
 
@@ -252,4 +254,100 @@ SQL;
     ob_end_flush(); 
 }
 }
+
+
+function Pdf($fecha_inicio, $fecha_fin, $titulo) {
+    // Crear instancia de FPDF
+    $pdf = new FPDF();
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', 'B', 16);
+    
+    // Título del documento
+    $pdf->Cell(200, 10, "$titulo", 0, 1, 'C');
+    
+    // Subtítulo con las fechas seleccionadas
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(200, 10, "Rango de Fechas: $fecha_inicio a $fecha_fin", 0, 1, 'C');
+    
+    // Espacio antes de la tabla
+    $pdf->Ln(10);
+    
+    // Encabezado de la tabla
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(80, 10, 'Producto', 1, 0, 'C');
+    $pdf->Cell(40, 10, 'Total Vendido', 1, 0, 'C');
+    $pdf->Cell(40, 10, 'Total Dinero', 1, 1, 'C');
+    
+    // Inicializar variables para los totales
+    $total_productos = 0;
+    $total_dinero = 0;
+    
+    // Consultar los productos vendidos en el rango de fechas
+    include_once "../../conexion.php";
+    $conexion = Conexion();
+
+    // Escapar las fechas para evitar inyecciones SQL
+    $fecha_inicio = pg_escape_string($conexion, $fecha_inicio);
+    $fecha_fin = pg_escape_string($conexion, $fecha_fin);
+
+    $query = "SELECT 
+                  p.nombre AS nombre_producto, 
+                  p.precio AS precio_unitario,
+                  SUM(f.stock) AS total_vendido, 
+                  SUM(f.total) AS total_dinero
+              FROM 
+                  facturas f 
+              JOIN 
+                  productos p 
+              ON 
+                  f.producto_id = p.id 
+              WHERE 
+                  f.fecha >= '$fecha_inicio' 
+                  AND f.fecha < '$fecha_fin' 
+              GROUP BY 
+                  p.nombre, p.precio 
+              ORDER BY 
+                  total_vendido DESC";
+    
+    $resultado = pg_query($conexion, $query);
+    
+    if (!$resultado) {
+        $pdf->Cell(200, 10, "Error en la consulta: " . pg_last_error($conexion), 0, 1, 'C');
+    } else {
+        // Mostrar los resultados en la tabla
+        $pdf->SetFont('Arial', '', 12);
+
+        // Usar foreach para recorrer los resultados
+        $productos_vendidos = pg_fetch_all($resultado);
+        
+        foreach ($productos_vendidos as $producto) {
+            // Mostrar el nombre del producto, total vendido y total dinero
+            $pdf->Cell(80, 10, $producto['nombre_producto'], 1, 0, 'C');
+            $pdf->Cell(40, 10, $producto['total_vendido'], 1, 0, 'C');
+            $pdf->Cell(40, 10, '$' . number_format($producto['total_dinero'], 2), 1, 1, 'C');
+            
+            // Acumular los totales
+            $total_productos += $producto['total_vendido'];
+            $total_dinero += $producto['total_dinero'];
+        }
+    }
+    
+    // Cerrar la conexión con la base de datos
+    pg_close($conexion);
+
+    // Espacio antes de los totales
+    $pdf->Ln(10);
+
+    // Mostrar el total de productos y el total de dinero
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(120, 10, 'Total Productos Vendidos:', 1, 0, 'C');
+    $pdf->Cell(40, 10, $total_productos, 1, 1, 'C');
+
+    $pdf->Cell(120, 10, 'Total Dinero Generado:', 1, 0, 'C');
+    $pdf->Cell(40, 10, '$' . number_format($total_dinero, 2), 1, 1, 'C');
+
+    // Generar el PDF
+    $pdf->Output();
+}
+
 ?>

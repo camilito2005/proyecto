@@ -263,7 +263,17 @@ HTML;
         </html>
 HTML;
     }
-function Ventasxmes() {
+function Ventasxmes($titulo,$subtitulo) {
+
+    $accion = $_REQUEST["accion"];
+
+    if ($accion == "filtro") {
+        $tipo_info = "dia";
+    }
+    elseif ($accion == "ventasxmes") {
+        $tipo_info = "mes";
+        
+    }
 
     $horas = [];
 for ($i = 0; $i < 24; $i++) {
@@ -281,7 +291,7 @@ for ($i = 0; $i < 60; $i++) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Productos Vendidos por mes</title>
+            <title>$titulo</title>
             <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
             <link rel="stylesheet" href="../../css/ventasxmes1.css">
             <style>
@@ -296,7 +306,7 @@ for ($i = 0; $i < 60; $i++) {
         
         <body>
             <div class="container mt-5">
-                <h2 class="text-center">Ventas por mes </h2>
+                <h2 class="text-center">$subtitulo</h2>
                 <form method="post" class="mt-4">
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -374,16 +384,8 @@ HTML;
                     $minutos_iniciales = pg_escape_string($conexion, $_POST['minutos_iniciales']);
                     $minutos_finales = pg_escape_string($conexion, $_POST['minutos_finales']);
 
-                    /*echo "<br><br> hora inicio : ".$hora_inicio."</br></br>";
-                    echo "<br><br> hora fin : ".$hora_fin."</br></br>";
-                    echo "<br><br> minutos iniciales : ".$minutos_iniciales."</br></br>";
-                    echo "<br><br> minutos finales : ".$minutos_finales."</br></br>";*/
-
                     $fecha_inicio= $fecha_inicio ." ".$hora_inicio.":".$minutos_iniciales.":00.000";
                     $fecha_fin = $fecha_fin." ".$hora_fin.":".$minutos_finales.":00.000";
-
-                    /*echo "<br><br> fecha inicio : ".$fecha_inicio."</br></br>";
-                    echo "<br><br> fecha fin : ".$fecha_fin."</br></br>"; */
 
 
                     // Consulta para obtener productos vendidos en el rango de fechas
@@ -405,8 +407,10 @@ HTML;
 
 
                     "SELECT 
-    p.nombre AS nombre_producto, 
-    SUM(f.stock) AS total_vendido 
+    p.nombre AS nombre_producto,
+    p.precio AS precio_unitario,
+    SUM(f.stock) AS total_vendido, 
+    SUM(f.total) AS total_dinero
 FROM 
     facturas f 
 JOIN 
@@ -417,10 +421,11 @@ WHERE
     f.fecha >= '$fecha_inicio' 
     AND f.fecha < '$fecha_fin' 
 GROUP BY 
-    p.nombre 
+    p.nombre,
+    p.precio
 ORDER BY 
     total_vendido DESC";
-                    echo $query;
+                    //echo $query;
         
                     $resultado = pg_query($conexion, $query);
                     if (!$resultado) {
@@ -430,21 +435,33 @@ ORDER BY
         
                     $productos_vendidos = pg_fetch_all($resultado);
                     pg_close($conexion);
-        
+
+                    $total_productos = 0;
+                    $total_dinero = 0;
+                    
                     // Mostrar los resultados en tarjetas
                     if ($productos_vendidos) {
                         echo "<div class='row'>";
                         foreach ($productos_vendidos as $producto) {
+                            $total_productos += $producto['total_vendido'];
+                $total_dinero += $producto['total_dinero'];
+                $total_formateado = number_format($total_dinero);
+
+                            $Total_precio = number_format($producto['total_dinero']);
+                            $precio_unitario = number_format($producto['precio_unitario']);
                             echo <<<HTML
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-body">
                                         <h5 class="card-title">{$producto['nombre_producto']}</h5>
+                                        <p class="card-text">Precio unitario : <strong>{$precio_unitario}</strong></p>
+                                        <p class="card-text">Total generado : <strong>{$Total_precio}</strong></p>
                                         <p class="card-text">Total Vendido: <strong>{$producto['total_vendido']}</strong></p>
                                     </div>
                                 </div>
                             </div>
 HTML;
+
                         }
                         echo "</div>";
                     } else {
@@ -452,10 +469,13 @@ HTML;
                     }
                 }
                 echo<<<HTML
+                <p>total ventas: {$total_productos }</p>
+                <p>total dinero: {$total_formateado}</p>
 
             <form action="estadisticas.php?accion=pdf" method="post" target="_blank">
                 <input type="hidden" name="fecha_inicio" value="{$fecha_inicio}">
-                <input type="hidden" name="fecha_final" value="{$fecha_final}">
+                <input type="hidden" name="fecha_fin" value="{$fecha_fin}">
+                <input type="hidden" name="tipoinfo" value="{$tipo_info}">
                 <button>pdf</button>
             </form>
             <!--<button class="btn btn-outline-secondary" type="submit">

@@ -1241,6 +1241,7 @@ HTML;
 
 function Catalogo() {
 
+    session_start();
 $html = <<<HTML
 <!DOCTYPE html>
 <html lang="es">
@@ -1297,7 +1298,6 @@ $html = <<<HTML
 
 HTML;
 
-session_start();
 if (isset($_SESSION["correo"])) {
     $html .= <<<HTML
     <div class="container-fluid text-end">
@@ -1312,7 +1312,7 @@ HTML;
 } else {
     $html .= <<<HTML
     <div class="container-fluid text-end">
-        <form id="myForm" action="../pagina-principal/login.php" onsubmit="showLoading()" method="post" class="d-inline">
+        <form id="myForm" action="../pagina-principal/login.php?accion=login" onsubmit="showLoading()" method="post" class="d-inline">
             <button type="submit" class="btn btn-primary btn-sm" name="cerrar" value="iniciar">
                 <i class="fa-solid fa-right-from-bracket"></i> Iniciar sesión
             </button>
@@ -1417,38 +1417,70 @@ function ProductoDetalles()
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Detalles del Producto</title>
         <!-- Materialize CSS -->
+        <link rel="stylesheet" href="../../css/detalles_productos.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
         <!-- Materialize JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <style>
-            .product-details {
-                margin: 50px auto;
-                max-width: 900px;
-            }
-            .product-image {
-                width: 100%;
-                height: auto;
-                border-radius: 10px;
-            }
+    </head>
+    <style>
+        .product-details {
+            margin: 45px auto;
+            max-width: 10000px;
+        }
+        .details-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .details-image {
+            flex: 1;
+            max-width: 40%; /* Imagen ocupa hasta el 40% */
+        }
+        .details-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .details-info {
+            flex: 2; /* Contenido ocupa el 60% restante */
+        }
+        .details-info h4 {
+            margin-bottom: 20px;
+        }
+        .details-info p {
+            margin: 10px 0;
+        }
+        .quantity-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .quantity-input input {
+            max-width: 80px;
+        }
+        .btn-back {
+            margin-top: 20px;
+        }
+
+        /* Diseño responsive para pantallas pequeñas */
+        @media screen and (max-width: 768px) {
             .details-content {
-                display: flex;
+                flex-direction: column;
                 align-items: center;
-                gap: 20px;
+            }
+            .details-image, .details-info {
+                max-width: 100%; /* Ambos ocupan el ancho completo */
+                flex: none;
             }
             .details-info {
-                flex: 1;
+                text-align: center;
             }
-            .details-info h4 {
-                margin-bottom: 20px;
+            .quantity-input {
+                flex-direction: column;
             }
-            .details-info p {
-                margin: 10px 0;
-            }
-            .btn-back {
-                margin-top: 20px;
-            }
-        </style>
-    </head>
+        }
+    </style>
     <body>
         <div class="container">
 HTML;
@@ -1473,16 +1505,28 @@ HTML;
                 <div class="card-content">
                     <div class="details-content">
                         <div class="details-image">
-                            <img src="/{$imagen}" alt="{$nombre}" class="product-image">
+                            <img src="/{$imagen}" alt="{$nombre}">
                         </div>
                         <div class="details-info">
-                            <h4>{$nombre}</h4>
+                            <h3>{$nombre}</h3>
                             <p><strong>Descripción:</strong> {$descripcion}</p>
-                            <p><strong>Precio:</strong> $ {$precio}</p>
+                            <p><strong>Cop:</strong> $ {$precio}</p>
                             <p><strong>Disponibles:</strong> {$stock}</p>
-                            <a href="catalogo.php" class="btn waves-effect waves-light blue btn-back">
-                                <i class="material-icons left">arrow_back</i> Volver al catálogo
-                            </a>
+                            <form action="carrito.php?accion=catalogo" method="post" class="quantity-input">
+                                <input type="hidden" name="id_producto" value="{$id}">
+                                <label for="cantidad">Cantidad:</label>
+                                <input type="number" name="cantidad" id="cantidad" value="1" min="1" max="{$stock}" required>
+                                <button type="submit" class="btn waves-effect waves-light blue">
+                                    <i class="material-icons left">Agregar al carrito</i> 
+                                </button>
+                            </form>
+                            <p><strong>Referencia:</strong> {$descripcion}</p>
+                            <p><strong>Categoria:</strong>N/A</p>
+                            <p><strong>Subcategoria:</strong> N/A</p>
+                            <p><strong>Envio:</strong> N/A</p>
+                            <!--<a href="#" class="btn waves-effect waves-light blue btn-back">
+                                <i class="material-icons left">Comprar</i> 
+                            </a>-->
                         </div>
                     </div>
                 </div>
@@ -1496,6 +1540,9 @@ HTML;
     }
 
     $html .= <<<HTML
+    <a href="catalogo.php?accion=catalogo" class="btn waves-effect waves-light blue btn-back">
+        <i class="material-icons left">Volver al catálogo</i> 
+    </a>
         </div>
     </body>
     </html>
@@ -1503,6 +1550,8 @@ HTML;
 
     echo $html;
 }
+
+
 
 
 
@@ -1804,17 +1853,12 @@ HTML;
 
 function FormularioFactura(){
 
-    
-    /*Menus($ruta_css="../css/estilos7.css",$ruta_usuarios="#",$ruta_registra_usuarios="#",
-    $ruta_catalogo="#",$ruta_login="#",$ruta_facturas="#",
-    $ruta_Verproductos="#",$ruta_aggproductos="#");*/
-
     include_once "../conexion.php";
     session_start();
 
     date_default_timezone_set('America/Bogota');
         $fecha = date('Y-m-d g:i:s');
-        echo $fecha;
+        echo "fecha y hora : ".$fecha;
 
         $correo = isset($_SESSION["correo"]) ? htmlspecialchars($_SESSION["correo"]) : null;
         $nombre_sesion = isset($_SESSION["nombre"]) ? htmlspecialchars($_SESSION["nombre"]) : null;
@@ -1959,18 +2003,18 @@ HTML;
 HTML;
     }
 }
-function FormularioFactura2() {
+
+
+function FormularioFactura00()
+{
     include_once "../conexion.php";
     session_start();
 
     date_default_timezone_set('America/Bogota');
     $fecha = date('Y-m-d g:i:s');
-
     $correo = isset($_SESSION["correo"]) ? htmlspecialchars($_SESSION["correo"]) : null;
     $nombre_sesion = isset($_SESSION["nombre"]) ? htmlspecialchars($_SESSION["nombre"]) : null;
-    $contraseña = isset($_SESSION["contraseña"]) ? htmlspecialchars($_SESSION["contraseña"]) : null;
-
-
+    $dni_sesion = isset($_SESSION["dni"]) ? htmlspecialchars($_SESSION["dni"]) : null;
 
     echo <<<HTML
     <!DOCTYPE html>
@@ -1982,134 +2026,128 @@ function FormularioFactura2() {
         <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <style>
+            body {
+                background-color: #f4f4f4;
+            }
             .form-container {
-                max-width: 600px;
-                margin: auto;
-                padding: 20px;
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                background-color: #fff;
+                margin: 20px auto;
+                max-width: 700px;
+                background: white;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .form-title {
+                font-size: 24px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .btn-back-home {
+                margin-top: 20px;
+            }
+            footer {
+                margin-top: 20px;
+                text-align: center;
+            }
+            @media (max-width: 600px) {
+                .form-container {
+                    padding: 15px;
+                }
+                .form-title {
+                    font-size: 20px;
+                }
             }
         </style>
     </head>
     <body>
-        <nav>
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo center">Facturas</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <div class="container">
 HTML;
 
     if ($correo) {
         echo <<<HTML
-                <li><form action="./usuarios/usuarios.php?accion=cerrar" onsubmit="showLoading()" method="post" class="mb-0">
-                    <button type="submit" name="cerrar" class="btn red">Cerrar sesión</button>
-                </form></li>
-                <li><span class="white-text">Welcome, $nombre_sesion</span></li>
-                <li><span class="white-text">Bienvenido, $correo</span></li>
-HTML;
-    } else {
-        echo <<<HTML
-                <li><a href="./pagina-principal/login.php" class="btn grey">Iniciar sesión</a></li>
-HTML;
-    }
-
-    echo <<<HTML
-                </ul>
-            </div>
-        </nav>
-
-        <div class="container mt-5">
-            <h4 class="center-align">Realizar Factura</h4>
             <div class="form-container">
-                <form action="facturas.php?accion=factura" method="post" class="bg-light p-4">
+                <div class="form-title">Facturas</div>
+                <p class="center-align"><strong>Bienvenido:</strong> $nombre_sesion</p>
+                <p class="center-align"><strong>Correo:</strong> $correo</p>
+                <p class="center-align"><strong>Documento:</strong> $dni_sesion</p>
+                <form action="facturas.php?accion=factura" method="post">
                     <div class="input-field">
-                        <select id="producto" name="producto" onchange="cargarDatos()">
-                            <option value="" disabled selected>Seleccionar</option>
+                        <select id="producto" name="producto" onchange="cargarDatos()" required>
+                            <option value="" disabled selected>Seleccionar producto</option>
 HTML;
+        $conexion = Conexion();
+        $datos = pg_query($conexion, "SELECT * FROM productos");
+        $productos = pg_fetch_all($datos);
 
-    $conexion = Conexion();
-    $datos = pg_query($conexion, "SELECT * FROM productos");
+        if ($productos) {
+            foreach ($productos as $d) {
+                $nombre = htmlspecialchars($d["nombre"]);
+                echo <<<HTML
+                        <option value="$nombre">$nombre</option>
+HTML;
+            }
+        } else {
+            echo <<<HTML
+                        <option value="" disabled>No hay productos disponibles</option>
+HTML;
+        }
 
-    while ($d = pg_fetch_array($datos)) {
-        $nombre = htmlspecialchars($d["nombre"]);
         echo <<<HTML
-                            <option value="$nombre">$nombre</option>
-HTML;
-    }
-
-    echo <<<HTML
                         </select>
                         <label for="producto">Producto</label>
                     </div>
-
                     <div class="input-field">
-                        <input type="text" id="nombre" required name="nombre" readonly>
+                        <input id="nombre" name="nombre" type="text" readonly>
                         <label for="nombre">Nombre</label>
                     </div>
-
                     <div class="input-field">
-                        <input type="text" id="descripcion" required name="descripcion" readonly>
+                        <input id="descripcion" name="descripcion" type="text" readonly>
                         <label for="descripcion">Descripción</label>
                     </div>
-
                     <div class="input-field">
-                        <input type="number" id="cantidad" required name="cantidad" min="1" onchange="calcularTotal()">
+                        <input id="cantidad" name="cantidad" type="number" min="1" onchange="calcularTotal()" required>
                         <label for="cantidad">Cantidad</label>
                     </div>
-
                     <div class="input-field">
-                        <input type="text" id="precio" required name="precio" readonly>
+                        <input id="precio" name="precio" type="text" readonly>
                         <label for="precio">Precio</label>
                     </div>
-
                     <div class="input-field">
-                        <input type="text" id="total" required name="total" readonly>
+                        <input id="total" name="total" type="text" readonly>
                         <label for="total">Total</label>
                     </div>
-
-                    <button type="submit" class="btn blue">Realizar Factura</button>
+                    <button type="submit" class="btn blue waves-effect waves-light">Realizar Factura</button>
                 </form>
+                <a href="../index.php" class="btn btn-flat btn-back-home">Regresar al inicio</a>
             </div>
-            <form id="myForm" action="../index.php" onsubmit="showLoading()" method="post" class="mt-4">
-                <button class="btn btn-outline-secondary" value="inicio">
-                    <i class="fa-solid fa-house"></i>
-                </button>
-            </form>
-        </div>
+HTML;
+    } else {
+        echo <<<HTML
+            <div class="form-container center-align">
+                <p>Por favor, inicia sesión para continuar</p>
+                <a href="./pagina-principal/login.php" class="btn blue waves-effect waves-light">
+                    Iniciar sesión
+                </a>
+            </div>
+HTML;
+    }
 
+    echo <<<HTML
+        </div>
+        <footer>
+            <p>&copy; 2024 Tu Empresa. Todos los derechos reservados.</p>
+        </footer>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                var elems = document.querySelectorAll('select');
-                var instances = M.FormSelect.init(elems);
+                M.AutoInit();
             });
-
-            function cargarDatos() {
-                var producto = document.getElementById('producto').value;
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        var data = JSON.parse(this.responseText);
-                        document.getElementById('nombre').value = data.nombre;
-                        document.getElementById('descripcion').value = data.descripcion;
-                        document.getElementById('precio').value = data.precio;
-                        calcularTotal();
-                    }
-                };
-                xhttp.open("GET", "../Librerias/lib_facturas.php?accion=cargardatos&nombre=" + encodeURIComponent(producto), true);
-                xhttp.send();
-            }
-
-            function calcularTotal() {
-                var cantidad = document.getElementById('cantidad').value;
-                var precio = document.getElementById('precio').value;
-                var total = cantidad * precio;
-                document.getElementById('total').value = total.toFixed(2);
-            }
         </script>
     </body>
     </html>
 HTML;
 }
+
 
 function Menu(){
 echo <<<HTML
