@@ -56,7 +56,7 @@ HTML;
     } else {
         echo <<<HTML
             <p>Para continuar, inicia sesión.</p>
-            <a href="../pagina-principal/login.php" class="btn blue btn-login">Iniciar sesión</a>
+            <a href="../pagina-principal/login.php?accion=login" class="btn blue btn-login">Iniciar sesión</a>
 HTML;
     }
 

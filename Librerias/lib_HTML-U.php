@@ -1351,9 +1351,12 @@ foreach ($mostrar_productos as $registros) {
         $mensaje_agotado = '';
     }
 
+    $id_encript = base64_encode($id);
+
+
     echo <<<HTML
         <div class="col-md-3">
-        <a href="catalogo.php?accion=detalles&id={$id}">
+        <a href="catalogo.php?accion=detalles&id={$id_encript}">
             <div class="card mx-4 mt-4">
                 <img src="/{$imagen}" class="card-img-top" alt="{$nombre}">
                 <div class="card-body">
@@ -1513,7 +1516,14 @@ HTML;
     $conexion = Conexion();
 
     if (isset($_GET['id'])) {
+
+            
+
+
         $id = (int)$_GET['id'];
+
+        $id = base64_decode($_GET['id']);
+            // Valida el id descifrado antes de usarlo en la consulta
         $consulta = pg_query($conexion, "SELECT * FROM productos WHERE id = $id");
         $producto = pg_fetch_assoc($consulta);
 

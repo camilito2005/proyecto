@@ -55,7 +55,117 @@ echo $query;
     } else {
         echo "campos vacios , por favor llene los campos";
     }
-}function Modificar_Productos()
+}
+
+function Modificar_Productos()
+{
+    include("../../conexion.php");
+    $conexion = Conexion();
+
+    if (isset($_GET['id'])) {
+        $id = base64_decode($_GET['id']);
+    }
+
+    $sql = <<<SQL
+        SELECT * FROM productos WHERE id=$id
+SQL;
+    $consulta = pg_query($conexion, $sql);
+    $resultado_consulsulta = pg_fetch_all($consulta);
+
+    echo <<<HTML
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <!-- Import Materialize CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Modificar Productos</title>
+        <style>
+            body {
+                background-color: #f3f4f6;
+                font-family: 'Roboto', sans-serif;
+            }
+            .container {
+                margin-top: 50px;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            }
+            .form-title {
+                text-align: center;
+                margin-bottom: 30px;
+                color: #424242;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h4 class="form-title">Modificar Producto</h4>
+            <form action="productos.php?accion=actualizar&id=$id" method="post">
+                <input type="hidden" name="id" value="{$_GET['id']}">
+HTML;
+foreach ($resultado_consulsulta as $producto) {
+
+    $precio = $producto['precio'];
+
+    $precio_format = number_format($precio);
+
+        echo <<<HTML
+                <div class="input-field">
+                    <input id="id" type="text" disabled value="{$producto['id']}">
+                    <label for="id">ID</label>
+                </div>
+                <div class="input-field">
+                    <input id="nombre" type="text" name="nombre" value="{$producto['nombre']}">
+                    <label for="nombre">Nombre del Producto</label>
+                </div>
+                <div class="input-field">
+                    <input id="descripcion" type="text" name="descripcion" value="{$producto['descripcion']}">
+                    <label for="descripcion">Descripción</label>
+                </div>
+                <div class="input-field">
+                    <input id="precio" type="number" name="precio" value="{$precio}">
+                    <label for="precio">Precio</label>
+                </div>
+                <div class="input-field">
+                    <input id="cantidad" type="number" name="cantidad" value="{$producto['stock']}">
+                    <label for="cantidad">Cantidad</label>
+                </div>
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>Foto</span>
+                        <input type="file" name="foto" disabled>
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" value="{$producto['imagen']}">
+                    </div>
+                </div>
+HTML;
+    }
+    echo  <<<HTML
+                <div class="center-align">
+                    <button type="submit" class="btn waves-effect waves-light blue">
+                        <i class="material-icons left">Modificar</i>Modificar
+                    </button>
+                    <a href="../productos/verProductos.php?accion=verproductos" class="btn waves-effect waves-light grey">
+                        <i class="material-icons left">Regresar</i> regresar
+                    </a>
+                </div>
+            </form>
+        </div>
+        <!-- Import Materialize JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </body>
+    </html>
+HTML;
+
+}
+
+
+function Modificar_Productos000()
 {
 
     include("../../conexion.php");
@@ -92,7 +202,7 @@ SQL;
                 <input type="hidden" name="id" value="{$_GET['id']}">
 HTML;
     while ($camilo = pg_fetch_object($consulta)) {
-        $html .= <<<HTML
+        echo  <<<HTML
                     <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">id</label>
                             <input type="text" disabled class="form-control" name="id" value="{$camilo->id}" >
@@ -121,7 +231,7 @@ HTML;
                 
 HTML;
     }
-    $html .= <<<HTML
+    echo <<<HTML
                 <button type="submit" class="btn btn-primary" name="modificar" value="modificar productos" class="btn btn-outline-secondary">
                     <i class="fa-solid fa-pen"></i>modificar
                 </button>
@@ -138,7 +248,6 @@ HTML;
     
     </html>
 HTML;
-echo $html;
 }
 function Actualizar_productos(){
 
