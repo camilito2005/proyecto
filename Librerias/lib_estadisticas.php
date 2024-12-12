@@ -375,6 +375,9 @@ HTML;
                 if (isset($_POST['fecha_inicio']) && isset($_POST['fecha_fin'])) {
                     include_once "../../conexion.php";
                     $conexion = Conexion();
+
+                    $fecha_inicio = "";
+                    $fecha_fin = "";
         
                     // Escapar las fechas para evitar inyecciones SQL
                     $fecha_inicio = pg_escape_string($conexion, $_POST['fecha_inicio']);
@@ -438,6 +441,8 @@ ORDER BY
 
                     $total_productos = 0;
                     $total_dinero = 0;
+
+                    $total_formateado = "";
                     
                     // Mostrar los resultados en tarjetas
                     if ($productos_vendidos) {

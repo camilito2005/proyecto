@@ -706,6 +706,21 @@ HTML;
 
 function Formulario_productos()
 {
+
+    session_start();
+    
+    // Generar el token CSRF si no existe
+if (empty($_SESSION['csrf_token'])) {
+    // Utiliza openssl_random_pseudo_bytes si random_bytes no está disponible
+    if (function_exists('openssl_random_pseudo_bytes')) {
+        $_SESSION['csrf_token'] = bin2hex(openssl_random_pseudo_bytes(32));
+    } else {
+        // Si no tienes openssl_random_pseudo_bytes, puedes usar mt_rand como último recurso (menos seguro)
+        $_SESSION['csrf_token'] = bin2hex(mt_rand());
+    }
+}
+$csrf_token = $_SESSION['csrf_token'];
+
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="es">
@@ -731,6 +746,8 @@ function Formulario_productos()
                     <h4 class="center-align grey-text">Agregar Productos</h4>
                     <form id="myForm" action="../productos/productos.php?accion=registrar_productos" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
                         
+                    <input type="hidden" name="csrf_token" value="{$csrf_token}">
+                    
                         <div class="input-field">
                             <input id="nombre" type="text" name="nombre" required>
                             <label for="nombre">Nombre del producto</label>

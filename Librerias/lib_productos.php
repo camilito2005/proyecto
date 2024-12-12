@@ -2,7 +2,7 @@
 $accion = $_GET["accion"];
 
 
-function Insertar_productos()
+function Insertar_productos000()
 {
     if (!empty($_POST["nombre"]) && !empty($_POST["descripcion"]) && !empty($_POST["precio"]) && !empty($_POST["cantidad"])) {
         date_default_timezone_set('America/Bogota');
@@ -56,6 +56,78 @@ echo $query;
         echo "campos vacios , por favor llene los campos";
     }
 }
+
+
+function Insertar_productos()
+{
+    // Inicia la sesión para gestionar CSRF
+    session_start();
+
+    // Verificar el token CSRF
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die("Token CSRF inválido.");
+    }
+
+    // Validar campos requeridos
+    if (empty($_POST["nombre"]) || empty($_POST["descripcion"]) || empty($_POST["precio"]) || empty($_POST["cantidad"])) {
+        die("Por favor, complete todos los campos.");
+    }
+
+    // Validar entradas
+    $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+    $descripcion = filter_input(INPUT_POST, 'descripcion', FILTER_SANITIZE_STRING);
+    $precio = filter_input(INPUT_POST, 'precio', FILTER_VALIDATE_FLOAT);
+    $cantidad = filter_input(INPUT_POST, 'cantidad', FILTER_VALIDATE_INT);
+
+    if (!$nombre || !$descripcion || !$precio || !$cantidad) {
+        die("Datos inválidos. Por favor revise los campos.");
+    }
+
+    date_default_timezone_set('America/Bogota');
+    $fecha_Actual = date('Y-m-d H:i');
+
+    // Validar archivo subido
+    if (isset($_FILES["foto"]) && $_FILES["foto"]["error"] === UPLOAD_ERR_OK) {
+        $archivo_temporal = $_FILES["foto"]["tmp_name"];
+        $foto_nombre = basename($_FILES["foto"]["name"]);
+        $directorio_destino = realpath(__DIR__ . '/../../../ti/fotos/');
+
+        // Verificar tipo de archivo
+        $tipo_mime = mime_content_type($archivo_temporal);
+        echo "el tipo de mime es :".$tipo_mime;
+        $extensiones_permitidas = ['image/jpeg', 'image/png', 'image/gif'];
+
+        if (!in_array($tipo_mime, $extensiones_permitidas)) {
+            die("El archivo subido no es una imagen válida.");
+        }
+
+        // Mover el archivo de manera segura
+        $ruta_final = $directorio_destino . DIRECTORY_SEPARATOR . $foto_nombre;
+
+        if (!move_uploaded_file($archivo_temporal, $ruta_final)) {
+            die("Error al subir la foto.");
+        }
+    } else {
+        die("No se subió ninguna imagen o hubo un error.");
+    }
+
+    // Conectar a la base de datos
+    include "../../conexion.php";
+    $conexion = Conexion();
+
+    // Preparar la consulta para evitar inyección SQL
+    $consulta = "INSERT INTO productos (nombre, descripcion, precio, stock, imagen, fecha_creacion) 
+                 VALUES ($1, $2, $3, $4, $5, $6)";
+    $resultado = pg_query_params($conexion, $consulta, [$nombre, $descripcion, $precio, $cantidad, $ruta_final, $fecha_Actual]);
+
+    if ($resultado) {
+        header("Location: ../catalogo/catalogo.php?accion=catalogo");
+        exit;
+    } else {
+        die("Error al insertar el producto. Intente de nuevo.");
+    }
+}
+
 
 function Modificar_Productos()
 {
