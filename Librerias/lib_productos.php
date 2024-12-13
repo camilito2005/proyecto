@@ -90,7 +90,8 @@ function Insertar_productos()
     if (isset($_FILES["foto"]) && $_FILES["foto"]["error"] === UPLOAD_ERR_OK) {
         $archivo_temporal = $_FILES["foto"]["tmp_name"];
         $foto_nombre = basename($_FILES["foto"]["name"]);
-        $directorio_destino = realpath(__DIR__ . '/../../../ti/fotos/');
+        //$directorio_destino = realpath(__DIR__ . '/../../../ti/fotos/');
+        $directorio_destino = (__DIR__ . '/../../../ti/fotos/');
 
         // Verificar tipo de archivo
         $tipo_mime = mime_content_type($archivo_temporal);
